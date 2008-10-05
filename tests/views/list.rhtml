@@ -5,12 +5,77 @@
 <% content_for('final') do %>
 
 <script>
+// create some item data...
+[
+ { guid: '1001', name: 'item one' },
+ { guid: '1002', name: 'item two' },
+ { guid: '1003', name: 'item three' },
+ { guid: '1004', name: 'item four' },
+ { guid: '1005', name: 'item five' },
+ { guid: '1006', name: 'item six' }
+].each(function(o){ SC.Store.addRecord(SC.Record.create(o)); });
+
+// a collection to hold the items...
+testCollection = SC.Record.collection();
+testCollection.refresh();
+
+// a controller for the collection...
+testController = SC.CollectionController.create();
+
+
 
 Test.context("SC.ListView",{
 
-  "TODO: Add your own tests here": function() {
-    true.shouldEqual(true) ;
+   "SC.ListView should add childNodes when it is on a pane that is visible": function() {
+     paneView.set('isVisible',true);
+     testListView.get('childNodes').length.shouldEqual(6) ;
+   },
+
+  "SC.ListView should add childNodes when it is on a pane, even if the pane is not visible": function() {
+     paneView.set('isVisible',false);   
+    testListView.get('childNodes').length.shouldEqual(6) ;
+  },
+  
+  setup: function()
+  {
+    
+    paneView = SC.PaneView.create();
+    paneView.set('isVisible',false);
+    paneView.set('height',500);
+    paneView.set('width',500);
+    SC.window.appendChild(paneView);
+    // add a scroll view wrapper.
+    scrollView = SC.ScrollView.create() ;
+    scrollView.set('frame', { x: 10, y: 10, width: 400, height: 400 }) ;
+    paneView.appendChild(scrollView) ;
+    
+    // create the view...
+    testListView = SC.ListView.create({
+      contentValueKey: 'name',
+      contentBinding: 'testController.arrangedObjects',
+      selectionBinding: 'testController.selection',
+      height: 300,
+      width: 300 
+    }) ;
+    scrollView.set('content', testListView) ;
+
+    testController.set('content', testCollection) ;
+  },
+  
+  teardown: function()
+  {
+    // remove the view from SC.window
+    testListView.removeFromParent() ;
+    scrollView.removeFromParent() ;
+    paneView.removeFromParent();
+    
+    delete testListView ;
+    delete scrollView ;
+    delete paneView;
+    
+    testController.set('content', null) ;
   }
+
 
 }) ;
 
