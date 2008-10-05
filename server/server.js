@@ -226,7 +226,10 @@ SC.Server = SC.Object.extend({
         context[rec._guid] = rec ;
         return recData ;
       }) ;
-
+      
+      if(this.get('postFormat') == SC.JSON_FORMAT){
+        data = data.toJSONString();  
+      }
       // issue request
       this.request(resource, this._createAction, null, {
         requestContext: context, 
