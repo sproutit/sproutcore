@@ -76,7 +76,7 @@ SC.Server = SC.Object.extend({
     var accept = params.accept ; delete params.accept ;
     var cacheCode = params.cacheCode; delete params.cacheCode ;
     // enable JSON for every operation
-    if(this.get('postFormat') == SC.JSON_FORMAT){
+    if((this.get('postFormat') == SC.JSON_FORMAT) && (params.records)){
       if(this.get('escapeJSON')){
          params.records = escape(params.records.toJSONString());
       } else {
