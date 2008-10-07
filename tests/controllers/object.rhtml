@@ -331,6 +331,22 @@ Test.context("SC.ObjectController", {
       delete this.c.nonContentProp;
     },
 
+    "Content changes fire observer on non-content properties": function () {
+      this.c.nonContentProp = null;
+      var notified = 0;
+      var observer = function () {
+         if (notified === 0)
+           this.c.set('content', SC.Object.create());
+         notified++;
+      }.bind(this);
+      this.c.addObserver('nonContentProp', observer);
+
+      this.c.set('nonContentProp', 'test');
+      notified.shouldEqual(2);
+
+      delete this.c.nonContentProp;
+    },
+
     setup: function() {
       this.c = SC.ObjectController.create() ;
       
