@@ -1433,6 +1433,14 @@ SC.View = SC.Responder.extend(SC.PathModule,  SC.DelegateSupport,
     this.viewFrameDidChange(YES) ;
   },
   
+  recomputeClippingFrame: function() {
+    this.recacheFrames();
+    var parent = this.parentNode;
+    while (parent) {
+      parent.recacheFrames();
+      parent = parent.parentNode;
+    }
+  },
   /** @private
     Handler for the onscroll event.  Hooked in on init if isScrollable is 
     true.  Notify children that their clipping frame has changed.

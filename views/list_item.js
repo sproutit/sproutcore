@@ -188,7 +188,7 @@ SC.ListItemView = SC.View.extend(SC.Control, SC.InlineEditorDelegate,
       ret = SC.ListItemView._selectedCheckboxHtml ;
       if (!ret) {
         ret = SC.CheckboxView.prototype.emptyElement ;
-        ret = ret.replace('class="', 'class="sel ') ;
+        ret = ret.replace('class="', 'class="sel ') ; 
         SC.ListItemView._selectedCheckboxHtml = ret ;
       }
     } else {
@@ -317,17 +317,17 @@ SC.ListItemView = SC.View.extend(SC.Control, SC.InlineEditorDelegate,
     button.
    */
    mouseDown: function(evt) {
-     var del = this.displayDelegate ;
-     var checkboxKey = this.getDelegateProperty(del, 'contentCheckboxKey') ;
-     if (checkboxKey) {
-       if (this._isInsideElementWithClassName('sc-checkbox-view', evt)) {
+
+      var del = this.displayDelegate ;
+      var checkboxKey = this.getDelegateProperty(del, 'contentCheckboxKey') ;
+      if (checkboxKey) {
+         if (this._isInsideElementWithClassName('sc-checkbox-view', evt)) {
          this._addCheckboxActiveState() ;
          this._isMouseDownOnCheckbox = YES ;
          this._isMouseInsideCheckbox = YES ;
          return true ;
-       }
-     }  
-     
+         }
+      }   
      return false ; // otherwise let normal handlers do it...
    },
 
@@ -340,7 +340,7 @@ SC.ListItemView = SC.View.extend(SC.Control, SC.InlineEditorDelegate,
          var del = this.displayDelegate ;
          var checkboxKey = this.getDelegateProperty(del, 'contentCheckboxKey') ;
          var content = this.get('content') ;
-         if (content && content.get) {
+         if (content && content.get && this.get('isEnabled')) {
            var value = content.get(checkboxKey) ;
            value = (value === SC.MIXED_STATE) ? YES : !value ;
            content.set(checkboxKey, value) ;
