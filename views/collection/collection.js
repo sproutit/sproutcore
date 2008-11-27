@@ -1794,6 +1794,9 @@ SC.CollectionView = SC.View.extend(SC.CollectionViewDelegate,
 
     this._mouseDownAt = Date.now();
 
+   // prevent any updates when disabled
+    if(!this.isEnabled) return true;
+    
     // holding down a modifier key while clicking a selected item should 
     // deselect that item...deselect and bail.
     if (modifierKeyPressed && isSelected) {
