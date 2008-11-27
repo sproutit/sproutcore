@@ -317,7 +317,6 @@ SC.ListItemView = SC.View.extend(SC.Control, SC.InlineEditorDelegate,
     button.
    */
    mouseDown: function(evt) {
-
       var del = this.displayDelegate ;
       var checkboxKey = this.getDelegateProperty(del, 'contentCheckboxKey') ;
       if (checkboxKey) {
@@ -334,7 +333,6 @@ SC.ListItemView = SC.View.extend(SC.Control, SC.InlineEditorDelegate,
    mouseUp: function(evt) {
      var ret= NO ;
      if (this._isMouseDownOnCheckbox) {
-       
        // update only if mouse inside on mouse up...
        if (this._isMouseInsideCheckbox) {
          var del = this.displayDelegate ;

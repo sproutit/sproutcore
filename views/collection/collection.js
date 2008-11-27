@@ -538,7 +538,7 @@ SC.CollectionView = SC.View.extend(SC.CollectionViewDelegate,
   /**
     Returns the groupView that represents the passed group value.
     
-    If no group view is currently rendered for the gorup value, this method
+    If no group view is currently rendered for the group value, this method
     will return null.  If grouping is disabled, this method will also return
     null.
     
@@ -623,6 +623,51 @@ SC.CollectionView = SC.View.extend(SC.CollectionViewDelegate,
   // ......................................
   // GENERATING CHILDREN
   //
+  
+  /**
+   Update the enabled status of the child views
+  
+  */
+  
+  _updateChildrensEnabledState: function(children){
+    // recursively running through the children
+    if(!children.childNodes){
+      //check for the empty array not necessary, as checked by observer
+      // if no childNodes found, children is just an array, so set the state on every item
+      if(this.isEnabled){
+         children.each(function(s){
+           if(s.removeClassName){
+             s.removeClassName('disabled');
+           }
+         });
+      }
+      else {
+        children.each(function(s){
+          if(s.addClassName){
+            s.addClassName('disabled'); 
+          }
+        });  
+      } // end if(this.isEnabled)
+    } // end if (!children.childNodes)
+    else {
+      // childnodes found
+      children.childNodes.each(this._updateChildrensEnabledState(s));
+      // and set the state on the current object too
+      if(this.isEnabled && children.addClassName){ // if addClassName exists, so does removeClassName
+        children.addClassName('disabled');
+      }
+      else {
+        children.removeClassName('disabled');  
+      }    
+    } // end childnodes found
+  },
+  
+  updateChildrensEnabledState: function(){
+   // updating children only makes sense when there are children to update
+   if(this.childNodes && (this.childNodes.length>0)){
+      this._updateChildrensEnabledState(this.childNodes);   
+   }
+  }.observes('isEnabled'),
   
   /**
     Update the itemViews in the receiver to match the currently visible 
@@ -1055,7 +1100,7 @@ SC.CollectionView = SC.View.extend(SC.CollectionViewDelegate,
         owner: this, displayDelegate: this 
       }) ;
       ret.addClassName('sc-collection-item') ; // add class name for display
-      
+
       // set content and add to content hash
       ret.set('content', content) ;
       this._itemViewsByContent[key] = ret ;
