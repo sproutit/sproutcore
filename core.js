@@ -166,6 +166,15 @@ SC.mixin(/** @scope SC */ {
   },
   
   /**
+    Returns YES if the passed value is null or undefined.  This avoids error
+    from JSLint complaining about use of ==, which can be technically 
+    confusing.
+  */
+  none: function(obj) {
+    return obj===null || obj===undefined;  
+  },
+  
+  /**
     Returns YES if the passed object is an array or array-like.
     
     Unlike SC.$type this method returns true even if the passed object is 
