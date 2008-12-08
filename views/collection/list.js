@@ -45,16 +45,13 @@ SC.ListView = SC.CollectionView.extend(
   
   insertionOrientation: SC.VERTICAL_ORIENTATION,
   
-/*  contentRangeInFrame: function(frame) {
+  contentRangeInFrame: function(frame) {
     var rowHeight = this.get('rowHeight') || 0 ;
     var min = Math.max(0,Math.floor(SC.minY(frame) / rowHeight)-1) ;
     var max = Math.ceil(SC.maxY(frame) / rowHeight) ;
     var ret = { start: min, length: max - min } ; 
     return ret ; 
-    var content = this.get('content') ;
-    var len = ((content && content.get) ? content.get('length') : 0) || 0 ;
-    return { start: 0, length: len };
-  },  */
+  },
   
   /** @private */
   layoutItemView: function(itemView, contentIndex, firstLayout) {
