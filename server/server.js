@@ -76,6 +76,14 @@ SC.Server = SC.Object.extend({
     var context = params.requestContext ; delete params.requestContext ;
     var accept = params.accept ; delete params.accept ;
     var cacheCode = params.cacheCode; delete params.cacheCode ;
+    // enable JSON for every operation
+    if((this.get('postFormat') == SC.JSON_FORMAT) && (params.records)){
+      if(this.get('escapeJSON')){
+         params.records = escape(params.records.toJSONString());
+      } else {
+         params.records = params.records.toJSONString();  
+      }  
+     }
     var url = params.url; delete params.url;
 
     opts.requestHeaders = {'Accept': 'application/json, text/javascript, application/xml, text/xml, text/html, */*'} ;
@@ -227,6 +235,7 @@ SC.Server = SC.Object.extend({
         context[SC.guidFor(rec)] = rec ;
         return recData ;
       }) ;
+      
 
       // issue request
       this.request(resource, this._createAction, null, {
@@ -336,32 +345,10 @@ SC.Server = SC.Object.extend({
       var server = this ;
 
       // start format differences
-      var data = null;
-      switch(this.get('postFormat')){
-        case SC.URL_ENCODED_FORMAT:     				
-          data = curRecords.map(function(rec) {
-            return server._decamelizeData(rec.getPropertyData()) ;
-          }) ;
-          break;
-        case SC.JSON_FORMAT:
-          // get all records and put them into an array
-          var objects = [];
-          for(rec in curRecords){
-            if (!curRecords.hasOwnProperty(rec)) continue ;
-            objects.push(curRecords[rec].get('attributes') || {});
-          }
-          
-          // convert to JSON and escape if this.escapeJSON is true
-          if(this.get('escapeJSON')){
-            data = escape(objects.toJSONString());
-          } else {
-            data = objects.toJSONString();
-          }
-          break;
-        default: 
-          break;
-      }
-      // end format differences
+      var data = null;   				
+      data = curRecords.map(function(rec) {
+         return server._decamelizeData(rec.getPropertyData()) ;
+         }) ;
 
       if (data) {
         var ids = [];

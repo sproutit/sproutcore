@@ -227,6 +227,27 @@ body.sc-theme {
 }
 
 
+
+
+/* checkboxes inside list item views */
+
+.sc-theme .sc-list-item-view.disabled {
+  color: #887F7F;  
+}
+
+.sc-theme .sc-list-item-view.disabled a.checkbox img.button {
+	background: static_url('images/sc-theme-sprite.png') no-repeat 0 -760px;
+} 
+
+.sc-theme .sc-list-item-view.disabled a.checkbox.sel img.button {
+	background: static_url('images/sc-theme-sprite.png') no-repeat -32px -792px;
+}
+
+.sc-theme .sc-list-item-view.disabled a.checkbox.mixed img.button {
+	background: static_url('images/sc-theme-sprite.png') no-repeat 0 -760px;
+}
+
+
 /* @end */
 
 /* @group SC.SplitView */
