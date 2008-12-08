@@ -812,6 +812,7 @@ SC.CollectionView = SC.View.extend(SC.CollectionViewDelegate,
     if (didChange) {
       this._flushZombieGroupViews() ;
       this.updateSelectionStates() ;
+      this.updateChildrensEnabledState();
       
       this._itemViews = null ;
       this.notifyPropertyChange('itemViews') ;
