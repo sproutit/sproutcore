@@ -5,7 +5,7 @@
 
 require('core') ;
 require('foundation/ext/date');
-require('foundation/deprecated/string') ;
+require('deprecated/string') ;
 
 /** @namespace SC.Benchmark
 
