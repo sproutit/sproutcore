@@ -50,7 +50,7 @@ SC.ListView = SC.CollectionView.extend(
     var min = Math.max(0,Math.floor(SC.minY(frame) / rowHeight)-1) ;
     var max = Math.ceil(SC.maxY(frame) / rowHeight) ;
     var ret = { start: min, length: max - min } ; 
-    return ret ;
+    return ret ; 
   },
   
   /** @private */

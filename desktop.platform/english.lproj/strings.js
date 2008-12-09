@@ -1,6 +1,7 @@
 // ========================================================================
 // Sprout Core
-// copyright 2006-2008 Sprout Systems, Inc.
+// Copyright ©2006-2008, Sprout Systems, Inc. and contributors.
+// Portions copyright ©2008 Apple, Inc.  All rights reserved.
 // ========================================================================
 
 require('system/locale');

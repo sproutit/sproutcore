@@ -1,7 +1,8 @@
 // ==========================================================================
-// SproutCore
+// SproutCore -- JavaScript Application Framework
 // Author: Charles Jolley
-// copyright 2006-2008, Sprout Systems, Inc.
+// Copyright ©2006-2008, Sprout Systems, Inc. and contributors.
+// Portions Copyright ©2008 Apple, Inc.  All rights reserved.
 // ==========================================================================
 
 // this is used by the JavascriptCompile class on the server side.  You can

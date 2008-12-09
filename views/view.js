@@ -1,6 +1,7 @@
 // ========================================================================
-// SproutCore
-// copyright 2006-2008 Sprout Systems, Inc.
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2008, Sprout Systems, Inc. and contributors.
+// Portions copyright ©2008 Apple, Inc.  All rights reserved.
 // ========================================================================
 
 require('system/browser');
@@ -1437,6 +1438,14 @@ SC.View = SC.Responder.extend(SC.PathModule,  SC.DelegateSupport,
     this.viewFrameDidChange(YES) ;
   },
   
+  recomputeClippingFrame: function() {
+    this.recacheFrames();
+    var parent = this.parentNode;
+    while (parent) {
+      parent.recacheFrames();
+      parent = parent.parentNode;
+    }
+  },
   /** @private
     Handler for the onscroll event.  Hooked in on init if isScrollable is 
     true.  Notify children that their clipping frame has changed.
