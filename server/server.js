@@ -80,9 +80,9 @@ SC.Server = SC.Object.extend({
     // enable JSON for every operation
     if((this.get('postFormat') == SC.JSON_FORMAT) && (params.records)){
       if(this.get('escapeJSON')){
-         params.records = escape(params.records.toJSONString());
+         params.records = escape(SC.json.encode(params.records));
       } else {
-         params.records = params.records.toJSONString();  
+         params.records = SC.json.encode(params.records);  
       }  
      }
     var url = params.url; delete params.url;
