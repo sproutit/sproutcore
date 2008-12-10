@@ -637,14 +637,14 @@ SC.CollectionView = SC.View.extend(SC.CollectionViewDelegate,
       //check for the empty array not necessary, as checked by observer
       // if no childNodes found, children is just an array, so set the state on every item
       if(this.isEnabled){
-         children.each(function(s){
+         children.forEach(function(s){
            if(s.removeClassName){
              s.removeClassName('disabled');
            }
          });
       }
       else {
-        children.each(function(s){
+        children.forEach(function(s){
           if(s.addClassName){
             s.addClassName('disabled'); 
           }
@@ -653,7 +653,7 @@ SC.CollectionView = SC.View.extend(SC.CollectionViewDelegate,
     } // end if (!children.childNodes)
     else {
       // childnodes found
-      children.childNodes.each(this._updateChildrensEnabledState(s));
+      children.childNodes.forEach(this._updateChildrensEnabledState(s));
       // and set the state on the current object too
       if(this.isEnabled && children.addClassName){ // if addClassName exists, so does removeClassName
         children.addClassName('disabled');

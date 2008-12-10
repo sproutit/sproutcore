@@ -28,7 +28,7 @@ SC.Routes = SC.Object.create(
         var parts = (value.route) ? value.route.split('&') : [''] ;
         var route = parts.shift() ;
         var params = {} ;
-        parts.each(function(p) {
+        parts.forEach(function(p) {
           var bits = p.split('=') ;
           params[bits[0]] = bits[1] ;
         }) ;
@@ -95,7 +95,7 @@ SC.Routes = SC.Object.create(
     var parts = route.split('&') ;
     if (parts && parts.length > 0) {
       route = parts.shift() ;
-      parts.each(function(part) {
+      parts.forEach(function(part) {
         var param = part.split('=') ;
         if (param && param.length > 1) params[param[0]] = decodeURIComponent(param[1]) ;
       }) ;

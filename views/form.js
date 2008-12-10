@@ -99,7 +99,7 @@ SC.FormView = SC.View.extend({
     if (!this._errors) {
       var fview =this ;
       this._errors = [] ;
-      this.get('fieldKeys').each(function(k) {
+      this.get('fieldKeys').forEach(function(k) {
         var value = fview.get(k) ;
         if (SC.$type(value) == SC.T_ERROR) fview._errors.push(value) ;
       }) ;
