@@ -35,7 +35,7 @@ SC.Validator.Password = SC.Validator.extend(
     var notEmpty = false ;
     var ret = true ;
     var value = this.fields[0].get('fieldValue') ;
-    this.fields.each(function(field) {
+    this.fields.forEach(function(field) {
       var curValue = field.get('fieldValue') ;
       if (curValue != value) ret= false ;
       if (!curValue || curValue.length == 0) empty = true ;
@@ -56,7 +56,7 @@ SC.Validator.Password = SC.Validator.extend(
     if (!this.fields || this.fields.length == 0) return true ;
     var err = "Invalid.Password".loc();
     var topField = this._field ;
-    this.fields.each(function(f) {
+    this.fields.forEach(function(f) {
       var msg = (valid) ? null : ((f == topField) ? err : '') ;
       form.setErrorFor(f,msg) ;
     }) ;

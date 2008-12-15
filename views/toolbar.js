@@ -24,7 +24,7 @@ SC.Toolbar = SC.View.extend({
   
   isEnabledObserver: function() {
     var e = this.get('isEnabled') ;
-    this.get('buttons').each(function(button) { button.set('isEnabled',e); }) ;
+    this.get('buttons').forEach(function(button) { button.set('isEnabled',e); }) ;
   }.observes('isEnabled')
   
 }) ;

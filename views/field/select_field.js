@@ -179,7 +179,7 @@ SC.SelectFieldView = SC.FieldView.extend(
      }
 
      // generate option elements.
-     objects.each(function(object) {
+     objects.forEach(function(object) {
        if (object) {
        
          // either get the name from the object or convert object to string.
@@ -204,7 +204,7 @@ SC.SelectFieldView = SC.FieldView.extend(
        } else {
          html.push('<option disabled="disabled"></option>') ;
        }
-     }.bind(this) );
+     }, this );
 
      // replace the contents of this HTML element.
      this.update(html.join(""));

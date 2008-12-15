@@ -59,7 +59,7 @@ SC.SegmentedView = SC.View.extend(
     // them up.
     if (!this.segments) this.segments = this.outlets.slice() ;
     var view = this ;
-    this.segments.each(function(key) {
+    this.segments.forEach(function(key) {
       var seg = view[key] ;
       var selectKey = key.slice(0,-6) ;
       if (seg && (seg.action == SC.ButtonView.prototype.action)) seg.action = function() {
@@ -80,7 +80,7 @@ SC.SegmentedView = SC.View.extend(
     if (value != this._lastSelected) {
       this._lastSelected = value ;
       var view = this ;
-      this.segments.each(function(key) {
+      this.segments.forEach(function(key) {
         var isSelected = (value) ? (key.slice(0,-6) == value) : false;
         var button = view[key] ;
         if (button) button.set('isSelected',isSelected) ;
@@ -92,7 +92,7 @@ SC.SegmentedView = SC.View.extend(
     var isEnabled = this.get('isEnabled') ;
     if (isEnabled != this._lastEnabled) {
       var view = this ;
-      this.segments.each(function(key) {
+      this.segments.forEach(function(key) {
         view[key].set('isEnabled',isEnabled) ;
       }) ;
     }
