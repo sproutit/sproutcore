@@ -66,4 +66,4 @@ SC.Page = SC.Object.extend(
   
 }) ;
 
-Object.extend(SC.Page.prototype, SC.PathModule) ;
+SC.mixin(SC.Page.prototype, SC.PathModule) ;

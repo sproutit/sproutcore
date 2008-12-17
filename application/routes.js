@@ -115,9 +115,9 @@ SC.Routes = SC.Object.create(
   init: function() {
     arguments.callee.base.call(this) ;
     if (SC.browser.isSafari && !(SC.browser.safari >= 3)) {
-      Object.extend(this,this.browserFuncs.safari) ;  
+      SC.mixin(this,this.browserFuncs.safari) ;  
     } else if (SC.browser.isIE) {
-      Object.extend(this,this.browserFuncs.ie) ;  
+      SC.mixin(this,this.browserFuncs.ie) ;  
     }
     this._didSetupHistory = false ;
   },
