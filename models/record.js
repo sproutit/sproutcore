@@ -663,7 +663,6 @@ SC.Record = SC.Object.extend(
   
   // used by the store
   _storeKey: function() { 
-    if (!this.constructor._storeKey) debugger ;
     return this.constructor._storeKey(); 
   }  
   
