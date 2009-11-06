@@ -3,6 +3,10 @@
 // Copyright: ©2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
+/*globals plan */
+
+"import core_test:package";
+"import package";
 
 // TODO: Make these unit tests more complete.
 
