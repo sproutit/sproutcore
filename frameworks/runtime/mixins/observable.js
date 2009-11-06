@@ -7,7 +7,6 @@
 
 "import core";
 "import private/observer_set";
-"import private/chain_observer";
 "export package";
 
 var _inited = false; // see initObservable().  avoid cyclical loop
@@ -816,11 +815,7 @@ SC.Observable = {
     if (this._observableInited) return ;
     this._observableInited = YES ;
 
-    if (!_inited) {
-      _inited = YES;
-      require('sproutcore/runtime:system/binding');
-      require('sproutcore/runtime:private/observer_queue');
-    }
+    if (_inited) require('sproutcore/runtime:private/observer_queue');
     
     var loc, keys, key, value, observer, propertyPaths, propertyPathsLength,
         len, ploc, path, dotIndex, root, propertyKey, keysLen;

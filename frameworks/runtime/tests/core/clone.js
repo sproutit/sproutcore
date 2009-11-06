@@ -5,8 +5,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
-"import core";
+"import core_test:package core";
 "import system/object";
 
 /*globals module test ok equals expects object same */

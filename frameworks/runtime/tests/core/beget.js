@@ -3,8 +3,7 @@
 // ========================================================================
 /*globals module test ok isObj equals expects */
 
-"import package core_test";
-"import package sproutcore/runtime";
+"import core_test:package core";
 
 var objectA, objectB , arrayA, stringA; // global variables
 
