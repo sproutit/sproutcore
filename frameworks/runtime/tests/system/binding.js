@@ -3,6 +3,12 @@
 // ========================================================================
 /*globals module test ok isObj equals expects */
 
+"import core_test:package";
+"import core";
+"import system/binding";
+"import system/object";
+"import system/run_loop";
+
 var fromObject, toObject, binding, Bon1, bon2 ; // global variables
 
 module("basic object binding", {
@@ -393,3 +399,5 @@ test("Binding refreshes after a couple of items have been pushed in the array", 
   SC.Binding.flushPendingChanges();
   equals(toObject.get('value'), 'foo,bar');
 });
+
+plan.run();

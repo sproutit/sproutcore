@@ -358,3 +358,5 @@ test("Chained binding should be null if intermediate object in chain is null", f
   SC.Binding.flushPendingChanges();
   equals(a.get('z'), null, "a.z == null");
 });
+
+plan.run();

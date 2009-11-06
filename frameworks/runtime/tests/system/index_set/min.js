@@ -1,3 +1,5 @@
+
+plan.run();
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2009 Apple Inc. and contributors.
@@ -48,3 +50,5 @@ test("newly created index, clearing and then adding", function() {
   equals(set.get('min'), 7, 'min should be lowest index');
 });
 
+
+plan.run();
