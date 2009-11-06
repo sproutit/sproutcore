@@ -1,7 +1,12 @@
 // ========================================================================
 // SC.Observable Tests
 // ========================================================================
-/*globals module test ok isObj equals expects */
+/*globals module test ok isObj equals expects plan */
+
+"import core_test:package";
+"import core";
+"import system/object";
+"import mixins/observable";
 
 var revMatches = NO , ObjectA;
 
@@ -153,3 +158,5 @@ test("should invalidate function property cache when notifyPropertyChange is cal
   equals(a.get('b'), 'foo', 'should have invalidated the cache so that the newly set value is actually set');
   
 });
+
+plan.run();
