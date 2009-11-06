@@ -3,7 +3,10 @@
 // ========================================================================
 /*globals module test ok isObj equals expects TestNamespace */
 
-var testObject, fromObject, extraObject, TestObject;
+"import core_test:package";
+"import package";
+
+var testObject, fromObject, extraObject, TestObject, TestNamespace;
 
 module("bind() method", {
   
@@ -27,10 +30,12 @@ module("bind() method", {
       fromObject: fromObject,
       testObject: testObject
     } ;
+    SC.global('TestNamespace', TestNamespace);
   },
   
-  teardown: function() { 
-    testObject = fromObject = extraObject = null ; 
+  teardown: function() {
+    SC.global.remove('TestNamespace');
+    testObject = fromObject = extraObject = TestObject = TestNamespace = null;
   }
   
 });
@@ -127,15 +132,16 @@ module("fooBinding method", {
       fromObject: fromObject,
       testObject: TestObject
     } ;
+    SC.global('TestNamespace', TestNamespace); 
   },
   
   teardown: function() { 
-    TestObject = fromObject = extraObject = null ;
-  //  delete TestNamespace ;
+    SC.global.remove('TestNamespace');
+    testObject = fromObject = extraObject = TestObject = TestNamespace = null;
   }
   
 });
-
+ 
 test("fooBinding: TestNamespace.fromObject.bar should follow absolute path", function() {
   // create binding
   testObject = TestObject.create({
@@ -228,11 +234,12 @@ module("fooBindingDefault: SC.Binding.Bool (old style)", {
       fromObject: fromObject,
       testObject: TestObject
     } ;
+    SC.global('TestNamespace', TestNamespace);
   },
   
   teardown: function() { 
-    TestObject = fromObject = null ;
- //   delete TestNamespace ;
+    SC.global.remove('TestNamespace');
+    testObject = fromObject = extraObject = TestObject = TestNamespace = null;
   }
   
 });
@@ -294,11 +301,12 @@ module("fooBindingDefault: SC.Binding.bool() (new style)", {
       fromObject: fromObject,
       testObject: testObject
     } ;
+    SC.global('TestNamespace', TestNamespace);
   },
   
   teardown: function() { 
-    TestObject = fromObject = null ;
-   // delete TestNamespace ;
+    SC.global.remove('TestNamespace');
+    testObject = fromObject = extraObject = TestObject = TestNamespace = null;
   }
   
 });
