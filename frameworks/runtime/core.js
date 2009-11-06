@@ -4,12 +4,11 @@
 //            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
+/*global NodeList system */
 
 "require license";
-"import system:package as system";
+"import tiki/system:package as system";
 "export package SC SproutCore YES NO";
-
-/*global NodeList */
 
 // ........................................
 // GLOBAL CONSTANTS

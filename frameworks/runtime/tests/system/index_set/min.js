@@ -1,5 +1,3 @@
-
-plan.run();
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2009 Apple Inc. and contributors.
