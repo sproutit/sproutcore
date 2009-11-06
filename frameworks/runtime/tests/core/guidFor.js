@@ -3,8 +3,7 @@
 // ========================================================================
 /*globals module test ok isObj equals expects */
 
-"import package core_test";
-"import core";
+"import core_test:package core";
 
 var objectA, objectB ; // global variables
 

@@ -3,8 +3,7 @@
 // ========================================================================
 /*globals module test */
 
-"import package core_test";
-"import core";
+"import core_test:package core";
 
 var StringA, StringB, StringC;
 
