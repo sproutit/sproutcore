@@ -4,8 +4,8 @@
 //            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-require('panes/picker');
-require('views/menu_item');
+sc_require('panes/picker');
+sc_require('views/menu_item');
 
 /**
   @class
