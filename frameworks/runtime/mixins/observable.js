@@ -699,7 +699,12 @@ SC.Observable = {
       this._kvo_for(kvoKey, SC.ObserverSet).add(target, method, context);
       this._kvo_for('_kvo_observed_keys', SC.CoreSet).add(key) ;
     }
-
+    
+    // add to observer list
+    if (!(observers = this._observersActive)) observers = this._observersActive = [];
+    this._observersActive.push([key, target, method]);
+    
+    // if didAddObserver is implemented, let them know, now that we finished adding.
     if (this.didAddObserver) this.didAddObserver(key, target, method);
     return this;
   },
@@ -757,7 +762,24 @@ SC.Observable = {
         }
       }
     }
+    
+    // don't do anything if it is already destroying observers from the destroy function
+    if (!this._isDestroyingObservers && this._observersActive) {
+      observers = this._observersActive;
+      
+      // simple loop to find the observer removed
+      idx = observers.length;
+      while (--idx >= 0) {
+        var o = observers[idx];
 
+        // if it is the one we want, remove it and exit
+        if (o[0] == key && o[1] == target && o[2] == method) {
+          observers.splice(idx, 1); 
+          break;
+        }
+      }
+    }
+    
     if (this.didRemoveObserver) this.didRemoveObserver(key, target, method);
     return this;
   },
@@ -808,6 +830,10 @@ SC.Observable = {
   initObservable: function() {
     if (this._observableInited) return ;
     this._observableInited = YES ;
+    
+    // track observers
+    this._observersActive = [];
+    this._isDestroyingObservers = NO;
     
     var loc, keys, key, value, observer, propertyPaths, propertyPathsLength,
         len, ploc, path, dotIndex, root, propertyKey, keysLen;
@@ -879,6 +905,17 @@ SC.Observable = {
       }
     }
     
+  },
+  
+  destroyObservable: function() {
+    var observers = this._observersActive;
+    this._isDestroyingObservers = true;
+    // simple loop to find the observer removed
+    var idx = observers.length;
+    while (--idx >= 0) {
+      var o = observers[idx];
+      this.removeObserver(o[0], o[1], o[2]);
+    }
   },
   
   // ..........................................
