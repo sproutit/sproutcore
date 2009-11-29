@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 // test parsing of query string
 var rec, q;
@@ -41,3 +45,5 @@ test("should handle record types", function() {
   q.parse();
   ok(!q.contains(rec), 'record with wrong type should not match');
 });
+
+plan.run();

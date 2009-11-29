@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
  
 // test parsing of query string
 var q, scope1, scope2;
@@ -54,4 +58,6 @@ test("chained scope", function() {
   var q4 = q2.queryWithScope(scope2);
   equals(q4, q3, 'calling again with same scope should return same instance');
 });
+
+plan.run();
 

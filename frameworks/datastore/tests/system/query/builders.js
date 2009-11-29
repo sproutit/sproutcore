@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 // This file tests the initial state of the store when it is first created
 // either independently or as a chained store.
@@ -98,7 +102,7 @@ function performBasicTests(methodName, loc) {
   test("query with multiple recordtypes", function() {
 
     var types = [TestRecord, TestRecord2],
-        q1, q2, a3, q4, q5, set;
+        q1, q2, q3, q4, q5, set;
 
     // create first query
     q1 = invokeWith(types);
@@ -217,3 +221,5 @@ function performBasicTests(methodName, loc) {
 
 performBasicTests('local', SC.Query.LOCAL);
 performBasicTests('remote', SC.Query.REMOTE);
+
+plan.run();

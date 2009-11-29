@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 // test core array-mapping methods for ManyArray
 var store, storeKey, storeId, rec, storeIds, recs, arrayRec;
@@ -202,3 +206,6 @@ test("reduced properties", function() {
   equals(recs.get('@min(age)'), 7, 'min reducer should return the correct value');
   equals(recs.get('@average(age)'), (32+30+7+17)/4.0, 'average reducer should return the correct value');
 });
+
+plan.run();
+ 

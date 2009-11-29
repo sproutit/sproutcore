@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 // test querying through find() on the store
 module("SC.Query querying find() on a store", {
@@ -527,4 +531,6 @@ test("creating record appears in future find()", function() {
   r = store.find(Rec);
   equals(r.get('length'), 3, 'should return additional record');  
 });
+
+plan.run();
 

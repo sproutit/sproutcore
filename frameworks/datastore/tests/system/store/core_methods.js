@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp Sample */
+/*globals module ok equals same test MyApp Sample plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 var store, Application, dataSource;
 
@@ -141,3 +145,5 @@ test("Make sure that setting an attribute on a record will only notify respectiv
   equals(Application._nameDidChange, 1, 'observer was only fired once');
 
 });
+
+plan.run();

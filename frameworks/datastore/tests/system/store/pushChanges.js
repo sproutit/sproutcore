@@ -3,9 +3,15 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
 
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
+
+var storeKey1, storeKey2, storeKey3, storeKey4, storeKey5, storeKey6;
 var store, storeKey, json;
+
 module("SC.Store#pushChanges", {
   setup: function() {
     
@@ -58,4 +64,6 @@ test("Issue a pushError and check if there is conflicts", function() {
   res = store.pushRetrieve(SC.Record, undefined, undefined, storeKey6);
   ok(!res, "There is a conflict, because of the state, this is expected.");
 });
+
+plan.run();
 

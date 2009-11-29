@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 // test parsing of query string
 var q;
@@ -64,14 +68,14 @@ test("should recognize all primitives", function() {
   q.parse();
   ok(q._tokenList.length == 1, 'list should have one token');
   equals(q._tokenList[0].tokenType, 'NUMBER', 'type should be NUMBER');
-  equals(q._tokenList[0].tokenValue, 1234, 'value should be 1234');
+  equals(q._tokenList[0].tokenValue, "1234", 'value should be 1234');
   
   // NUMBER - float
   q.conditions = "12.34";
   q.parse();
   ok(q._tokenList.length == 1, 'list should have one token');
   equals(q._tokenList[0].tokenType, 'NUMBER', 'type should be NUMBER');
-  equals(q._tokenList[0].tokenValue, 12.34, 'value should be 12.34');
+  equals(q._tokenList[0].tokenValue, "12.34", 'value should be 12.34');
   
   // STRING - single quoted
   q.conditions = "'ultravisitor'";
@@ -198,5 +202,7 @@ test("token tree should build", function() {
   ok(q._tokenTree.tokenValue == 'AND', 'tree root shoud be AND');
   
 });
+
+plan.run();
 
 

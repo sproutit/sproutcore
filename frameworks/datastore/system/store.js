@@ -7,6 +7,7 @@
 
 "import package sproutcore/runtime";
 "import models/record";
+"import models/record_array";
 "export package";
 
 /**

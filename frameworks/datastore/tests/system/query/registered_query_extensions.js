@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
  
 var store, storeKey, rec1, rec2, rec3, rec4, rec5, MyApp, q;
 module("SC.Query registered query extensions", {
@@ -65,3 +69,6 @@ test("SC.Query.queryExtensions", function(){
   ok(q.contains(rec5), "Bert Jules should match");
 
 });
+
+plan.run();
+

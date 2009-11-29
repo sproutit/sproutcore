@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 // NOTE: The test below are based on the Data Hashes state chart.  This models
 // the "did_change" event in the NestedStore portion of the diagram.
@@ -110,4 +114,7 @@ test("marking change should update revision but leave lock alone", function() {
   equals(store.locks[storeKey], parent.revisions[storeKey], 'lock should have parent revision');
   ok(store.revisions[storeKey] !== parent.revisions[storeKey], 'revision should not match parent rev');  
 });
+
+plan.run();
+
 

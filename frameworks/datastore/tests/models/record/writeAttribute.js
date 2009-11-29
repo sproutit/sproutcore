@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 var store, Foo, json, foo ;
 module("SC.Record#writeAttribute", {
@@ -110,3 +114,5 @@ test("Writing primaryKey of 'id'", function(){
   foo2.set('id', 2);
   equals(foo2.get('id'), 2, 'foo2.id should be 2');
 });
+
+plan.run();

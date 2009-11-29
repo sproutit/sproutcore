@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 // NOTE: The test below are based on the Data Hashes state chart.  This models
 // the "read" event in the Store portion of the diagram.
@@ -68,7 +72,9 @@ test("data state=EDITABLE", function() {
 });
 
 test("should return null when accessing an unknown storeKey", function() {
-  equals(store.readDataHash(20000000), null, 'shuld return null for non-existant store key');
+  equals(store.readDataHash(20000000), undefined, 'shuld return undefined for non-existant store key');
   equals(store.storeKeyEditState(storeKey), SC.Store.LOCKED, 'should put into locked edit state');
 });
+
+plan.run();
 

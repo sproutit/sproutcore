@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 // NOTE: The test below are based on the Data Hashes state chart.  This models
 // the "commit" event in the NestedStore portion of the diagram.
@@ -169,3 +173,6 @@ test("commiting a changed record should immediately notify outstanding records i
   prec.equals(1,1,'after runloop ends - should not notify again');
   
 });
+
+plan.run();
+

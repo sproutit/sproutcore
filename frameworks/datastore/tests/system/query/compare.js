@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
  
 // test parsing of query string
 var store, storeKey, rec1, rec2, rec3, rec4, rec5, MyApp, q;
@@ -129,3 +133,5 @@ test("comparing by equal properties should use guid for order", function() {
   q.parse();
   equals(q.compare(rec1,rec2), -1, 'guid 1 should be before guid 2');
 });
+
+plan.run();

@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 // test core array-mapping methods for RecordArray
 var store, storeKey, json, rec, storeKeys, recs;
@@ -175,3 +179,5 @@ test("swapping storeKey array should change recordArray and observers", function
   equals(recs.objectAt(0), rec, 'recs.objectAt(0) should return pushed rec');  
 
 });
+
+plan.run();

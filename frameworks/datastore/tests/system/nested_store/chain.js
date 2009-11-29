@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 // This file tests the initial state of the store when it is first created
 // either independently or as a chained store.
@@ -71,10 +75,10 @@ test("allow for custom subclasses of SC.NestedStore", function() {
   // SC.NestedStore
   ex = null;
   try {
-    var bogus = parent.chain({}, SC.Store);
+    bogus = parent.chain({}, SC.Store);
   }
-  catch(e) {
-    ex = e;
+  catch(e2) {
+    ex = e2;
   }
   ok(ex  &&  ex.message  &&  ex.message.indexOf('is not a type of SC.NestedStore') !== -1, 'chain should report that our class needs to be a subclass of SC.NestedStore');
   
@@ -178,3 +182,6 @@ test("chained store changes should propagate reliably", function() {
   equals(rec.fired, YES, 'original rec.title should have notified');  
   
 });
+
+plan.run();
+

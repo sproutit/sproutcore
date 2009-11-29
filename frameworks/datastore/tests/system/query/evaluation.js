@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 // test parsing of query string
 var q;
@@ -113,39 +117,39 @@ test("should evaluate all comparators", function() {
   
   q.conditions = "'Tea pot' CONTAINS 'Tea pot'";
   q.parse();
-  ok(q._tokenTree.evaluate() == true, "'Tea pot' CONTAINS 'Tea pot' should be true");
+  ok(q._tokenTree.evaluate() === true, "'Tea pot' CONTAINS 'Tea pot' should be true");
   
   q.conditions = "'Tea pot' CONTAINS 'Tea'";
   q.parse();
-  ok(q._tokenTree.evaluate() == true, "'Tea pot' CONTAINS 'Tea' should be true");
+  ok(q._tokenTree.evaluate() === true, "'Tea pot' CONTAINS 'Tea' should be true");
   
   q.conditions = "'Tea pot' CONTAINS 'pot'";
   q.parse();
-  ok(q._tokenTree.evaluate() == true, "'Tea pot' CONTAINS 'pot' should be true");
+  ok(q._tokenTree.evaluate() === true, "'Tea pot' CONTAINS 'pot' should be true");
   
   q.conditions = "'Tea pot' CONTAINS 'a po'";
   q.parse();
-  ok(q._tokenTree.evaluate() == true, "'Tea pot' CONTAINS 'a po' should be true");
+  ok(q._tokenTree.evaluate() === true, "'Tea pot' CONTAINS 'a po' should be true");
   
   q.conditions = "'Tea pot' CONTAINS 'a cup'";
   q.parse();
-  ok(q._tokenTree.evaluate() == false, "'Tea pot' CONTAINS 'a cup' should be false");
+  ok(q._tokenTree.evaluate() === false, "'Tea pot' CONTAINS 'a cup' should be false");
   
   q.conditions = "{myTeapot} CONTAINS 'Tea'";
   q.parse();
-  ok(q._tokenTree.evaluate(null,{myTeapot: ['Tea','pot']}) == true, "['Tea', 'pot'] CONTAINS 'Tea' should be true");
+  ok(q._tokenTree.evaluate(null,{myTeapot: ['Tea','pot']}) === true, "['Tea', 'pot'] CONTAINS 'Tea' should be true");
 
   q.conditions = "{myTeapot} CONTAINS 'pot'";
   q.parse();
-  ok(q._tokenTree.evaluate(null,{myTeapot: ['Tea','pot']}) == true, "['Tea', 'pot'] CONTAINS 'pot' should be true");
+  ok(q._tokenTree.evaluate(null,{myTeapot: ['Tea','pot']}) === true, "['Tea', 'pot'] CONTAINS 'pot' should be true");
 
   q.conditions = "{myTeapot} CONTAINS 'coffee'";
   q.parse();
-  ok(q._tokenTree.evaluate(null,{myTeapot: ['Tea','pot']}) == false, "['Tea', 'pot'] CONTAINS 'coffee' should be false");
+  ok(q._tokenTree.evaluate(null,{myTeapot: ['Tea','pot']}) === false, "['Tea', 'pot'] CONTAINS 'coffee' should be false");
   
   q.conditions = "'Tea pot' MATCHES {myCup}";
   q.parse();
-  ok(q._tokenTree.evaluate(null,{myCup: /a\sp/}) === true, "'Tea pot' MATCHES /a\sp/ should be true");
+  ok(q._tokenTree.evaluate(null,{myCup: /a\sp/}) === true, "'Tea pot' MATCHES /a\\sp/ should be true");
   
   q.conditions = "'Tea pot' MATCHES {myCup}";
   q.parse();
@@ -194,4 +198,7 @@ test("boolean operators should work", function() {
   ok(q._tokenTree.evaluate() === false, "NOT true should be false");
   
 });  
+
+plan.run();
+
   
