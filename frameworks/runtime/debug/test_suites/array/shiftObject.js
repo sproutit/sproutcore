@@ -9,7 +9,7 @@
 
 "import core";
 "import debug/test_suites/array/base";
-"import core_test:package";
+"import package core_test";
 
 SC.ArraySuite.define(function(T) {
   

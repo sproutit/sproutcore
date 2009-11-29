@@ -5,7 +5,7 @@
 // ==========================================================================
 /*globals module ok equals same test MyApp */
 
-"import core_test:package core";
+"import package core_test";
 "import system/object";
 
 // test parsing of query string

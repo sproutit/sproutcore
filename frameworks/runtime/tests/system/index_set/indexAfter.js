@@ -6,8 +6,8 @@
 // ==========================================================================
 /*globals plan */
 
-"import core_test:package";
-"import package";
+"import package core_test";
+"import package sproutcore/runtime";
 
 var set ;
 

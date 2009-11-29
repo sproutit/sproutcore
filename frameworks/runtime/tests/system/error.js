@@ -3,8 +3,8 @@
 // ========================================================================
 /*globals module test ok isObj equals expects */
 
-"import core_test:package";
-"import package";
+"import package core_test";
+"import package sproutcore/runtime";
 
 module("SC.ERROR");
 

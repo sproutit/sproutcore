@@ -5,6 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+"import core";
+
 /**
   The SC.ObservableProtocol defines optional methods you can implement on your
   objects.  They will be used if defined but are not required for observing to

@@ -3,8 +3,9 @@
 // ========================================================================
 /*globals module test ok same equals expects */
 
-"import core_test:package core";
-"import tiki/system:package as system";
+"import package core_test";
+"import package tiki/system as system";
+"import core";
 
 // An ObjectController will make a content object or an array of content objects 
 module("SC.objectForPropertyPath") ;
