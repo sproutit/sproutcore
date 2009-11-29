@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 var store, child, storeKey, json;
 module("SC.Store#commitChangesFromNestedStore", {
@@ -19,21 +23,24 @@ module("SC.Store#commitChangesFromNestedStore", {
     storeKey = SC.Store.generateStoreKey();
 
     child = store.chain();  // test multiple levels deep
+    SC.RunLoop.begin();
 
     // wirte basic status
     child.writeDataHash(storeKey, json, SC.Record.READY_DIRTY);
     child.dataHashDidChange(storeKey);
     child.changelog = SC.Set.create();
     child.changelog.add(storeKey);
+    
+    SC.RunLoop.end();
   }
 });
 
 test("copies changed data hashes, statuses, and revisions", function() {
-  
+
   SC.RunLoop.begin();
   
   // verify preconditions
-  equals(store.readDataHash(storeKey), null, 'precond - should not have data yet');
+  equals(store.readDataHash(storeKey), undefined, 'precond - should not have data yet');
   ok(child.chainedChanges.contains(storeKey), 'precond - child changes should include storeKey');
   
   // perform action
@@ -44,7 +51,7 @@ test("copies changed data hashes, statuses, and revisions", function() {
   equals(store.readStatus(storeKey), SC.Record.READY_DIRTY, 'now should have status');
   equals(store.revisions[storeKey], child.revisions[storeKey], 'now shoulave have revision from child');  
     
-  SC.RunLoop.end();
+  SC.RunLoop.end(); 
 });
 
 test("adds items in changelog to reciever changelog", function() {
@@ -70,13 +77,13 @@ test("adds items in changelog to reciever changelog", function() {
 test("ignores changed data hashes not passed in changes set", function() {
   
   // preconditions
-  equals(store.readDataHash(storeKey), null, 'precond - should not have data yet');
+  equals(store.readDataHash(storeKey), undefined, 'precond - should not have data yet');
 
   // perform action
   equals(store.commitChangesFromNestedStore(child, SC.Set.create(), NO), store, 'should return receiver');
 
   // verify results
-  equals(store.readDataHash(storeKey), null, 'should not copy data hash for storeKey');
+  equals(store.readDataHash(storeKey), undefined, 'should not copy data hash for storeKey');
   
 });
 
@@ -130,4 +137,6 @@ test("does not throw exception if optimistic locking fails but force option is p
   var errorCount = createConflict(YES);
   equals(errorCount, 0, 'should not raise error');
 });
+
+plan.run();
 

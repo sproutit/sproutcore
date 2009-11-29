@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 // NOTE: The test below are based on the Data Hashes state chart.  This models
 // the "remove" event in the Store portion of the diagram.
@@ -77,7 +81,7 @@ test("edit state=EDITABLE", function() {
 
 test("remove a non-existing hash", function() {
   storeKey = SC.Store.generateStoreKey(); // new store key!
-  equals(store.readDataHash(storeKey), null, 'precond - store should not have a data hash for store key yet');
+  equals(store.readDataHash(storeKey), undefined, 'precond - store should not have a data hash for store key yet');
   
   // perform write
   equals(store.removeDataHash(storeKey, SC.Record.DESTROYED_CLEAN), store, 'should return receiver');
@@ -133,6 +137,8 @@ test("change should not propogate to child if child edit state = EDITABLE", func
 
   testLockedOrEditableChild();
 });
+
+plan.run();
 
 
 

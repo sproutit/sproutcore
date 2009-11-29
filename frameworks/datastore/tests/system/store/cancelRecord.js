@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 var store, storeKey1,storeKey2;
 var json1, json2;
@@ -46,9 +50,11 @@ test("Check for error state handling and make sure that the method executes.", f
   try{
     store.cancelRecord(undefined, undefined, storeKey2);
     throwError=true;    
-  }catch (error){
+  }catch (error2){
     throwError=false;
   }
   ok(throwError, " cancelRecord was succesfully executed.");
   
 });
+
+plan.run();

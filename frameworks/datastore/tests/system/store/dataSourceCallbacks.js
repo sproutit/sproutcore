@@ -3,9 +3,21 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
 
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
+
+var json1, json2, json3, json4, json5, json6, json7, json8, json9, json10,
+    json11, json12, json13, json14, json15, json16;
+
+var storeKey1, storeKey2, storeKey3, storeKey4, storeKey5, storeKey6,
+    storeKey7, storeKey8, storeKey9, storeKey10, storeKey11, storeKey12,
+    storeKey13, storeKey14, storeKey15, storeKey16;
+    
 var store, storeKey, json;
+
 module("SC.Store#dataSourceCallbacks", {
   setup: function() {
     
@@ -191,8 +203,8 @@ test("Confirm that dataSourceDidCancel switched the records to the right states"
   try{
     store.dataSourceDidCancel(storeKey8);  
     msg='';
-  }catch(error){
-    msg=error.message;
+  }catch(error2){
+    msg=error2.message;
   }
   equals(SC.Record.BAD_STATE_ERROR.message, msg, 
     "should throw the following error ");
@@ -205,8 +217,8 @@ test("Confirm that dataSourceDidComplete switched the records to the right state
   try{
     store.dataSourceDidComplete(storeKey9);
     msg='';  
-  }catch(error){
-    msg=error.message;
+  }catch(error2){
+    msg=error2.message;
   }
   equals(SC.Record.BAD_STATE_ERROR.message, msg, 
     "should throw the following error ");
@@ -276,3 +288,6 @@ test("Confirm that errors passed to dataSourceDidError make it into the recordEr
   equals(store.recordErrors[storeKey16], SC.Record.GENERIC_ERROR,
     "recordErrors[storeKey] should be the right error object");
 });
+
+plan.run();
+

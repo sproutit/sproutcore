@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 // NOTE: The test below are based on the Data Hashes state chart.  This models
 // the "write" event in the NestedStore portion of the diagram.
@@ -89,7 +93,7 @@ test("edit state=EDITABLE", function() {
 
 test("writing a new hash", function() {
   storeKey = SC.Store.generateStoreKey(); // new store key!
-  equals(parent.readDataHash(storeKey), null, 'precond - parent should not have a data hash for store key yet');
+  equals(parent.readDataHash(storeKey), undefined, 'precond - parent should not have a data hash for store key yet');
   equals(store.storeKeyEditState(storeKey), SC.Store.INHERITED, 'precond - edit status should be inherited');
   
   // perform write
@@ -156,6 +160,8 @@ test("change should not propogate to child if child edit state = EDITABLE", func
   testLockedOrEditableChild();
 });
 
+
+plan.run();
 
 
 

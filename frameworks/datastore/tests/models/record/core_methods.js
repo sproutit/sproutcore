@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 var MyApp, dataSource;
 module("SC.Record core methods", {
@@ -53,3 +57,5 @@ test("Can commitRecord() specific SC.Record instance", function() {
   equals(dataSource.gotParams, YES, 'Params were properly passed through commitRecord');
   
 });
+
+plan.run();

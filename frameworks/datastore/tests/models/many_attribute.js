@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 // test core array-mapping methods for ManyArray with ManyAttribute
 var storeKeys, rec, rec2, rec3, rec4;
@@ -167,7 +171,7 @@ test("reading toMany in chained store", function() {
 test("reading a null relation", function() {
   
   // note: rec1 hash has NO array
-  equals(rec.readAttribute('fooMany'), null, 'rec1.fooMany attr should be null');
+  equals(rec.readAttribute('fooMany'), undefined, 'rec1.fooMany attr should be undefined');
   
   var ret = rec.get('fooMany');
   equals(ret.get('length'), 0, 'rec1.get(fooMany).length should be 0'); 
@@ -410,3 +414,5 @@ test("add a record to a one-to-many; one-side", function() {
   equals(bar3.get('status'), SC.Record.READY_DIRTY, 'bar3.status should be READY_DIRTY');
   
 });
+
+plan.run();

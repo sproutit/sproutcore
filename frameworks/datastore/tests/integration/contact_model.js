@@ -4,7 +4,11 @@
 //            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module test ok equals same AB */
+/*globals module test ok equals same AB plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 var AB;
 module("Sample Model from an address book app", { 
@@ -129,3 +133,5 @@ module("Sample Model from an address book app", {
     
   }
 });
+
+plan.run();

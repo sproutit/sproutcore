@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
  
 // test parsing of query string
 var store, storeKey, foo1, foo2, bar1, bar2, baz, barChild, MyApp, q;
@@ -127,5 +131,7 @@ test("should consider recordType + query conditions", function() {
   equals(q.contains(baz), NO, 'should contain baz (wrong type)');
   
 });
+
+plan.run();
 
 

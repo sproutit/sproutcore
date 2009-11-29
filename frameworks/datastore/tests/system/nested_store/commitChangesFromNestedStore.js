@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 var parent, store, child, storeKey, json;
 module("SC.NestedStore#commitChangesFromNestedStore", {
@@ -34,7 +38,7 @@ test("copies changed data hashes, statuses, and revisions", function() {
   SC.RunLoop.begin();
   
   // verify preconditions
-  equals(store.readDataHash(storeKey), null, 'precond - should not have data yet');
+  equals(store.readDataHash(storeKey), undefined, 'precond - should not have data yet');
   ok(child.chainedChanges.contains(storeKey), 'precond - child changes should include storeKey');
   
   // perform action
@@ -134,8 +138,8 @@ test("committing changes should chain back each step", function() {
 
   // preconditions
   equals(child.readDataHash(storeKey), json, 'precond - child should have data');
-  equals(store.readDataHash(storeKey), null, 'precond - store should not have data');
-  equals(parent.readDataHash(storeKey), null, 'precond - parent should not have data');
+  equals(store.readDataHash(storeKey), undefined, 'precond - store should not have data');
+  equals(parent.readDataHash(storeKey), undefined, 'precond - parent should not have data');
   
   // do commits
   child.commitChanges();
@@ -149,6 +153,8 @@ test("committing changes should chain back each step", function() {
   SC.RunLoop.end();
   
 });
+
+plan.run();
 
 
 

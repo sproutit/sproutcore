@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp Sample */
+/*globals module ok equals same test MyApp Sample plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 var store, fds, storeKey1,storeKey2;
 
@@ -115,3 +119,5 @@ test("Update and commit a record", function() {
   equals(fixture.name, rec.get('name'), 'fixture state should update to match new name');
     
 });
+
+plan.run();

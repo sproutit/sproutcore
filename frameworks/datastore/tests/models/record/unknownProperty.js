@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 var MyFoo = null ;
 module("SC.Record#unknownProperty", {
@@ -62,5 +66,8 @@ test("set() on unknown property if model ignoreUnknownProperties=YES should not 
   MyApp.fooStrict.set('foo', 'baz');
   equals(MyApp.store.dataHashes[MyApp.fooStrict.storeKey].foo, 'bar', 'should not have written new value to dataHash');
 });
+
+plan.run();
+
 
 

@@ -3,9 +3,13 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
 
-var store, storeKey, json, hash, hash2;
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
+
+var store, storeKey, json, hash, hash2, MyRecordType;
 
 module("SC.Store#createRecord", {
   setup: function() {
@@ -70,3 +74,5 @@ test("Creating an empty (null) record should make the hash available", function(
   ok(store.readDataHash(storeKey), 'data hash should not be empty/undefined');
   
 });
+
+plan.run();

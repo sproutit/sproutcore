@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 var store, Application;
 
@@ -60,3 +64,5 @@ test("Verify readQueryError() returns correct errors", function() {
   equals(store.readQueryError(q), SC.Record.GENERIC_ERROR,
     "store.readQueryError(q) should return the correct error object");
 });
+
+plan.run();

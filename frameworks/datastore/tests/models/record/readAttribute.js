@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 var store, Foo, json, foo ;
 module("SC.Record#readAttribute", {
@@ -49,5 +53,8 @@ test("returns undefined when data hash is not present", function() {
   equals(store.readDataHash(foo.storeKey), null, 'precond - data hash should be removed from store');
   equals(foo.readAttribute("foo"), undefined, "should return undefined if data hash is missing");
 });
+
+plan.run();
+
 
 
