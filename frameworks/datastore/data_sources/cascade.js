@@ -5,7 +5,9 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('data_sources/data_source');
+"import package sproutcore/runtime";
+"import data_sources/data_source";
+"export package";
 
 /** @class
 

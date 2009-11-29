@@ -5,6 +5,9 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+"import package sproutcore/runtime";
+"export package";
+
 /**
   @class
 
@@ -353,7 +356,7 @@ SC.Record = SC.Object.extend(
   propagateToAggregates: function() {
     var storeKey = this.get('storeKey'),
         recordType = SC.Store.recordTypeFor(storeKey), 
-        idx, len, key, val, recs;
+        idx, len, key, val, recs, k;
     
     var aggregates = recordType.aggregates;
     
@@ -1134,3 +1137,16 @@ SC.Record.mixin( /** @scope SC.Record */ {
     return newIdx; 
   }
 }) ;
+
+// Make sure some core required modules are loaded.  These modules import 
+// record, so we require them here to make sure modules are defined in the 
+// proper order.
+require('system/store');
+require('system/query');
+require('system/many_array');
+
+require('models/record_attribute');
+require('models/single_attribute');
+require('models/many_attribute');
+require('models/fetched_attribute');
+

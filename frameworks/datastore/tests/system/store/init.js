@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 // This file tests the initial state of the store when it is first created
 // either independently or as a chained store.
@@ -21,3 +25,4 @@ test("initial setup for root store", function() {
   ok(!store.queryErrors, 'should not have queryErrors');
 }); 
 
+plan.run();

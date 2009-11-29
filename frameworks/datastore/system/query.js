@@ -5,8 +5,9 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('core') ;
-sc_require('models/record');
+"import package sproutcore/runtime";
+"import models/record";
+"export package";
 
 /**
   @class
