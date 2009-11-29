@@ -3,9 +3,10 @@
 // ========================================================================
 /*globals module test */
 
-"import core_test:package core";
+"import package core_test";
+"import core";
 "import system/object";
-"import tiki/system:package as system";
+"import package tiki/system as system";
 
 var object, object1,object3; //global variables
 

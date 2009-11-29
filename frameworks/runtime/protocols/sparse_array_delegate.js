@@ -5,6 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+"import core";
+
 /** @namespace
 
   Delegate that provides data for a sparse array.  If you set the delegate for

@@ -3,8 +3,8 @@
 // ========================================================================
 /*globals module test ok isObj equals expects same plan */
 
-"import core_test:package";
-"import package";
+"import package core_test";
+"import package sproutcore/runtime";
 
 var obj, obj1, don, don1 ; // global variables
 

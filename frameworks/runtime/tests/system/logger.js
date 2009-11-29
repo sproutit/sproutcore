@@ -4,8 +4,8 @@
 
 /*globals module test equals */
 
-"import core_test:package";
-"import package";
+"import package core_test";
+"import package sproutcore/runtime";
 
 // Test console needed because testing for null functions,
 // ie. setting the actual console.log = null means setting up

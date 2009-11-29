@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import core_test:package";
+"import package core_test";
 "import core";
 "import system/object";
 "import mixins/comparable";

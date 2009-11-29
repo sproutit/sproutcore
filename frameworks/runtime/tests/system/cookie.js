@@ -3,7 +3,7 @@
 // ==========================================================================
 /*globals module test equals */
 
-"import core_test:package";
+"import package core_test";
 "import core";
 "import system/cookie";
 "import system/object";

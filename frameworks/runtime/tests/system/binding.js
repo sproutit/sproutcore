@@ -3,12 +3,12 @@
 // ========================================================================
 /*globals module test ok isObj equals expects */
 
-"import core_test:package";
+"import package core_test";
 "import core";
 "import system/binding";
 "import system/object";
 "import system/run_loop";
-"import tiki/system:package as system";
+"import package tiki/system as system";
 
 var fromObject, toObject, binding, Bon1, bon2 ; // global variables
 
