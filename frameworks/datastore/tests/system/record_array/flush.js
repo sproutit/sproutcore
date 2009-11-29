@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 // test core array-mapping methods for RecordArray
 var store, storeKey, json, rec, storeKeys, recs, query;
@@ -127,6 +131,8 @@ test("calling storeDidChangeStoreKeys() to remove a record", function() {
   
   equals(recs.get('length'), 0, 'should remove storeKey on flush()');
 });
+
+plan.run();
 
 
 // ..........................................................

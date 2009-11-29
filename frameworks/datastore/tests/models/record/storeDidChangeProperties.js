@@ -3,7 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp */
+/*globals module ok equals same test MyApp plan */
+
+"import package core_test";
+"import package sproutcore/runtime";
+"import package sproutcore/datastore";
 
 var store, child, Foo, json, foo ;
 module("SC.Record#storeDidChangeProperties", {
@@ -167,4 +171,7 @@ test("changing attributes on a parent store should NOT notify child store if loc
   SC.RunLoop.end();
 
 });
+
+plan.run();
+
 
