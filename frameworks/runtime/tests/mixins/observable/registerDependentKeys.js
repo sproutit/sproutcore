@@ -7,7 +7,7 @@
 
 /*globals module test ok equals same plan */
 
-"import core_test:package";
+"import package core_test";
 "import core";
 "import system/object";
 "import mixins/observable";

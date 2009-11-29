@@ -6,7 +6,7 @@
 // ==========================================================================
 
 // Unit test some standard SC.Array implementations.
-"import core_test:package";
+"import package core_test";
 "import core";
 "import debug/test_suites/array";
 "import system/object";

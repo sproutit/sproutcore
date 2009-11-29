@@ -3,7 +3,7 @@
 // ========================================================================
 /*globals module test ok isObj equals expects Namespace */
 
-"import core_test:package";
+"import package core_test";
 "import core";
 "import system/object";
 "import mixins/observable";

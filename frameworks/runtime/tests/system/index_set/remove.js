@@ -6,8 +6,8 @@
 
 /*global module test equals context ok same notest shouldThrow plan*/
 
-"import core_test:package";
-"import package";
+"import package core_test";
+"import package sproutcore/runtime";
 
 var set ;
 module("SC.IndexSet#remove", {

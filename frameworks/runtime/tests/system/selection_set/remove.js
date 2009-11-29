@@ -5,8 +5,8 @@
 // ==========================================================================
 /*globals plan */
 
-"import core_test:package";
-"import package";
+"import package core_test";
+"import package sproutcore/runtime";
 
 var set, array, array2, expected, expected2 ;
 module("SC.SelectionSet#remove", {

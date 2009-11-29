@@ -6,8 +6,8 @@
 
 /*global module test equals context ok same notest */
 
-"import core_test:package";
-"import package";
+"import package core_test";
+"import package sproutcore/runtime";
 
 var source, indexes, observer, obj ; // base array to work with
 module("SC.RangeObserver#update", {

@@ -8,7 +8,7 @@
 /*globals module test ok equals same CoreTest */
 
 "import core";
-"import core_test:package";
+"import package core_test";
 
 /**
   Adds a new module of unit tests to verify that the passed object implements

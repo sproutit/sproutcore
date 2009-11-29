@@ -3,7 +3,8 @@
 // ========================================================================
 /*globals module test */
 
-"import core_test:package core";
+"import package core_test";
+"import core";
 
 var objectA,objectB,objectC, objectD, objectE; //global variables
 
