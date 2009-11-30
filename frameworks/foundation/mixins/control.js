@@ -5,7 +5,9 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('mixins/string');
+"import package sproutcore/runtime";
+"import mixins/string";
+"export package";
 
 /** 
   Indicates a value has a mixed state of both on and off. 

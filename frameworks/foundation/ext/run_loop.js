@@ -5,6 +5,10 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+"import sproutcore/runtime";
+"import core";
+"export package";
+
 // Create anonymous subclass of SC.RunLoop to add support for processing 
 // view queues and Timers.
 SC.RunLoop = SC.RunLoop.extend(

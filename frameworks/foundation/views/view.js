@@ -5,12 +5,17 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('system/browser');
-sc_require('system/event');
-sc_require('system/cursor');
-sc_require('system/responder') ;
+"import package sproutcore/runtime";
 
-sc_require('mixins/string') ;
+"import core";
+"import system/browser";
+"import system/event";
+"import system/cursor";
+"import system/responder";
+"import mixins/string";
+"import system/render_context";
+
+"export package";
 
 SC.viewKey = SC.guidKey + "_view" ;
 

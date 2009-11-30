@@ -6,7 +6,11 @@
 // ==========================================================================
 /*globals CQ add*/
 
-sc_require('system/builder') ;
+"import package sproutcore/runtime";
+"import core";
+"import mixins/string";
+"import system/builder";
+"export package";
 
 /**
   CoreQuery is a simplified DOM manipulation library used internally by 

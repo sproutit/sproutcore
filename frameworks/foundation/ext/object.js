@@ -5,6 +5,10 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+"import sproutcore/runtime";
+"import core";
+"export package";
+
 // Extensions to the core SC.Object class
 SC.mixin(SC.Object.prototype, /** @scope SC.Object.prototype */ {
   

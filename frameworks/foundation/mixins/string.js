@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('system/locale');
+"import package sproutcore/runtime";
+"export package";
 
 // These are basic enhancements to the string class used throughout 
 // SproutCore.
@@ -372,3 +373,4 @@ String.prototype.loc = SC.String.loc; // Two places define it, and we want the v
 /** @private */
 SC.String.fmt = String.prototype.fmt; // copy from runtime
 
+require('system/locale');

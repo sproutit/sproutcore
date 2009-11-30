@@ -3,7 +3,9 @@
 // copyright 2006-2008 Sprout Systems, Inc.
 // ========================================================================
 
-sc_require('views/text_field') ;
+"import package sproutcore/runtime";
+"import views/text_field";
+"export package";
 
 /**
   @class

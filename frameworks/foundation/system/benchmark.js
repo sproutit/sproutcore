@@ -6,7 +6,9 @@
 // ==========================================================================
 /*globals $A*/
 
-sc_require('core') ;
+"import package sproutcore/runtime";
+"import core";
+"export package";
  
 /** @namespace
 

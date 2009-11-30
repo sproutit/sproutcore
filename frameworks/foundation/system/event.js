@@ -5,7 +5,10 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('system/core_query') ;
+"import package sproutcore/runtime";
+"import core";
+"import system/core_query";
+"export package";
 
 /**
   The event class provides a simple cross-platform library for capturing and

@@ -5,6 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+"import package sproutcore/runtime";
+"export package";
 
 /**
   Used for contentIndexDisclosureState().  Indicates open branch node.

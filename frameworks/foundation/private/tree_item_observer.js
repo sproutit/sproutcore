@@ -5,8 +5,12 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('mixins/tree_item_content');
-sc_require('mixins/collection_content');
+"import package sproutcore/runtime";
+"import core";
+"import mixins/tree_item_content";
+"import mixins/collection_content";
+"export package";
+
 
 /** 
   @ignore

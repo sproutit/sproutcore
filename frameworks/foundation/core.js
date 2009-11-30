@@ -5,6 +5,11 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+"require license";
+"import package sproutcore/runtime";
+"import mixins/string";
+"export package";
+
 /**
   Indicates that the collection view expects to accept a drop ON the specified
   item.

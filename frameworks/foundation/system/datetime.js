@@ -5,6 +5,10 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+"import package sproutcore/runtime";
+"import core";
+"export package";
+
 /**
   Standard error thrown by SC.Scanner when it runs out of bounds
   

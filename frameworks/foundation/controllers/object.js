@@ -5,7 +5,10 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('controllers/controller') ;
+"import package sproutcore/runtime";
+"import core";
+"import controllers/controller";
+"export package";
 
 /** @class
 

@@ -5,7 +5,9 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('panes/pane');
+"import sproutcore/runtime";
+"import core";
+"import panes/pane";
 
 /*global test */
 

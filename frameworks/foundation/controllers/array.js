@@ -4,8 +4,11 @@
 // Portions copyright ©2008 Apple Inc.  All rights reserved.
 // ========================================================================
 
-sc_require('controllers/controller');
-sc_require('mixins/selection_support');
+"import package sproutcore/runtime";
+"import core";
+"import controllers/controller";
+"import mixins/selection_support";
+"export package";
 
 /**
   @class

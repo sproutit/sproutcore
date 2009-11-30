@@ -5,6 +5,9 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+"import package sproutcore/runtime";
+"export package";
+
 /** @namespace
 
   This mixin implements many of the basic state-handling attributes for 

@@ -5,6 +5,10 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+"import package sproutcore/runtime";
+"import core";
+"export package";
+
 // standard browser cursor definitions
 SC.SYSTEM_CURSOR = 'default' ;
 SC.AUTO_CURSOR = SC.DEFAULT_CURSOR = 'auto' ;
