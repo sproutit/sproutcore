@@ -32,14 +32,25 @@ config :bootstrap,
   :use_modules => false       
 
 config :runtime,    
-  :required => ['tiki/system'],
+  :required => :tiki,
   :debug_required => [],
-  :test_required => ['core_test'],
+  :test_required => :core_test,
   :use_modules => true,
   :factory_format => :function
   
-config :foundation, :required => [:runtime]
-config :datastore,  :required => [:runtime]
+config :datastore,
+  :required       => [:tiki, :runtime],
+  :debug_required => [],
+  :test_required  => :core_test,
+  :use_modules    => true,
+  :factory_format => :function
+
+config :foundation,
+  :required       => [:tiki, :runtime],
+  :debug_required => [],
+  :test_required  => :core_test,
+  :use_modules    => true,
+  :factory_format => :function
 
 # APP-LEVEL FRAMEWORKS
 %w(desktop mobile designer).each do |app_framework|
@@ -66,20 +77,26 @@ end
 # CONFIGURE THEMES
 config :empty_theme, 
   :theme_name => 'empty-theme',
-  :test_required  => ['sproutcore/testing'],
-  :debug_required => ['sproutcore/debug']
+  :test_required  => :core_test,
+  :debug_required => [],
+  :required       => [],
+  :use_modules    => true
 
 config :iphone_theme, 
   :theme_name     => 'iphone-theme',
   :required       => [],
-  :test_required  => ['sproutcore/testing'],
-  :debug_required => ['sproutcore/debug']
+  :test_required  => :core_test,
+  :debug_required => [],
+  :required       => [:empty_theme],
+  :use_modules    => true
 
 config :standard_theme, 
   :required => :empty_theme, 
   :theme_name => 'sc-theme',
-  :test_required  => ['sproutcore/testing'],
-  :debug_required => ['sproutcore/debug']
+  :test_required  => :core_test,
+  :debug_required => [],
+  :required       => [:empty_theme],
+  :use_modules    => true
 
 # CONFIGURE APPS
 
