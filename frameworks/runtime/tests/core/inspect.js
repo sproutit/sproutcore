@@ -19,13 +19,13 @@ module("Inspect module",{
 
 test("SC.inspect module should give a string type",function(){
     var object1 = SC.inspect(obj1); 	
-	equals(YES,SC.T_STRING === SC.typeOf(object1) ,'description of the array');
+	equals(true,SC.T_STRING === SC.typeOf(object1) ,'description of the array');
 	
 	var object2 = SC.inspect(obj2);
-	equals(YES,SC.T_STRING === SC.typeOf(object2),'description of the numbers');
+	equals(true,SC.T_STRING === SC.typeOf(object2),'description of the numbers');
 	
 	var object3 = SC.inspect(obj3);
-	equals(YES,SC.T_STRING === SC.typeOf(object3),'description of the object');
+	equals(true,SC.T_STRING === SC.typeOf(object3),'description of the object');
 });
 
 plan.run();

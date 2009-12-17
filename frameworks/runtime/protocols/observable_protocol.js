@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
+var SC = require('core');
 
 /**
   The SC.ObservableProtocol defines optional methods you can implement on your

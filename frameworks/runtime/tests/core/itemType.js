@@ -42,8 +42,8 @@ module("none or undefined object type",{
 });
 
 test("should return true for null and undefined ",function(){
-	equals(YES,SC.none(a),"for a null parameter passed  ");
-	equals(YES,SC.none(b),"for a undefined parameter passed ");
+	equals(true,SC.none(a),"for a null parameter passed  ");
+	equals(true,SC.none(b),"for a undefined parameter passed ");
 });
 
 plan.run();

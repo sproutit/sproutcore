@@ -5,12 +5,11 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
-"import mixins/enumerable";
-"import mixins/observable";
-"import mixins/freezable";
-"import mixins/copyable";
-"export package";
+var SC = require('core');
+require('mixins/enumerable');
+require('mixins/observable');
+require('mixins/freezable');
+require('mixins/copyable');
 
 /**
   @class 
@@ -100,7 +99,7 @@ SC.IndexSet = SC.mixin({},
     
     @property {Boolean}
   */
-  isIndexSet: YES,
+  isIndexSet: true,
 
   /**  @private 
     Internal setting determines the preferred skip size for hinting sets.
@@ -178,8 +177,8 @@ SC.IndexSet = SC.mixin({},
   },
     
   /**
-    Returns YES if the passed index set contains the exact same indexes as 
-    the receiver.  If you pass any object other than an index set, returns NO.
+    Returns true if the passed index set contains the exact same indexes as 
+    the receiver.  If you pass any object other than an index set, returns false.
     
     @param {Object} obj another object.
     @returns {Boolean}
@@ -187,8 +186,8 @@ SC.IndexSet = SC.mixin({},
   isEqual: function(obj) {
     
     // optimize for some special cases
-    if (obj === this) return YES ;
-    if (!obj || !obj.isIndexSet || (obj.max !== this.max) || (obj.length !== this.length)) return NO;
+    if (obj === this) return true ;
+    if (!obj || !obj.isIndexSet || (obj.max !== this.max) || (obj.length !== this.length)) return false;
 
     // ok, now we need to actually compare the ranges of the two.
     var lcontent = this._content,
@@ -197,11 +196,11 @@ SC.IndexSet = SC.mixin({},
         next     = lcontent[cur];
     
     do {
-      if (rcontent[cur] !== next) return NO ;
+      if (rcontent[cur] !== next) return false ;
       cur = Math.abs(next) ;
       next = lcontent[cur];
     } while (cur !== 0);
-    return YES ;
+    return true ;
   },
   
   /**
@@ -259,7 +258,7 @@ SC.IndexSet = SC.mixin({},
   },
   
   /**
-    Returns YES if the index set contains the named index
+    Returns true if the index set contains the named index
     
     @param {Number} start index or range
     @param {Number} length optional range length
@@ -270,24 +269,24 @@ SC.IndexSet = SC.mixin({},
     
     // normalize input
     if (length === undefined) { 
-      if (start === null || start === undefined) return NO ;
+      if (start === null || start === undefined) return false ;
       
       if (typeof start === SC.T_NUMBER) {
         length = 1 ;
         
       // if passed an index set, check each receiver range
       } else if (start && start.isIndexSet) {
-        if (start === this) return YES ; // optimization
+        if (start === this) return true ; // optimization
 
         content = start._content ;
         cur = 0 ;
         next = content[cur];
         while (next !== 0) {
-          if ((next>0) && !this.contains(cur, next-cur)) return NO ;
+          if ((next>0) && !this.contains(cur, next-cur)) return false ;
           cur = Math.abs(next);
           next = content[cur];
         }
-        return YES ;
+        return true ;
         
       } else {
         length = start.length; 
@@ -302,7 +301,7 @@ SC.IndexSet = SC.mixin({},
   },
 
   /**
-    Returns YES if the index set contains any of the passed indexes.  You
+    Returns true if the index set contains any of the passed indexes.  You
     can pass a single index, a range or an index set.
     
     @param {Number} start index, range, or IndexSet
@@ -319,17 +318,17 @@ SC.IndexSet = SC.mixin({},
         
       // if passed an index set, check each receiver range
       } else if (start && start.isIndexSet) {
-        if (start === this) return YES ; // optimization
+        if (start === this) return true ; // optimization
 
         content = start._content ;
         cur = 0 ;
         next = content[cur];
         while (next !== 0) {
-          if ((next>0) && this.intersects(cur, next-cur)) return YES ;
+          if ((next>0) && this.intersects(cur, next-cur)) return true ;
           cur = Math.abs(next);
           next = content[cur];
         }
-        return NO ;
+        return false ;
         
       } else {
         length = start.length; 
@@ -342,12 +341,12 @@ SC.IndexSet = SC.mixin({},
     next    = content[cur];
     lim     = start + length;
     while (cur < lim) {
-      if (next === 0) return NO; // no match and at end!
-      if ((next > 0) && (next > start)) return YES ; // found a match
+      if (next === 0) return false; // no match and at end!
+      if ((next > 0) && (next > start)) return true ; // found a match
       cur = Math.abs(next);
       next = content[cur];
     }
-    return NO ; // no match
+    return false ; // no match
   },
 
   /**
@@ -1135,7 +1134,7 @@ SC.IndexSet = SC.mixin({},
     
     @property {Boolean}
   */
-  LOG_OBSERVING: NO,
+  LOG_OBSERVING: false,
   
   /** @private - optimized call to forEach() */
   forEach: function(callback, target) {

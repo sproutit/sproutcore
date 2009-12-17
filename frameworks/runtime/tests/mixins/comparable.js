@@ -42,7 +42,7 @@ module("Comparable", {
 });
 
 test("should be comparable and return the correct result", function() {
-  equals(r1.constructor.isComparable, YES);
+  equals(r1.constructor.isComparable, true);
   equals(SC.compare(r1, r1), 0);
   equals(SC.compare(r1, r2), -1);
   equals(SC.compare(r2, r1), 1);

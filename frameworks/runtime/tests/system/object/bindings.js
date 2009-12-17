@@ -74,12 +74,12 @@ test("SC.Binding.bool(TestNamespace.fromObject.bar)) should create binding with 
   fromObject.set("bar", 1) ;
   
   SC.Binding.flushPendingChanges();
-  equals(YES, testObject.get("foo"), "testObject.foo == YES");
+  equals(true, testObject.get("foo"), "testObject.foo == true");
   
   fromObject.set("bar", 0) ;
   
   SC.Binding.flushPendingChanges();
-  equals(NO, testObject.get("foo"), "testObject.foo == NO");
+  equals(false, testObject.get("foo"), "testObject.foo == false");
 });
 
 test("bind(TestNamespace.fromObject*extraObject.foo) should create chained binding", function() {
@@ -181,12 +181,12 @@ test("fooBinding: SC.Binding.bool(TestNamespace.fromObject.bar should create bin
   fromObject.set("bar", 1) ;
   
   SC.Binding.flushPendingChanges();
-  equals(YES, testObject.get("foo"), "testObject.foo == YES");
+  equals(true, testObject.get("foo"), "testObject.foo == true");
   
   fromObject.set("bar", 0) ;
   
   SC.Binding.flushPendingChanges();
-  equals(NO, testObject.get("foo"), "testObject.foo == NO");
+  equals(false, testObject.get("foo"), "testObject.foo == false");
 });
 
 test("fooBinding: TestNamespace.fromObject*extraObject.foo should create chained binding", function() {
@@ -255,12 +255,12 @@ test("fooBinding: TestNamespace.fromObject.bar should have bool binding", functi
   fromObject.set("bar", 1) ;
   
   SC.Binding.flushPendingChanges();
-  equals(YES, testObject.get("foo"), "testObject.foo == YES");
+  equals(true, testObject.get("foo"), "testObject.foo == true");
   
   fromObject.set("bar", 0) ;
   
   SC.Binding.flushPendingChanges();
-  equals(NO, testObject.get("foo"), "testObject.foo == NO");
+  equals(false, testObject.get("foo"), "testObject.foo == false");
 });
 
 test("fooBinding: SC.Binding.not(TestNamespace.fromObject.bar should override default", function() {
@@ -274,12 +274,12 @@ test("fooBinding: SC.Binding.not(TestNamespace.fromObject.bar should override de
   fromObject.set("bar", 1) ;
   
   SC.Binding.flushPendingChanges();
-  equals(NO, testObject.get("foo"), "testObject.foo == NO");
+  equals(false, testObject.get("foo"), "testObject.foo == false");
   
   fromObject.set("bar", 0) ;
   
   SC.Binding.flushPendingChanges();
-  equals(YES, testObject.get("foo"), "testObject.foo == YES");
+  equals(true, testObject.get("foo"), "testObject.foo == true");
 });
 
 module("fooBindingDefault: SC.Binding.bool() (new style)", {
@@ -322,12 +322,12 @@ test("fooBinding: TestNamespace.fromObject.bar should have bool binding", functi
   fromObject.set("bar", 1) ;
   
   SC.Binding.flushPendingChanges();
-  equals(YES, testObject.get("foo"), "testObject.foo == YES");
+  equals(true, testObject.get("foo"), "testObject.foo == true");
   
   fromObject.set("bar", 0) ;
   
   SC.Binding.flushPendingChanges();
-  equals(NO, testObject.get("foo"), "testObject.foo == NO");
+  equals(false, testObject.get("foo"), "testObject.foo == false");
 });
 
 test("fooBinding: SC.Binding.not(TestNamespace.fromObject.bar should override default", function() {
@@ -341,12 +341,12 @@ test("fooBinding: SC.Binding.not(TestNamespace.fromObject.bar should override de
   fromObject.set("bar", 1) ;
   
   SC.Binding.flushPendingChanges();
-  equals(NO, testObject.get("foo"), "testObject.foo == NO");
+  equals(false, testObject.get("foo"), "testObject.foo == false");
   
   fromObject.set("bar", 0) ;
   
   SC.Binding.flushPendingChanges();
-  equals(YES, testObject.get("foo"), "testObject.foo == YES");
+  equals(true, testObject.get("foo"), "testObject.foo == true");
 });
 
 test("Chained binding should be null if intermediate object in chain is null", function() {

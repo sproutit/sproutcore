@@ -5,8 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
-"export package";
+var SC = require('core');
 
 /**
   @namespace
