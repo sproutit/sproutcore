@@ -22,11 +22,11 @@ module("SC.RangeObserver#rangeDidChange", {
     
     observer = SC.Object.create({
 
-      verify: NO ,
+      verify: false ,
       
       callCount: 0, 
       
-      indexes: NO,
+      indexes: false,
       
       // whenever this is called, verify proper params are passed
       changeObserver: function(inSource, inObject, inKey, inIndexes, inContext) { 
@@ -47,7 +47,7 @@ module("SC.RangeObserver#rangeDidChange", {
       
     });
 
-    obj = SC.RangeObserver.create(source, indexes, observer, observer.changeObserver, "context", YES);
+    obj = SC.RangeObserver.create(source, indexes, observer, observer.changeObserver, "context", true);
     
   }
 });
@@ -61,22 +61,22 @@ test("returns receiver", function() {
 // 
 
 test("invokes callback if no changes set is passed", function() {
-  observer.verify = YES ;
+  observer.verify = true ;
   observer.indexes = null ;
   obj.rangeDidChange();
   equals(observer.callCount, 1, 'should invoke callback');
 });
 
 test("invokes callback if changes set is passed and it intersects with observed range", function() {
-  observer.verify = YES ;
+  observer.verify = true ;
   observer.indexes = SC.IndexSet.create(1,2) ;
   obj.rangeDidChange(observer.indexes);
   equals(observer.callCount, 1, 'should invoke callback');
 });
 
-test("does NOT invoke callback if changes set is passed and it intersects with observed range", function() {
+test("does falseT invoke callback if changes set is passed and it intersects with observed range", function() {
   obj.rangeDidChange(SC.IndexSet.create(4));
-  equals(observer.callCount, 0, 'should NOT invoke callback');
+  equals(observer.callCount, 0, 'should falseT invoke callback');
 });
 
 // ..........................................................

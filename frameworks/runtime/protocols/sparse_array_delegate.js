@@ -5,7 +5,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
+var SC = require('core');
 
 /** @namespace
 
@@ -108,16 +108,16 @@ SC.SparseArrayDelegate = {
   /**
     Optional delegate method invoked whenever the sparse array attempts to 
     changes its contents.  If you do not implement this method or if you 
-    return NO from this method, then the edit will not be allowed.
+    return false from this method, then the edit will not be allowed.
     
     @param {SC.SparseArray} sparseArray the sparse array
     @param {Number} idx the starting index to replace
     @param {Number} amt the number if items to replace
     @param {Array} objects the array of objects to insert
-    @returns {Boolean} YES to allow replace, NO to deny
+    @returns {Boolean} true to allow replace, false to deny
   */
   sparseArrayShouldReplace: function(sparseArray, idx, amt, objects) {
-    return NO ;
+    return false ;
   },
   
   /**

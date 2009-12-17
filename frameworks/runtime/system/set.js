@@ -5,14 +5,13 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
-"import mixins/enumerable";
-"import mixins/copyable";
-"import mixins/freezable";
-"import mixins/observable";
-"export package";
+var SC = require('core');
+require('mixins/enumerable');
+require('mixins/copyable');
+require('mixins/freezable');
+require('mixins/observable');
 
-// IMPORTANT NOTE:  This file actually defines two classes: 
+// IMPORTANT falseTE:  This file actually defines two classes: 
 // SC.Set is a fully observable set class documented below. 
 // SC._CoreSet is just like SC.Set but is not observable.  This is required
 // because SC.Observable is built on using sets and requires sets without 
@@ -116,7 +115,7 @@ SC.Set = SC.mixin({},
       
       if (items && items.isEnumerable && items.get('length')>0) {
 
-        ret.isObservable = NO; // suspend change notifications
+        ret.isObservable = false; // suspend change notifications
         
         // arrays and sets get special treatment to make them a bit faster
         if (items.isSCArray) {
@@ -141,7 +140,7 @@ SC.Set = SC.mixin({},
     
     @property {Boolean}
   */
-  isSet: YES,
+  isSet: true,
   
   /**
     This property will change as the number of objects in the set changes.
@@ -181,13 +180,13 @@ SC.Set = SC.mixin({},
     // still be stored as a key, but points to an index that is beyond the
     // length.  Therefore the found idx must both be defined and less than
     // the current length.
-    if (obj === null) return NO ;
+    if (obj === null) return false ;
     var idx = this[SC.hashFor(obj)] ;
     return (!SC.none(idx) && (idx < this.length) && (this[idx]===obj)) ;
   },
   
   /**
-    Returns YES if the passed object is also a set that contains the same 
+    Returns true if the passed object is also a set that contains the same 
     objects as the receiver.
   
     @param {SC.Set} obj the other object
@@ -196,15 +195,15 @@ SC.Set = SC.mixin({},
   isEqual: function(obj) {
     // fail fast
     if (!obj || !obj.isSet || (obj.get('length') !== this.get('length'))) {
-      return NO ;
+      return false ;
     }
     
     var loc = this.get('length');
     while(--loc>=0) {
-      if (!obj.contains(this[loc])) return NO ;
+      if (!obj.contains(this[loc])) return false ;
     }
     
-    return YES;
+    return true;
   },
 
   /**
@@ -350,7 +349,7 @@ SC.Set = SC.mixin({},
     @returns {SC.Set} receiver
   */
   destroy: function() {
-    this.isFrozen = NO ; // unfreeze to return to pool
+    this.isFrozen = false ; // unfreeze to return to pool
     if (!this.isObservable) SC.Set._pool.push(this.clear());
     return this;
   },
@@ -378,7 +377,7 @@ SC.Set = SC.mixin({},
   _pool: [],
 
   /** @private */
-  isObservable: YES
+  isObservable: true
 
 }) ;
 
@@ -421,7 +420,7 @@ SC.Set._pool = [];
 SC.CoreSet = SC.beget(SC.Set);
 
 /** @private */
-SC.CoreSet.isObservable = NO ;
+SC.CoreSet.isObservable = false ;
 
 /** @private */
 SC.CoreSet.constructor = SC.CoreSet;

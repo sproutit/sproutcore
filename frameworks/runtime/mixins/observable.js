@@ -5,22 +5,19 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
-"import private/observer_set";
-"import private/chain_observer";
-"export package";
-
-var _inited = false; // see initObservable().  avoid cyclical loop
+var SC = require('core');
+require('private/observer_set');
+require('private/chain_observer');
 
 /*globals logChange */
 
 /**
-  Set to YES to have all observing activity logged to the console.  This 
+  Set to true to have all observing activity logged to the console.  This 
   should be used for debugging only.
   
   @property {Boolean}
 */
-SC.LOG_OBSERVERS = NO ;
+SC.LOG_OBSERVERS = false ;
 
 /**
   @namespace 
@@ -122,7 +119,7 @@ SC.LOG_OBSERVERS = NO ;
   {{{
     
     automaticallyNotifiesObserversFor: function(key) {
-      return (key === 'balance') ? NO : sc_super() ;
+      return (key === 'balance') ? false : sc_super() ;
     },
     
     balance: function(key, value) {
@@ -153,23 +150,23 @@ SC.Observable = {
     
     @property {Boolean}
   */
-  isObservable: YES,
+  isObservable: true,
   
   /**
     Determines whether observers should be automatically notified of changes
     to a key.
     
     If you are manually implementing change notifications for a property, you
-    can override this method to return NO for properties you do not want the
+    can override this method to return false for properties you do not want the
     observing system to automatically notify for.
     
-    The default implementation always returns YES.
+    The default implementation always returns true.
     
     @param key {String} the key that is changing
-    @returns {Boolean} YES if automatic notification should occur.
+    @returns {Boolean} true if automatic notification should occur.
   */
   automaticallyNotifiesObserversFor: function(key) { 
-    return YES;
+    return true;
   },
 
   // ..........................................
@@ -312,7 +309,7 @@ SC.Observable = {
 
         // update cached value
         if (func.isCacheable) cache[func.cacheKey] = ret ;
-        if (notify) this.propertyDidChange(key, ret, YES) ;
+        if (notify) this.propertyDidChange(key, ret, true) ;
       }
 
     } else if (func === undefined) {
@@ -427,7 +424,7 @@ SC.Observable = {
     this._kvo_revision = (this._kvo_revision || 0) + 1; 
     var level = this._kvo_changeLevel || 0,
         cachedep, idx, dfunc, cache, func,
-        log = SC.LOG_OBSERVERS && !(this.LOG_OBSERVING===NO);
+        log = SC.LOG_OBSERVERS && !(this.LOG_OBSERVING===false);
 
     if (cache = this._kvo_cache) {
 
@@ -606,13 +603,13 @@ SC.Observable = {
     // assume array.
     if (!ret) {
       ret = this[kvoKey] = (type === undefined) ? [] : type.create();
-      this._kvo_cloned[kvoKey] = YES ;
+      this._kvo_cloned[kvoKey] = true ;
       
     // if item does exist but has not been cloned, then clone it.  Note
     // that all types must implement copy().0
     } else if (!this._kvo_cloned[kvoKey]) {
       ret = this[kvoKey] = ret.copy();
-      this._kvo_cloned[kvoKey] = YES; 
+      this._kvo_cloned[kvoKey] = true; 
     }
     
     return ret ;
@@ -770,7 +767,7 @@ SC.Observable = {
   },
   
   /**
-    Returns YES if the object currently has observers registered for a 
+    Returns true if the object currently has observers registered for a 
     particular key.  You can use this method to potentially defer performing
     an expensive action until someone begins observing a particular property
     on the object.
@@ -785,9 +782,9 @@ SC.Observable = {
         locals    = this[SC.keyFor('_kvo_local', key)],
         members ;
 
-    if (locals && locals.length>0) return YES ;
-    if (observers && observers.getMembers().length>0) return YES ;
-    return NO ;
+    if (locals && locals.length>0) return true ;
+    if (observers && observers.getMembers().length>0) return true ;
+    return false ;
   },
 
   /**
@@ -814,14 +811,8 @@ SC.Observable = {
   */
   initObservable: function() {
     if (this._observableInited) return ;
-    this._observableInited = YES ;
+    this._observableInited = true ;
 
-    if (!_inited) {
-      _inited = YES;
-      require('sproutcore/runtime:system/binding');
-      require('sproutcore/runtime:private/observer_queue');
-    }
-    
     var loc, keys, key, value, observer, propertyPaths, propertyPathsLength,
         len, ploc, path, dotIndex, root, propertyKey, keysLen;
     
@@ -882,7 +873,7 @@ SC.Observable = {
         if (value = this[key]) {
 
           // activate cacheable only if needed for perf reasons
-          if (value.isCacheable) this._kvo_cacheable = YES; 
+          if (value.isCacheable) this._kvo_cacheable = true; 
 
           // register dependent keys
           if (value.dependentKeys && (value.dependentKeys.length>0)) {
@@ -895,7 +886,7 @@ SC.Observable = {
   },
   
   // ..........................................
-  // NOTIFICATION
+  // falseTIFICATION
   // 
 
   /**
@@ -919,7 +910,7 @@ SC.Observable = {
     
     SC.Observers.flush(this) ; // hookup as many observers as possible.
 
-    var log = SC.LOG_OBSERVERS && !(this.LOG_OBSERVING===NO),
+    var log = SC.LOG_OBSERVERS && !(this.LOG_OBSERVING===false),
         observers, changes, dependents, starObservers, idx, keys, rev,
         members, membersLength, member, memberLoc, target, method, loc, func,
         context, spaces, cache ;
@@ -958,7 +949,7 @@ SC.Observable = {
       // Now go through the set and add all dependent keys...
       if (dependents = this._kvo_dependents) {
 
-        // NOTE: each time we loop, we check the changes length, this
+        // falseTE: each time we loop, we check the changes length, this
         // way any dependent keys added to the set will also be evaluated...
         for(idx=0;idx<changes.length;idx++) {
           key = changes[idx] ;
@@ -1065,7 +1056,7 @@ SC.Observable = {
     
     if (log) SC.KVO_SPACES = spaces.slice(0, -2);
     
-    return YES ; // finished successfully
+    return true ; // finished successfully
   },
 
   // ..........................................
@@ -1353,3 +1344,8 @@ SC.mixin(SC, {
 
 // Make all Array's observable
 SC.mixin(Array.prototype, SC.Observable) ;
+
+// these depend on observable being defined already so make sure they are 
+// required now...
+require('system/binding');
+require('private/observer_queue');

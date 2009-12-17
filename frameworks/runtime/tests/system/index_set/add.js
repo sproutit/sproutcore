@@ -122,7 +122,7 @@ test("add range matching existing range", function() {
 });
 
 // ..........................................................
-// NORMALIZED PARAMETER CASES
+// falseRMALIZED PARAMETER CASES
 // 
 
 test("add with no params should do nothing", function() {

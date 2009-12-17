@@ -5,8 +5,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
-"export package";
+var SC = require('core');
 
 /**
   @namespace
@@ -29,7 +28,7 @@ SC.Copyable = {
     
     @type Boolean
   */
-  isCopyable: YES,
+  isCopyable: true,
   
   /**
     Override to return a copy of the receiver.  Default implementation raises
@@ -56,7 +55,7 @@ SC.Copyable = {
   */
   frozenCopy: function() {
     var isFrozen = this.get ? this.get('isFrozen') : this.isFrozen;
-    if (isFrozen === YES) return this;
+    if (isFrozen === true) return this;
     else if (isFrozen === undefined) throw "%@ does not support freezing".fmt(this);
     else return this.copy().freeze();
   }

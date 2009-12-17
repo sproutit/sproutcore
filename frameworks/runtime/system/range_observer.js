@@ -5,10 +5,9 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
-"import private/observer_queue";
-"import system/index_set";
-"export package";
+var SC = require('core');
+require('private/observer_queue');
+require('system/index_set');
 
 /** @class
 
@@ -31,7 +30,7 @@ SC.RangeObserver = {
     
     @property {Boolean}
   */
-  isRangeObserver: YES,
+  isRangeObserver: true,
   
   /** @private */
   toString: function() { 
@@ -52,7 +51,7 @@ SC.RangeObserver = {
     @param {Object} target the target
     @param {Function|String} method the method to invoke
     @param {Object} context optional context to include in callback
-    @param {Boolean} isDeep if YES, observe property changes as well
+    @param {Boolean} isDeep if true, observe property changes as well
     @returns {SC.RangeObserver} instance
   */
   create: function(source, indexSet, target, method, context, isDeep) {
@@ -62,7 +61,7 @@ SC.RangeObserver = {
     ret.target = target;
     ret.method = method;
     ret.context = context ;
-    ret.isDeep  = isDeep || NO ;
+    ret.isDeep  = isDeep || false ;
     ret.beginObserving();
     return ret ;
   },
@@ -128,7 +127,7 @@ SC.RangeObserver = {
         var obj = this.source.objectAt(idx);
         if (obj && obj.addObserver) {
           observing.push(obj);
-          obj._kvo_needsRangeObserver = YES ;
+          obj._kvo_needsRangeObserver = true ;
         }
       };
     }
@@ -136,7 +135,7 @@ SC.RangeObserver = {
 
     // add to pending range observers queue so that if any of these objects
     // change we will have a chance to setup observing on them.
-    this.isObserving = NO ;
+    this.isObserving = false ;
     SC.Observers.addPendingRangeObserver(this);
 
     return this;
@@ -152,11 +151,11 @@ SC.RangeObserver = {
     var observing = this.observing ;
 
     if (this.isObserving || !observing || (observing.get('length')===0)) {
-      return YES ;
+      return true ;
     } 
     
     if (observing.contains(object)) {
-      this.isObserving = YES ;
+      this.isObserving = true ;
 
       // cache iterator function to keep things fast
       var func = this._setupPendingForEach;
@@ -188,9 +187,9 @@ SC.RangeObserver = {
         };
       }
       this.indexes.forEach(func,this);
-      return YES ;
+      return true ;
       
-    } else return NO ;
+    } else return false ;
   },
   
   /**
@@ -220,7 +219,7 @@ SC.RangeObserver = {
         observing.length = 0 ; // reset
       } 
       
-      this.isObserving = NO ;
+      this.isObserving = false ;
     }
     
     if (observing) observing.clear(); // empty set.

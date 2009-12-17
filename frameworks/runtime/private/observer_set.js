@@ -5,7 +5,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
+var SC = require('core');
 
 // ........................................................................
 // ObserverSet
@@ -27,7 +27,7 @@ SC.ObserverSet = {
   */
   targets: 0,
   
-  _membersCacheIsValid: NO,
+  _membersCacheIsValid: false,
   
   /**
     Adds the named target/method observer to the set.  The method must be
@@ -45,7 +45,7 @@ SC.ObserverSet = {
     if (!methods) {
       methods = this[targetGuid] = SC.CoreSet.create() ;
       methods.target = target ;
-      methods.isTargetSet = YES ; // used for getMembers().
+      methods.isTargetSet = true ; // used for getMembers().
       this.targets++ ;
     }
     methods.add(method) ;
@@ -58,7 +58,7 @@ SC.ObserverSet = {
       contexts[SC.guidFor(method)] = context ;
     }
     
-    this._membersCacheIsValid = NO ;
+    this._membersCacheIsValid = false ;
   },
   
   /**
@@ -66,19 +66,19 @@ SC.ObserverSet = {
     last method for the named target, then the number of targets will also
     be reduced.
   
-    returns YES if the items was removed, NO if it was not found.
+    returns true if the items was removed, false if it was not found.
   */
   remove: function(target, method) {
     var targetGuid = (target) ? SC.guidFor(target) : "__this__";
     
     // get the set of methods
     var methods = this[targetGuid] ;    
-    if (!methods) return NO ;
+    if (!methods) return false ;
     
     methods.remove(method) ;
     if (methods.length <= 0) {
       methods.target = null;
-      methods.isTargetSet = NO ;
+      methods.isTargetSet = false ;
       methods.contexts = null ;
       delete this[targetGuid] ;
       this.targets-- ;
@@ -87,9 +87,9 @@ SC.ObserverSet = {
       delete methods.contexts[SC.guidFor(method)];
     }
 
-    this._membersCacheIsValid = NO;
+    this._membersCacheIsValid = false;
     
-    return YES ;
+    return true ;
   },
   
   /**
@@ -147,7 +147,7 @@ SC.ObserverSet = {
       }
     }
 
-    this._membersCacheIsValid = YES ;
+    this._membersCacheIsValid = true ;
     return ret ;
   },
   
@@ -167,7 +167,7 @@ SC.ObserverSet = {
       }
     }
     ret.targets = this.targets ;
-    ret._membersCacheIsValid = NO ;
+    ret._membersCacheIsValid = false ;
     return ret ;
   },
   

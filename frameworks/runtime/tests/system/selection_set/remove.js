@@ -36,7 +36,7 @@ function validate(set, expected, defaultSource) {
   for(idx=0;idx<len;idx++) {
     cur = expected[idx];
     if (!cur.source) cur.source =defaultSource; 
-    actual = set.indexSetForSource(cur.source, NO);
+    actual = set.indexSetForSource(cur.source, false);
     ok(actual, 'should have indexSet for source: %@'.fmt(cur.source));
     equals(actual.source, cur.source, 'indexSet.source should match source');
     ok(actual.isEqual(cur), 'indexSet should match for source %@ (actual: %@ expected: %@)'.fmt(cur.source, actual, cur));
@@ -106,9 +106,9 @@ test("removing index set should also remove individually added objects", functio
   // now remove from array set
   set.remove(array, 2, 4);  
   
-  SC.stopIt = NO ;
+  SC.stopIt = false ;
   
-  ok(!set.contains(objToRemove), 'set should NOT contain objToRemove');
+  ok(!set.contains(objToRemove), 'set should falseT contain objToRemove');
   ok(set.contains(objToNotRemove), 'set should contain objToNotRemove');
   equals(set.get('length'), 2, 'set.length should == 1 object + index.length');
 });

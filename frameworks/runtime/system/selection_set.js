@@ -5,14 +5,13 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
-"import system/object";
-"import mixins/enumerable";
-"import mixins/copyable";
-"import mixins/freezable";
-"import system/set";
-"import system/index_set";
-"export package";
+var SC = require('core');
+require('system/object');
+require('mixins/enumerable');
+require('mixins/copyable');
+require('mixins/freezable');
+require('system/set');
+require('system/index_set');
 
 /** @class
 
@@ -34,7 +33,7 @@ SC.SelectionSet = SC.Object.extend(SC.Enumerable, SC.Freezable, SC.Copyable,
     
     @property {Boolean}
   */
-  isSelectionSet: YES,
+  isSelectionSet: true,
   
   /**
     Total number of indexes in the selection set
@@ -96,7 +95,7 @@ SC.SelectionSet = SC.Object.extend(SC.Enumerable, SC.Freezable, SC.Copyable,
 
     // not in cache.  generate from index sets and any saved objects
     if (!ret) {
-      ret = this._indexSetForSource(source, NO);
+      ret = this._indexSetForSource(source, false);
       if (ret && ret.get('length')===0) ret = null;
     
       if (objects) {
@@ -125,7 +124,7 @@ SC.SelectionSet = SC.Object.extend(SC.Enumerable, SC.Freezable, SC.Copyable,
     that have been added directly.
   */
   _indexSetForSource: function(source, canCreate) {
-    if (canCreate === undefined) canCreate = YES;
+    if (canCreate === undefined) canCreate = true;
 
     var guid  = SC.guidFor(source),
         index = this[guid],
@@ -192,7 +191,7 @@ SC.SelectionSet = SC.Object.extend(SC.Enumerable, SC.Freezable, SC.Copyable,
       }
     }
 
-    set    = this._indexSetForSource(source, YES);
+    set    = this._indexSetForSource(source, true);
     oldlen = this.get('length');
     setlen = set.get('length');
     newlen = oldlen - setlen;
@@ -252,7 +251,7 @@ SC.SelectionSet = SC.Object.extend(SC.Enumerable, SC.Freezable, SC.Copyable,
     }
     
     // save starter info
-    set    = this._indexSetForSource(source, YES);
+    set    = this._indexSetForSource(source, true);
     oldlen = this.get('length');
     newlen = oldlen - set.get('length');
 
@@ -293,7 +292,7 @@ SC.SelectionSet = SC.Object.extend(SC.Enumerable, SC.Freezable, SC.Copyable,
 
   
   /**
-    Returns YES if the selection contains the named index, range of indexes.
+    Returns true if the selection contains the named index, range of indexes.
     
     @param {Object} source source object for range
     @param {Number} start index, start of range, range object, or indexSet
@@ -306,12 +305,12 @@ SC.SelectionSet = SC.Object.extend(SC.Enumerable, SC.Freezable, SC.Copyable,
     }
     
     var set = this.indexSetForSource(source);
-    if (!set) return NO ;
+    if (!set) return false ;
     return set.contains(start, length);
   },
 
   /**
-    Returns YES if the index set contains any of the passed indexes.  You
+    Returns true if the index set contains any of the passed indexes.  You
     can pass a single index, a range or an index set.
     
     @param {Object} source source object for range
@@ -320,8 +319,8 @@ SC.SelectionSet = SC.Object.extend(SC.Enumerable, SC.Freezable, SC.Copyable,
     @returns {Boolean}
   */
   intersects: function(source, start, length) {
-    var set = this.indexSetForSource(source, NO);
-    if (!set) return NO ;
+    var set = this.indexSetForSource(source, false);
+    if (!set) return false ;
     return set.intersects(start, length);
   },
   
@@ -430,7 +429,7 @@ SC.SelectionSet = SC.Object.extend(SC.Enumerable, SC.Freezable, SC.Copyable,
   },
 
   /**
-    Returns YES if the selection contains the passed object.  This will search
+    Returns true if the selection contains the passed object.  This will search
     selected ranges in all source objects.
     
     @param {Object} object the object to search for
@@ -439,17 +438,17 @@ SC.SelectionSet = SC.Object.extend(SC.Enumerable, SC.Freezable, SC.Copyable,
   containsObject: function(object) {
     // fast path
     var objects = this._objects ;
-    if (objects && objects.contains(object)) return YES ;
+    if (objects && objects.contains(object)) return true ;
     
     var sets = this._sets,
         len  = sets ? sets.length : 0,
         idx, set;
     for(idx=0;idx<len;idx++) {
       set = sets[idx];
-      if (set && set.indexOf(object)>=0) return YES;
+      if (set && set.indexOf(object)>=0) return true;
     }
     
-    return NO ;
+    return false ;
   },
   
   
@@ -474,12 +473,12 @@ SC.SelectionSet = SC.Object.extend(SC.Enumerable, SC.Freezable, SC.Copyable,
     // remove sources other than this one
     this.get('sources').forEach(function(cur) {
       if (cur === source) return; //skip
-      var set = this._indexSetForSource(source, NO);
+      var set = this._indexSetForSource(source, false);
       if (set) this.remove(source, set);
     },this); 
     
     // remove indexes beyond end of source length
-    set = this._indexSetForSource(source, NO);
+    set = this._indexSetForSource(source, false);
     if (set && ((max=set.get('max'))>(len=source.get('length')))) {
       this.remove(source, len, max-len);
     }
@@ -496,9 +495,9 @@ SC.SelectionSet = SC.Object.extend(SC.Enumerable, SC.Freezable, SC.Copyable,
   },
   
   /**
-    Returns YES if the passed index set or selection set contains the exact 
+    Returns true if the passed index set or selection set contains the exact 
     same source objects and indexes as  the receiver.  If you pass any object 
-    other than an IndexSet or SelectionSet, returns NO.
+    other than an IndexSet or SelectionSet, returns false.
     
     @param {Object} obj another object.
     @returns {Boolean}
@@ -507,19 +506,19 @@ SC.SelectionSet = SC.Object.extend(SC.Enumerable, SC.Freezable, SC.Copyable,
     var left, right, idx, len, sources, source;
     
     // fast paths
-    if (!obj || !obj.isSelectionSet) return NO ;
-    if (obj === this) return YES;
-    if ((this._sets === obj._sets) && (this._objects === obj._objects)) return YES;
-    if (this.get('length') !== obj.get('length')) return NO;
+    if (!obj || !obj.isSelectionSet) return false ;
+    if (obj === this) return true;
+    if ((this._sets === obj._sets) && (this._objects === obj._objects)) return true;
+    if (this.get('length') !== obj.get('length')) return false;
     
     // check objects
     left = this._objects;
     right = obj._objects;
     if (left || right) {
       if ((left ? left.get('length'):0) !== (right ? right.get('length'):0)) {
-        return NO;
+        return false;
       }
-      if (left && !left.isEqual(right)) return NO ;
+      if (left && !left.isEqual(right)) return false ;
     }
 
     // now go through the sets
@@ -527,13 +526,13 @@ SC.SelectionSet = SC.Object.extend(SC.Enumerable, SC.Freezable, SC.Copyable,
     len     = sources.get('length');
     for(idx=0;idx<len;idx++) {
       source = sources.objectAt(idx);
-      left = this._indexSetForSource(source, NO);
-      right = this._indexSetForSource(source, NO);
-      if (!!right !== !!left) return NO ;
-      if (left && !left.isEqual(right)) return NO ;
+      left = this._indexSetForSource(source, false);
+      right = this._indexSetForSource(source, false);
+      if (!!right !== !!left) return false ;
+      if (left && !left.isEqual(right)) return false ;
     }
     
-    return YES ;
+    return true ;
   },
 
   /**

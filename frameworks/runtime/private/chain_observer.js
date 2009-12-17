@@ -5,7 +5,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
+var SC = require('core');
 
 // ........................................................................
 // CHAIN OBSERVER

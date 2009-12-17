@@ -5,13 +5,12 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
-"import system/index_set";
-"import system/object";
-"import mixins/enumerable";
-"import mixins/array";
-"import mixins/delegate_support";
-"export package";
+var SC = require('core');
+require('system/index_set');
+require('system/object');
+require('mixins/enumerable');
+require('mixins/array');
+require('mixins/delegate_support');
 
 /**
   @class
@@ -222,9 +221,9 @@ SC.SparseArray = SC.Object.extend(SC.Enumerable, SC.Array,
     var i = this.wasRangeRequested(start);
     if(i>=0) { 
       this.requestedRangeIndex.removeAt(i,1);
-      return YES;
+      return true;
     }
-    return NO;
+    return false;
   },
   
   /**

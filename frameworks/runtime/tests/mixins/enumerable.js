@@ -51,10 +51,10 @@ var CommonArray = [
   {
     first: "Charles", 
     gender: "male", 
-    californian: NO, 
-    ready: YES, 
+    californian: false, 
+    ready: true, 
     visited: "Prague", 
-    doneTravelling: NO, 
+    doneTravelling: false, 
     run: runFunc,
     invokeWhileTest: invokeWhileOK,
     balance: 1
@@ -63,10 +63,10 @@ var CommonArray = [
   {
     first: "Jenna", 
     gender: "female", 
-    californian: YES, 
-    ready: YES, 
+    californian: true, 
+    ready: true, 
     visited: "Prague", 
-    doneTravelling: NO, 
+    doneTravelling: false, 
     run: runFunc,
     invokeWhileTest: invokeWhileOK,
     balance: 2 
@@ -75,10 +75,10 @@ var CommonArray = [
   {
     first: "Peter", 
     gender: "male", 
-    californian: NO, 
-    ready: YES, 
+    californian: false, 
+    ready: true, 
     visited: "Prague", 
-    doneTravelling: NO, 
+    doneTravelling: false, 
     run: runFunc,
     invokeWhileTest: invokeWhileNotOK,
     balance: 3 
@@ -87,10 +87,10 @@ var CommonArray = [
   {
     first: "Chris", 
     gender: "male", 
-    californian: NO, 
-    ready: YES, 
+    californian: false, 
+    ready: true, 
     visited: "Prague", 
-    doneTravelling: NO, 
+    doneTravelling: false, 
     run: runFunc,
     invokeWhileTest: invokeWhileOK,
     balance: 4
@@ -267,7 +267,7 @@ test("should return true if function for every() returns true", function() {
       equals(SC.guidFor(this), SC.guidFor(targets[idx]), "this") ;
     }
     
-    equals(result, YES) ;
+    equals(result, true) ;
   }
 });
 
@@ -278,7 +278,7 @@ test("should return false if one function for every() returns false", function()
     var result = src.every(function(item, index, array) {
       return item.gender === "male" ;
     }, this);
-    equals(result, NO) ;
+    equals(result, false) ;
   }
 });
 
@@ -311,7 +311,7 @@ test("should return false if all functions for some() returns false", function()
       equals(SC.guidFor(this), SC.guidFor(targets[idx]), "this") ;
     }
     
-    equals(result, NO) ;
+    equals(result, false) ;
   }
 });
 
@@ -322,7 +322,7 @@ test("should return true if one function for some() returns true", function() {
     var result = src.some(function(item, index, array) {
       return item.gender !== "male" ;
     }, this);
-    equals(result, YES) ;
+    equals(result, true) ;
   }
 });
 
@@ -375,7 +375,7 @@ test("everyProperty should return true if all properties macth", function() {
   for (var idx2=0, len2=ary2.length; idx2<len2; idx2++) {
     src = ary2[idx2] ;
     var ret = src.everyProperty('visited', 'Prague') ;
-    equals(YES, ret, "visited") ;
+    equals(true, ret, "visited") ;
   }
 });
 
@@ -384,7 +384,7 @@ test("everyProperty should return true if all properties true", function() {
   for (var idx2=0, len2=ary2.length; idx2<len2; idx2++) {
     src = ary2[idx2] ;
     var ret = src.everyProperty('ready') ;
-    equals(YES, ret, "ready") ;
+    equals(true, ret, "ready") ;
   }
 });
 
@@ -393,7 +393,7 @@ test("everyProperty should return false if any properties false", function() {
   for (var idx2=0, len2=ary2.length; idx2<len2; idx2++) {
     src = ary2[idx2] ;
     var ret = src.everyProperty('gender', 'male') ;
-    equals(NO, ret, "ready") ;
+    equals(false, ret, "ready") ;
   }
 });
 
@@ -402,7 +402,7 @@ test("someProperty should return false if all properties not match", function() 
   for (var idx2=0, len2=ary2.length; idx2<len2; idx2++) {
     src = ary2[idx2] ;
     var ret = src.someProperty('visited', 'Timbuktu') ;
-    equals(NO, ret, "visited") ;
+    equals(false, ret, "visited") ;
   }
 });
 
@@ -411,7 +411,7 @@ test("someProperty should return false if all properties false", function() {
   for (var idx2=0, len2=ary2.length; idx2<len2; idx2++) {
     src = ary2[idx2] ;
     var ret = src.someProperty('doneTravelling') ;
-    equals(NO, ret, "doneTravelling") ;
+    equals(false, ret, "doneTravelling") ;
   }
 });
 
@@ -420,7 +420,7 @@ test("someProperty should return true if any properties true", function() {
   for (var idx2=0, len2=ary2.length; idx2<len2; idx2++) {
     src = ary2[idx2] ;
     var ret = src.someProperty('first', 'Charles') ;
-    equals(YES, ret, "first") ;
+    equals(true, ret, "first") ;
   }
 });
 
@@ -512,8 +512,8 @@ test("should trigger observer of reduced prop when array changes once property r
     src.pushObject({ 
       first: "John", 
       gender: "male", 
-      californian: NO, 
-      ready: YES, 
+      californian: false, 
+      ready: true, 
       visited: "Paris", 
       balance: 5
     }) ;
@@ -540,8 +540,8 @@ test("should trigger observer of reduced prop when array changes - even if you n
     src.pushObject({ 
       first: "John", 
       gender: "male", 
-      californian: NO, 
-      ready: YES, 
+      californian: false, 
+      ready: true, 
       visited: "Paris", 
       balance: 5
     }) ;
@@ -614,8 +614,8 @@ test("should notify observers even if reduced property is cached on prototype", 
   source.pushObject({ 
     first: "John", 
     gender: "male", 
-    californian: NO, 
-    ready: YES, 
+    californian: false, 
+    ready: true, 
     visited: "Paris", 
     balance: 5
   }) ;

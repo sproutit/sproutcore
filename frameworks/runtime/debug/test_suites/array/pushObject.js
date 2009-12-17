@@ -5,36 +5,34 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-/*globals module test ok equals same CoreTest */
-
-"import core";
-"import debug/test_suites/array/base";
-"import package core_test";
+var SC = require('core'),
+    Ct = require('index', 'core_test');
+require('debug/test_suites/array/base');
 
 SC.ArraySuite.define(function(T) {
   
   var observer, obj ;
   
-  module(T.desc("pushObject"), {
+  Ct.module(T.desc("pushObject"), {
     setup: function() {
       obj = T.newObject();
       observer = T.observer(obj);
     }
   });
 
-  test("returns pushed object", function() {
+  Ct.test("returns pushed object", function() {
     var exp = T.expected(1)[0];
-    equals(obj.pushObject(exp), exp, 'should return receiver');
+    Ct.equals(obj.pushObject(exp), exp, 'should return receiver');
   });
   
-  test("[].pushObject(X) => [X] + notify", function() {
+  Ct.test("[].pushObject(X) => [X] + notify", function() {
     var exp = T.expected(1);
     observer.observe('[]', 'length') ;
     obj.pushObject(exp[0]) ;
-    T.validateAfter(obj, exp, observer, YES);
+    T.validateAfter(obj, exp, observer, true);
   });
 
-  test("[A,B,C].pushObject(X) => [A,B,C,X] + notify", function() {
+  Ct.test("[A,B,C].pushObject(X) => [A,B,C,X] + notify", function() {
     var after  = T.expected(4),
         before = after.slice(0,3),
         value  = after[3];
@@ -42,7 +40,7 @@ SC.ArraySuite.define(function(T) {
     obj.replace(0,0,before);
     observer.observe('[]', 'length') ;
     obj.pushObject(value) ;
-    T.validateAfter(obj, after, observer, YES);
+    T.validateAfter(obj, after, observer, true);
   });
   
 });

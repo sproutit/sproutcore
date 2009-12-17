@@ -5,10 +5,8 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-/*globals module test ok equals same CoreTest */
-
-"import core";
-"import package core_test";
+var SC = require('core'),
+    Ct = require('core_test');
 
 /**
   Adds a new module of unit tests to verify that the passed object implements
@@ -47,7 +45,7 @@
   
   
 */
-SC.ArraySuite = CoreTest.Suite.create("Verify SC.Array compliance: %@#%@", {
+SC.ArraySuite = Ct.Suite.create("Verify SC.Array compliance: %@#%@", {
   
   /** 
     Override to return a set of simple values such as numbers or strings.
@@ -120,7 +118,7 @@ SC.ArraySuite = CoreTest.Suite.create("Verify SC.Array compliance: %@#%@", {
     return SC.Object.create({
 
       // ..........................................................
-      // NORMAL OBSERVER TESTING
+      // falseRMAL OBSERVER TESTING
       // 
       
       observer: function(target, key, value) {
@@ -159,29 +157,29 @@ SC.ArraySuite = CoreTest.Suite.create("Verify SC.Array compliance: %@#%@", {
 
       // call afterward to verify
       expectRangeChange: function(source, object, key, indexes, context) {
-        equals(this.callCount, 1, 'expects one callback');
+        Ct.equals(this.callCount, 1, 'expects one callback');
         
-        if (source !== undefined && source !== NO) {
-          ok(this.source, source, 'source should equal array');
+        if (source !== undefined && source !== false) {
+          Ct.ok(this.source, source, 'source should equal array');
         }
         
-        if (object !== undefined && object !== NO) {
-          equals(this.object, object, 'object');
+        if (object !== undefined && object !== false) {
+          Ct.equals(this.object, object, 'object');
         }
         
-        if (key !== undefined && key !== NO) {
-          equals(this.key, key, 'key');
+        if (key !== undefined && key !== false) {
+          Ct.equals(this.key, key, 'key');
         }
         
-        if (indexes !== undefined && indexes !== NO) {
+        if (indexes !== undefined && indexes !== false) {
           if (indexes.isIndexSet) {
-            ok(this.indexes && this.indexes.isIndexSet, 'indexes should be index set');
-            ok(indexes.isEqual(this.indexes), 'indexes should match %@ (actual: %@)'.fmt(indexes, this.indexes));
-          } else equals(this.indexes, indexes, 'indexes');
+            Ct.ok(this.indexes && this.indexes.isIndexSet, 'indexes should be index set');
+            Ct.ok(indexes.isEqual(this.indexes), 'indexes should match %@ (actual: %@)'.fmt(indexes, this.indexes));
+          } else Ct.equals(this.indexes, indexes, 'indexes');
         }
           
-        if (context !== undefined && context !== NO) {
-          equals(this.context, context, 'context should match');
+        if (context !== undefined && context !== false) {
+          Ct.equals(this.context, context, 'context should match');
         }
         
       },
@@ -206,20 +204,20 @@ SC.ArraySuite = CoreTest.Suite.create("Verify SC.Array compliance: %@#%@", {
   */
   validateAfter: function(obj, after, observer, lengthDidChange, enumerableDidChange) {
     var loc = after.length;
-    equals(obj.get('length'), loc, 'length should update (%@)'.fmt(obj)) ;
+    Ct.equals(obj.get('length'), loc, 'length should update (%@)'.fmt(obj)) ;
     while(--loc >= 0) {
-      equals(obj.objectAt(loc), after[loc], 'objectAt(%@)'.fmt(loc)) ;
+      Ct.equals(obj.objectAt(loc), after[loc], 'objectAt(%@)'.fmt(loc)) ;
     }
 
     // note: we only test that the length notification happens when we expect
     // it.  If we don't expect a length notification, it is OK for a class
     // to trigger a change anyway so we don't check for this case.
-    if (enumerableDidChange !== NO) {
-      equals(observer.didNotify("[]"), YES, 'should notify []') ;
+    if (enumerableDidChange !== false) {
+      Ct.equals(observer.didNotify("[]"), true, 'should notify []') ;
     }
     
     if (lengthDidChange) {
-      equals(observer.didNotify('length'), YES, 'should notify length change');
+      Ct.equals(observer.didNotify('length'), true, 'should notify length change');
     }
   }
   
@@ -229,13 +227,13 @@ SC.ArraySuite = CoreTest.Suite.create("Verify SC.Array compliance: %@#%@", {
 SC.ArraySuite.define(function(T) {
   T.module("length");
   
-  test("should return 0 on empty array", function() {
-    equals(T.object.get('length'), 0, 'should have empty length');
+  Ct.test("should return 0 on empty array", function() {
+    Ct.equals(T.object.get('length'), 0, 'should have empty length');
   });
   
-  test("should return array length", function() {
+  Ct.test("should return array length", function() {
     var obj = T.newObject(3);
-    equals(obj.get('length'), 3, 'should return length');
+    Ct.equals(obj.get('length'), 3, 'should return length');
   });
   
 });

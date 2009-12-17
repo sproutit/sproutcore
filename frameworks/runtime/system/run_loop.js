@@ -5,10 +5,9 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
-"import private/observer_set";
-"import system/object";
-"export package";
+var SC = require('core');
+require('private/observer_set');
+require('system/object');
 
 /**
   @class
@@ -158,12 +157,12 @@ SC.RunLoop = SC.Object.extend(/** @scope SC.RunLoop.prototype */ {
     bindings that might have changed.  You can override this method in a 
     subclass if you like to handle additional cleanup. 
     
-    This method must return YES if it found any items pending in its queues
+    This method must return true if it found any items pending in its queues
     to take action on.  endRunLoop will invoke this method repeatedly until
-    the method returns NO.  This way if any if your final executing code
+    the method returns false.  This way if any if your final executing code
     causes additional queues to trigger, then can be flushed again.
     
-    @returns {Boolean} YES if items were found in any queue, NO otherwise
+    @returns {Boolean} true if items were found in any queue, false otherwise
   */
   flushApplicationQueues: function() {
     var hadContent = NO,
@@ -171,7 +170,7 @@ SC.RunLoop = SC.Object.extend(/** @scope SC.RunLoop.prototype */ {
         queue = this._invokeQueue;
     if (queue && queue.targets > 0) {
       this._invokeQueue = null; // reset so that a new queue will be created
-      hadContent = YES ; // needs to execute again
+      hadContent = true ; // needs to execute again
       queue.invokeMethods();
     }
     
@@ -181,10 +180,10 @@ SC.RunLoop = SC.Object.extend(/** @scope SC.RunLoop.prototype */ {
   },
   
   _flushinvokeLastQueue: function() {
-    var queue = this._invokeLastQueue, hadContent = NO ;
+    var queue = this._invokeLastQueue, hadContent = false ;
     if (queue && queue.targets > 0) {
       this._invokeLastQueue = null; // reset queue.
-      hadContent = YES; // has targets!
+      hadContent = true; // has targets!
       if (hadContent) queue.invokeMethods();
     }
     return hadContent ;

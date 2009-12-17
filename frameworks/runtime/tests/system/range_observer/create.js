@@ -30,7 +30,7 @@ module("SC.RangeObserver#create", {
       
     });
 
-    obj = SC.RangeObserver.create(source, indexes, observer, observer.rangeDidChange, "context", YES);
+    obj = SC.RangeObserver.create(source, indexes, observer, observer.rangeDidChange, "context", true);
     
   }
 });
@@ -47,12 +47,12 @@ test("sets up observing on properties for each object in range in index if isDee
   equals(observer.callCount, 2, 'range observer should fire twice');
 });
 
-test("does not observe object properties if isDeep is NO", function() {
+test("does not observe object properties if isDeep is false", function() {
   // remove unneeded observer
   obj.destroy();
   
   // use new observer
-  obj = SC.RangeObserver.create(source, indexes, observer, observer.rangeDidChange, "context", NO);
+  obj = SC.RangeObserver.create(source, indexes, observer, observer.rangeDidChange, "context", false);
   
   var len = source.length, idx;
   for(idx=0;idx<len;idx++) {

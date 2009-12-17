@@ -5,8 +5,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
-"export package";
+var SC = require('core');
 
 /**
   @namespace
@@ -25,7 +24,7 @@ SC.Comparable = {
     
     @type Boolean
   */
-  isComparable: YES,
+  isComparable: true,
   
   /**
     Override to return the result of the comparison of the two parameters. The

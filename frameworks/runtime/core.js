@@ -4,11 +4,9 @@
 //            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*global NodeList system */
 
-"require license";
-"import default:system as system";
-"export package SC SproutCore YES NO";
+var system = require('system', 'default');
+var SC, SproutCore, YES, NO;
 
 // ........................................
 // GLOBAL CONSTANTS
@@ -20,11 +18,13 @@ YES = true ;
 NO = false ;
 
 // prevent a console.log from blowing things up if we are on a browser that
-// does not support it
+// does not support it -- only do when running on a browser platform
 var UNDEFINED = 'undefined';
-if (UNDEFINED === typeof console) console = system.console;
-if (UNDEFINED === typeof sc_require) sc_require = function() {};
-if (UNDEFINED === typeof sc_resource) sc_resource = function() {} ;
+if (system.platform === 'tiki') { 
+  if (UNDEFINED === typeof console) console = system.console;
+  if (UNDEFINED === typeof sc_require) sc_require = function() {};
+  if (UNDEFINED === typeof sc_resource) sc_resource = function() {} ;
+}
 
 // ........................................
 // BOOTSTRAP
@@ -257,7 +257,7 @@ SC.mixin(/** @scope SC */ {
   
   /**
     Returns YES if the passed object is an array or array-like. Instances
-    of the NodeList class return NO.
+    of the NodeList class return false.
 
     Unlike SC.typeOf this method returns true even if the passed object is 
     not formally array but appears to be array-like (i.e. has a length 
@@ -398,7 +398,7 @@ SC.mixin(/** @scope SC */ {
     code to cause two separate instances of the same object to be treated as
     if they were equal for comparisons and other functions.
 
-    IMPORTANT:  If you implement a hash() method, it MUST NOT return a 
+    IMPORTANT:  If you implement a hash() method, it MUST falseT return a 
     number or a string that contains only a number.  Typically hash codes 
     are strings that begin with a "%".
 
@@ -1039,3 +1039,12 @@ String.prototype.w = function() {
   }
   return ary ;
 };
+
+// place into exports - you can import the base namespace or symbols directly
+module.exports = SC;
+SC.SC = SC;
+SC.SproutCore = SproutCore;
+SC.YES = YES;
+SC.NO  = NO ;
+
+

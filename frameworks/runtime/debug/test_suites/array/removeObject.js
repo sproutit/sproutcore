@@ -5,29 +5,27 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-/*globals module test ok equals same CoreTest */
-
-"import core";
-"import debug/test_suites/array/base";
-"import package core_test";
+var SC = require('core'),
+    Ct = require('index', 'core_test');
+require('debug/test_suites/array/base');
 
 SC.ArraySuite.define(function(T) {
   
   var observer, obj ;
   
-  module(T.desc("removeObject"), {
+  Ct.module(T.desc("removeObject"), {
     setup: function() {
       obj = T.newObject();
       observer = T.observer(obj);
     }
   });
 
-  test("should return receiver", function() {
+  Ct.test("should return receiver", function() {
     obj = T.newObject(3);
-    equals(obj.removeObject(obj.objectAt(0)), obj, 'should return receiver');
+    Ct.equals(obj.removeObject(obj.objectAt(0)), obj, 'should return receiver');
   });
   
-  test("[A,B,C].removeObject(B) => [A,C] + notify", function() {
+  Ct.test("[A,B,C].removeObject(B) => [A,C] + notify", function() {
 
     var before = T.expected(3),
         after  = [before[0], before[2]];
@@ -35,17 +33,17 @@ SC.ArraySuite.define(function(T) {
     observer.observe('[]', 'length') ;
     
     obj.removeObject(before[1]) ;
-    T.validateAfter(obj, after, observer, YES);
+    T.validateAfter(obj, after, observer, true);
   });
   
-  test("[A,B,C].removeObject(D) => [A,B,C]", function() {
+  Ct.test("[A,B,C].removeObject(D) => [A,B,C]", function() {
     var exp = T.expected(4),
         extra = exp.pop();
     obj.replace(0,0,exp);
     observer.observe('[]', 'length') ;
     
     obj.removeObject(extra);
-    T.validateAfter(obj, exp, observer, NO, NO);
+    T.validateAfter(obj, exp, observer, false, false);
   });
   
 });

@@ -22,24 +22,24 @@ module("SC.RangeObserver#objectPropertyDidChange", {
     
     observer = SC.Object.create({
 
-      verify: NO ,
+      verify: false ,
       
       callCount: 0, 
       
-      object: NO,
+      object: false,
       
-      key: NO,
+      key: false,
 
-      indexes: NO,
+      indexes: false,
       
-      context: NO,
+      context: false,
       
       setupVerify: function(object, key, indexes, context) {
-        this.verify = YES ;  
-        this.object = (object === undefined) ? NO : object ;
-        this.key = (key === undefined) ? NO : key ;
-        this.indexes = (indexes === undefined) ? NO :indexes ;
-        this.context = (context === undefined) ? NO : context ;
+        this.verify = true ;  
+        this.object = (object === undefined) ? false : object ;
+        this.key = (key === undefined) ? false : key ;
+        this.indexes = (indexes === undefined) ? false :indexes ;
+        this.context = (context === undefined) ? false : context ;
         return this ;
       },
       
@@ -53,7 +53,7 @@ module("SC.RangeObserver#objectPropertyDidChange", {
             equals(inObject, this.object, 'passed object should match');  
           }
 
-          if (this.key !== NO) {
+          if (this.key !== false) {
             equals(inKey, this.key, 'passed key should match');
           }
           
@@ -66,7 +66,7 @@ module("SC.RangeObserver#objectPropertyDidChange", {
             equals(inIndexes, null, 'passed indexes should be null');
           }
 
-          if (this.context !== NO) {
+          if (this.context !== false) {
             equals(inContext, this.context, 'passed context should match');
           }
 
@@ -79,7 +79,7 @@ module("SC.RangeObserver#objectPropertyDidChange", {
 });
 
 test("changing property on object that does not appear in range", function() {
-  obj = SC.RangeObserver.create(source, indexes, observer, observer.changeObserver, null, YES);
+  obj = SC.RangeObserver.create(source, indexes, observer, observer.changeObserver, null, true);
   source[4].set('foo', 'baz');
   equals(observer.callCount, 0, 'should not invoke observer callback') ;
 });
@@ -87,7 +87,7 @@ test("changing property on object that does not appear in range", function() {
 test("changing property on object that appears one time in range", function() {
   observer.setupVerify(source[2], 'foo', SC.IndexSet.create(2));
   
-  obj = SC.RangeObserver.create(source, indexes, observer, observer.changeObserver, null, YES);
+  obj = SC.RangeObserver.create(source, indexes, observer, observer.changeObserver, null, true);
   source[2].set('foo', 'baz');
   equals(observer.callCount, 1, 'should not invoke observer callback') ;
 }) ;
@@ -96,7 +96,7 @@ test("changing property on object that appears more than one time in range", fun
   source[3] = source[2]; // copy item.  don't use KVO because we're testing it
   observer.setupVerify(source[2], 'foo', SC.IndexSet.create(2,2));
   
-  obj = SC.RangeObserver.create(source, indexes, observer, observer.changeObserver, null, YES);
+  obj = SC.RangeObserver.create(source, indexes, observer, observer.changeObserver, null, true);
   source[2].set('foo', 'baz');
   equals(observer.callCount, 1, 'should not invoke observer callback') ;
 });
@@ -104,7 +104,7 @@ test("changing property on object that appears more than one time in range", fun
 test("changing all properties on object that apepars one time in range", function() {
   observer.setupVerify(source[2], '*', SC.IndexSet.create(2));
   
-  obj = SC.RangeObserver.create(source, indexes, observer, observer.changeObserver, null, YES);
+  obj = SC.RangeObserver.create(source, indexes, observer, observer.changeObserver, null, true);
   source[2].allPropertiesDidChange();
   equals(observer.callCount, 1, 'should not invoke observer callback') ;
 });
@@ -112,7 +112,7 @@ test("changing all properties on object that apepars one time in range", functio
 test("notifications with context", function() {
   observer.setupVerify(source[2], 'foo', SC.IndexSet.create(2), 'context');
   
-  obj = SC.RangeObserver.create(source, indexes, observer, observer.changeObserver, 'context', YES);
+  obj = SC.RangeObserver.create(source, indexes, observer, observer.changeObserver, 'context', true);
   source[2].set('foo', 'baz');
   equals(observer.callCount, 1, 'should not invoke observer callback') ;
 });

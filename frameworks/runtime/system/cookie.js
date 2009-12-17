@@ -4,9 +4,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
-"import system/object";
-"export package";
+var SC = require('core');
+require('system/object');
 
 /** @class
   
@@ -70,7 +69,7 @@ SC.Cookie = SC.Object.extend({
     
     @property {Boolean}
   */
-  secure: NO,
+  secure: false,
   
   /**
     Walk like a duck
@@ -78,7 +77,7 @@ SC.Cookie = SC.Object.extend({
     @property {Boolean}
     @isReadOnly
   */
-  isCookie: YES,
+  isCookie: true,
   
   // ..........................................................
   // METHODS
@@ -148,7 +147,7 @@ SC.Cookie.mixin(
     @returns SC.Cookie object containing name and value of cookie
   */
   find: function(name) {
-    if (document.cookie && document.cookie != '') {
+    if (document.cookie && (document.cookie !== '')) {
       var cookies = document.cookie.split(';');
       for (var i = 0; i < cookies.length; i++) {
         var cookie = String(cookies[i]).trim();

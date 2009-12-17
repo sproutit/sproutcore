@@ -5,45 +5,43 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-/*globals module test ok equals same CoreTest */
-
-"import core";
-"import debug/test_suites/array/base";
-"import package core_test";
+var SC = require('core'),
+    Ct = require('index', 'core_test');
+require('debug/test_suites/array/base');
 
 SC.ArraySuite.define(function(T) {
   
   var observer, obj ;
   
-  module(T.desc("removeAt"), {
+  Ct.module(T.desc("removeAt"), {
     setup: function() {
       obj = T.newObject();
       observer = T.observer(obj);
     }
   });
 
-  test("[X].removeAt(0) => [] + notify", function() {
+  Ct.test("[X].removeAt(0) => [] + notify", function() {
 
     var before = T.expected(1);
     obj.replace(0,0, before);
     observer.observe('[]', 'length') ;
     
     obj.removeAt(0) ;
-    T.validateAfter(obj, [], observer, YES);
+    T.validateAfter(obj, [], observer, true);
   });
   
-  test("[].removeAt(200) => OUT_OF_RANGE_EXCEPTION exception", function() {
-    var didThrow = NO ;
+  Ct.test("[].removeAt(200) => OUT_OF_RANGE_EXCEPTION exception", function() {
+    var didThrow = false ;
     try {
       obj.removeAt(200);
     } catch (e) {
-      equals(e, SC.OUT_OF_RANGE_EXCEPTION, 'should throw SC.OUT_OF_RANGE_EXCEPTION');
-      didThrow = YES ;
+      Ct.equals(e, SC.OUT_OF_RANGE_EXCEPTION, 'should throw SC.OUT_OF_RANGE_EXCEPTION');
+      didThrow = true ;
     }
-    ok(didThrow, 'should raise exception');
+    Ct.ok(didThrow, 'should raise exception');
   });
 
-  test("[A,B].removeAt(0) => [B] + notify", function() {
+  Ct.test("[A,B].removeAt(0) => [B] + notify", function() {
     var before = T.expected(2), 
         after   = [before[1]];
     
@@ -51,10 +49,10 @@ SC.ArraySuite.define(function(T) {
     observer.observe('[]', 'length') ;
     
     obj.removeAt(0);
-    T.validateAfter(obj, after, observer, YES);
+    T.validateAfter(obj, after, observer, true);
   });
 
-  test("[A,B].removeAt(1) => [A] + notify", function() {
+  Ct.test("[A,B].removeAt(1) => [A] + notify", function() {
     var before = T.expected(2), 
         after   = [before[0]];
     
@@ -62,10 +60,10 @@ SC.ArraySuite.define(function(T) {
     observer.observe('[]', 'length') ;
     
     obj.removeAt(1);
-    T.validateAfter(obj, after, observer, YES);
+    T.validateAfter(obj, after, observer, true);
   });
 
-  test("[A,B,C].removeAt(1) => [A,C] + notify", function() {
+  Ct.test("[A,B,C].removeAt(1) => [A,C] + notify", function() {
     var before = T.expected(3), 
         after   = [before[0], before[2]];
     
@@ -73,10 +71,10 @@ SC.ArraySuite.define(function(T) {
     observer.observe('[]', 'length') ;
     
     obj.removeAt(1);
-    T.validateAfter(obj, after, observer, YES);
+    T.validateAfter(obj, after, observer, true);
   });
   
-  test("[A,B,C,D].removeAt(1,2) => [A,D] + notify", function() {
+  Ct.test("[A,B,C,D].removeAt(1,2) => [A,D] + notify", function() {
     var before = T.expected(4), 
         after   = [before[0], before[3]];
     
@@ -84,10 +82,10 @@ SC.ArraySuite.define(function(T) {
     observer.observe('[]', 'length') ;
     
     obj.removeAt(1,2);
-    T.validateAfter(obj, after, observer, YES);
+    T.validateAfter(obj, after, observer, true);
   });
 
-  test("[A,B,C,D].removeAt(IndexSet<0,2-3>) => [B] + notify", function() {
+  Ct.test("[A,B,C,D].removeAt(IndexSet<0,2-3>) => [B] + notify", function() {
     var before = T.expected(4), 
         after   = [before[1]];
     
@@ -95,7 +93,7 @@ SC.ArraySuite.define(function(T) {
     observer.observe('[]', 'length') ;
     
     obj.removeAt(SC.IndexSet.create(0).add(2,2));
-    T.validateAfter(obj, after, observer, YES);
+    T.validateAfter(obj, after, observer, true);
   });
   
 });

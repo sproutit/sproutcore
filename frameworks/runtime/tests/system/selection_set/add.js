@@ -31,7 +31,7 @@ function validate(set, expected, defaultSource) {
   for(idx=0;idx<len;idx++) {
     cur = expected[idx];
     if (!cur.source) cur.source =defaultSource; 
-    actual = set.indexSetForSource(cur.source, NO);
+    actual = set.indexSetForSource(cur.source, false);
     ok(actual, 'should have indexSet for source: %@'.fmt(cur.source));
     equals(actual.source, cur.source, 'indexSet.source should match source');
     ok(actual.isEqual(cur), 'indexSet should match for source %@ (actual: %@ expected: %@)'.fmt(cur.source, actual, cur));

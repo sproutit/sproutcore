@@ -5,8 +5,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
-"export package";
+var SC = require('core');
 
 /**
   Standard Error that should be raised when you try to modify a frozen object.
@@ -80,15 +79,15 @@ SC.Freezable = {
     
     @property {Boolean}
   */
-  isFreezable: YES,
+  isFreezable: true,
   
   /**
-    Set to YES when the object is frozen.  Use this property to detect whether
+    Set to true when the object is frozen.  Use this property to detect whether
     your object is frozen or not.
     
     @property {Boolean}
   */
-  isFrozen: NO,
+  isFrozen: false,
   
   /**
     Freezes the object.  Once this method has been called the object should
@@ -97,11 +96,11 @@ SC.Freezable = {
     @returns {Object} reciever
   */
   freeze: function() {
-    // NOTE: Once someone actually implements Object.freeze() in the browser,
+    // falseTE: Once someone actually implements Object.freeze() in the browser,
     // add a call to that here also.
     
-    if (this.set) this.set('isFrozen', YES);
-    else this.isFrozen = YES;
+    if (this.set) this.set('isFrozen', true);
+    else this.isFrozen = true;
     return this;
   }
     

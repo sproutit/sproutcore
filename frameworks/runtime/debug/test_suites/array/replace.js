@@ -5,34 +5,32 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-/*globals module test ok equals same CoreTest */
-
-"import core";
-"import debug/test_suites/array/base";
-"import package core_test";
+var SC = require('core'),
+    Ct = require('index', 'core_test');
+require('debug/test_suites/array/base');
 
 SC.ArraySuite.define(function(T) {
   
   var observer, obj ;
   
-  module(T.desc("replace"), {
+  Ct.module(T.desc("replace"), {
     setup: function() {
       obj = T.newObject();
       observer = T.observer(obj);
     }
   });
   
-  test("[].replace(0,0,'X') => ['X'] + notify", function() {
+  Ct.test("[].replace(0,0,'X') => ['X'] + notify", function() {
 
     var exp = T.expected(1);
     
     observer.observe('[]', 'length') ;
     obj.replace(0,0,exp) ;
 
-    T.validateAfter(obj, exp, observer, YES);
+    T.validateAfter(obj, exp, observer, true);
   });
 
-  test("[A,B,C,D].replace(1,2,X) => [A,X,D] + notify", function() {
+  Ct.test("[A,B,C,D].replace(1,2,X) => [A,X,D] + notify", function() {
     
     var exp = T.expected(5), 
         before = exp.slice(0,4),
@@ -44,10 +42,10 @@ SC.ArraySuite.define(function(T) {
 
     obj.replace(1,2,replace) ;
 
-    T.validateAfter(obj, after, observer, YES);
+    T.validateAfter(obj, after, observer, true);
   });
 
-  test("[A,B,C,D].replace(1,2,[X,Y]) => [A,X,Y,D] + notify", function() {
+  Ct.test("[A,B,C,D].replace(1,2,[X,Y]) => [A,X,Y,D] + notify", function() {
     
     // setup the before, after, and replace arrays.  Use generated objects
     var exp  = T.expected(6),
@@ -60,10 +58,10 @@ SC.ArraySuite.define(function(T) {
 
     obj.replace(1,2, replace) ;
 
-    T.validateAfter(obj, after, observer, YES);
+    T.validateAfter(obj, after, observer, true);
   });
   
-  test("[A,B].replace(1,0,[X,Y]) => [A,X,Y,B] + notify", function() {
+  Ct.test("[A,B].replace(1,0,[X,Y]) => [A,X,Y,B] + notify", function() {
 
     // setup the before, after, and replace arrays.  Use generated objects
     var exp  = T.expected(4),
@@ -76,10 +74,10 @@ SC.ArraySuite.define(function(T) {
   
     obj.replace(1,0, replace) ;
     
-    T.validateAfter(obj, after, observer, YES);
+    T.validateAfter(obj, after, observer, true);
   });
   
-  test("[A,B,C,D].replace(2,2) => [A,B] + notify", function() {
+  Ct.test("[A,B,C,D].replace(2,2) => [A,B] + notify", function() {
 
     // setup the before, after, and replace arrays.  Use generated objects
     var before  = T.expected(4),
@@ -90,7 +88,7 @@ SC.ArraySuite.define(function(T) {
   
     obj.replace(2,2) ;
     
-    T.validateAfter(obj, after, observer, YES);
+    T.validateAfter(obj, after, observer, true);
   });
   
 });

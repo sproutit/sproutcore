@@ -34,7 +34,7 @@ test("clone should return new object with same key properties", function() {
 
 test("cloning frozen object returns unfrozen", function() {
   var set2 = set.freeze().clone();
-  equals(set2.get('isFrozen'), NO, 'set2.isFrozen should be NO');
+  equals(set2.get('isFrozen'), false, 'set2.isFrozen should be false');
 });
 
 test("copy works like clone", function() {
