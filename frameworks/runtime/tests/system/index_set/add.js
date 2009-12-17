@@ -3,7 +3,7 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*global module test equals context ok same shouldThrow plan */
+/*global module test equals context ok same raises plan */
 
 "import package core_test";
 "import package sproutcore/runtime";
@@ -191,7 +191,7 @@ test("appending range to start of empty set should create a single range", funct
 });
 
 test("add raises exception when frozen", function() {
-  shouldThrow(function() {
+  raises(function() {
     set.freeze().add(0,2);    
   }, SC.FROZEN_ERROR);  
 });

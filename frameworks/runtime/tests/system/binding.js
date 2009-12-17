@@ -1,14 +1,14 @@
 // ========================================================================
 // SC.Binding Tests
 // ========================================================================
-/*globals module test ok isObj equals expects */
+/*globals module test ok isObj equals expects TestNamespace system plan */
 
 "import package core_test";
 "import core";
 "import system/binding";
 "import system/object";
 "import system/run_loop";
-"import package tiki/system as system";
+"import package default:system as system";
 
 var fromObject, toObject, binding, Bon1, bon2 ; // global variables
 
@@ -190,9 +190,7 @@ module("Custom Binding", {
   },
   
   teardown: function() { 
-    delete Bon1 ;
-    delete bon2 ;
-	//delete TestNamespace;
+    Bon1 = bon2 = null ;
   }
 });
 

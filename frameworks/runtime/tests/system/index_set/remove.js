@@ -4,7 +4,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same notest shouldThrow plan*/
+/*global module test equals context ok same notest raises plan*/
 
 "import package core_test";
 "import package sproutcore/runtime";
@@ -187,7 +187,7 @@ test("removing an index range outside of target range (specific bug)", function(
 });
 
 test("remove() raises exception when frozen", function() {
-  shouldThrow(function() {
+  raises(function() {
     set.freeze().remove(0,2);    
   }, SC.FROZEN_ERROR);  
 });
