@@ -124,7 +124,7 @@ test("remove range matching existing range", function() {
 });
 
 // ..........................................................
-// NORMALIZED PARAMETER CASES
+// falseRMALIZED PARAMETER CASES
 // 
 
 test("remove with no params should do nothing", function() {
@@ -165,7 +165,7 @@ test("removing a non-existant range should not trigger observer notification", f
   
   set.addObserver('[]', function() { callCnt++; });
   set.remove(10,10); // 10-20 are already empty
-  equals(callCnt, 0, 'should NOT have called observer');
+  equals(callCnt, 0, 'should falseT have called observer');
 });
 
 test("removing a clone of the same index set should leave an empty set", function() {

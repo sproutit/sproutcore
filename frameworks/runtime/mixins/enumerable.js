@@ -5,9 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
-"import system/enumerator";
-"export package";
+var SC = require('core');
+require('system/enumerator');
 
 /*globals Prototype */
 
@@ -55,7 +54,7 @@ SC.Enumerable = {
     
     @property {Boolean}
   */
-  isEnumerable: YES,
+  isEnumerable: true,
   
   /**
     Implement this method to make your class enumerable.
@@ -258,7 +257,7 @@ SC.Enumerable = {
 
   /**
     Returns an array with all of the items in the enumeration that the passed
-    function returns YES for. This method corresponds to filter() defined in 
+    function returns true for. This method corresponds to filter() defined in 
     JavaScript 1.6.
     
     The callback method you provide should have the following signature (all
@@ -272,7 +271,7 @@ SC.Enumerable = {
     - *index* is the current index in the iteration
     - *enumerable* is the enumerable object itself.
     
-    It should return the YES to include the item in the results, NO otherwise.
+    It should return the true to include the item in the results, false otherwise.
     
     Note that in addition to a callback, you can also pass an optional target
     object that will be set as "this" on the context.  This is a good way
@@ -362,7 +361,7 @@ SC.Enumerable = {
   },
     
   /**
-    Returns the first item in the array for which the callback returns YES.
+    Returns the first item in the array for which the callback returns true.
     This method works similar to the filter() method defined in JavaScript 1.6
     except that it will stop working on the array once a match is found.
 
@@ -377,7 +376,7 @@ SC.Enumerable = {
     - *index* is the current index in the iteration
     - *enumerable* is the enumerable object itself.
 
-    It should return the YES to include the item in the results, NO otherwise.
+    It should return the true to include the item in the results, false otherwise.
 
     Note that in addition to a callback, you can also pass an optional target
     object that will be set as "this" on the context.  This is a good way
@@ -392,7 +391,7 @@ SC.Enumerable = {
     var len = this.get ? this.get('length') : this.length ;
     if (target === undefined) target = null;
 
-    var last = null, next, found = NO, ret = null ;
+    var last = null, next, found = false, ret = null ;
     var context = SC.Enumerator._popContext();
     for(var idx=0;idx<len && !found;idx++) {
       next = this.nextObject(idx, last, context) ;
@@ -417,7 +416,7 @@ SC.Enumerable = {
   */
   findProperty: function(key, value) {
     var len = this.get ? this.get('length') : this.length ;
-    var found = NO, ret = null, last = null, next, cur ;
+    var found = false, ret = null, last = null, next, cur ;
     var context = SC.Enumerator._popContext();
     for(var idx=0;idx<len && !found;idx++) {
       next = this.nextObject(idx, last, context) ;
@@ -432,7 +431,7 @@ SC.Enumerable = {
   },
       
   /**
-    Returns YES if the passed function returns YES for every item in the
+    Returns true if the passed function returns true for every item in the
     enumeration.  This corresponds with the every() method in JavaScript 1.6.
     
     The callback method you provide should have the following signature (all
@@ -446,7 +445,7 @@ SC.Enumerable = {
     - *index* is the current index in the iteration
     - *enumerable* is the enumerable object itself.
     
-    It should return the YES or NO.
+    It should return the true or false.
     
     Note that in addition to a callback, you can also pass an optional target
     object that will be set as "this" on the context.  This is a good way
@@ -467,12 +466,12 @@ SC.Enumerable = {
     var len = this.get ? this.get('length') : this.length ;
     if (target === undefined) target = null;
     
-    var ret  = YES;
+    var ret  = true;
     var last = null ;
     var context = SC.Enumerator._popContext();
     for(var idx=0;ret && (idx<len);idx++) {
       var next = this.nextObject(idx, last, context) ;
-      if(!callback.call(target, next, idx, this)) ret = NO ;
+      if(!callback.call(target, next, idx, this)) ret = false ;
       last = next ;
     }
     last = null ;
@@ -481,7 +480,7 @@ SC.Enumerable = {
   },
 
   /**
-    Returns YES if the passed property resolves to true for all items in the
+    Returns true if the passed property resolves to true for all items in the
     enumerable.  This method is often simpler/faster than using a callback.
 
     @params key {String} the property to test
@@ -490,7 +489,7 @@ SC.Enumerable = {
   */
   everyProperty: function(key, value) {
     var len = this.get ? this.get('length') : this.length ;
-    var ret  = YES;
+    var ret  = true;
     var last = null ;
     var context = SC.Enumerator._popContext();
     for(var idx=0;ret && (idx<len);idx++) {
@@ -506,7 +505,7 @@ SC.Enumerable = {
   
   
   /**
-    Returns YES if the passed function returns true for any item in the 
+    Returns true if the passed function returns true for any item in the 
     enumeration. This corresponds with the every() method in JavaScript 1.6.
     
     The callback method you provide should have the following signature (all
@@ -520,7 +519,7 @@ SC.Enumerable = {
     - *index* is the current index in the iteration
     - *enumerable* is the enumerable object itself.
     
-    It should return the YES to include the item in the results, NO otherwise.
+    It should return the true to include the item in the results, false otherwise.
     
     Note that in addition to a callback, you can also pass an optional target
     object that will be set as "this" on the context.  This is a good way
@@ -541,12 +540,12 @@ SC.Enumerable = {
     var len = this.get ? this.get('length') : this.length ;
     if (target === undefined) target = null;
     
-    var ret  = NO;
+    var ret  = false;
     var last = null ;
     var context = SC.Enumerator._popContext();
     for(var idx=0;(!ret) && (idx<len);idx++) {
       var next = this.nextObject(idx, last, context) ;
-      if(callback.call(target, next, idx, this)) ret = YES ;
+      if(callback.call(target, next, idx, this)) ret = true ;
       last = next ;
     }
     last = null ;
@@ -555,16 +554,16 @@ SC.Enumerable = {
   },
 
   /**
-    Returns YES if the passed property resolves to true for any item in the
+    Returns true if the passed property resolves to true for any item in the
     enumerable.  This method is often simpler/faster than using a callback.
 
     @params key {String} the property to test
     @param value {String} optional value to test against.
-    @returns {Boolean} YES 
+    @returns {Boolean} true 
   */
   someProperty: function(key, value) {
     var len = this.get ? this.get('length') : this.length ;
-    var ret  = NO;
+    var ret  = false;
     var last = null ;
     var context = SC.Enumerator._popContext();
     for(var idx=0; !ret && (idx<len); idx++) {
@@ -831,7 +830,7 @@ SC.Reducers = /** @lends SC.Enumerable */ {
     if (SC.typeOf(reducer) !== SC.T_FUNCTION) return undefined;
     
     // if we can't generate the property, just run reduce
-    if (generateProperty === NO) {
+    if (generateProperty === false) {
       return SC.Enumerable.reduce.call(this, reducer, null, reducerProperty) ;
     }
 
@@ -945,7 +944,7 @@ SC.Reducers = /** @lends SC.Enumerable */ {
 // Apply reducers...
 SC.mixin(SC.Enumerable, SC.Reducers) ;
 SC.mixin(Array.prototype, SC.Reducers) ;
-Array.prototype.isEnumerable = YES ;
+Array.prototype.isEnumerable = true ;
 
 // ......................................................
 // ARRAY SUPPORT
@@ -995,7 +994,7 @@ Array.prototype.isEnumerable = YES ;
       var len = this.length ;
       if (target === undefined) target = null;
 
-      var next, ret = null, found = NO;
+      var next, ret = null, found = false;
       for(var idx=0;idx<len && !found;idx++) {
         next = this[idx] ;
         if(found = callback.call(target, next, idx, this)) ret = next ;
@@ -1006,7 +1005,7 @@ Array.prototype.isEnumerable = YES ;
 
     findProperty: function(key, value) {
       var len = this.length ;
-      var next, cur, found=NO, ret=null;
+      var next, cur, found=false, ret=null;
       for(var idx=0;idx<len && !found;idx++) {
         cur = (next=this[idx]) ? (next.get ? next.get(key): next[key]):null;
         found = (value === undefined) ? !!cur : SC.isEqual(cur, value);
@@ -1018,7 +1017,7 @@ Array.prototype.isEnumerable = YES ;
 
     everyProperty: function(key, value) {
       var len = this.length ;
-      var ret  = YES;
+      var ret  = true;
       for(var idx=0;ret && (idx<len);idx++) {
         var next = this[idx] ;
         var cur = next ? (next.get ? next.get(key) : next[key]) : null;
@@ -1029,7 +1028,7 @@ Array.prototype.isEnumerable = YES ;
     
     someProperty: function(key, value) {
       var len = this.length ;
-      var ret  = NO;
+      var ret  = false;
       for(var idx=0; !ret && (idx<len); idx++) {
         var next = this[idx] ;
         var cur = next ? (next.get ? next.get(key) : next[key]) : null;
@@ -1169,10 +1168,10 @@ Array.prototype.isEnumerable = YES ;
       var len = this.length ;
       if (target === undefined) target = null;
 
-      var ret  = YES;
+      var ret  = true;
       for(var idx=0;ret && (idx<len);idx++) {
         var next = this[idx] ;
-        if(!callback.call(target, next, idx, this)) ret = NO ;
+        if(!callback.call(target, next, idx, this)) ret = false ;
       }
       return ret ;
     },
@@ -1182,10 +1181,10 @@ Array.prototype.isEnumerable = YES ;
       var len = this.length ;
       if (target === undefined) target = null;
 
-      var ret  = NO;
+      var ret  = false;
       for(var idx=0;(!ret) && (idx<len);idx++) {
         var next = this[idx] ;
-        if(callback.call(target, next, idx, this)) ret = YES ;
+        if(callback.call(target, next, idx, this)) ret = true ;
       }
       return ret ;
     },

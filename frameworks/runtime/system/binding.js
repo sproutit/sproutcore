@@ -5,9 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
-"import system/set";
-"export package";
+var SC = require('core');
+require('system/set');
 
 /**
   Debug parameter you can turn on.  This will log all bindings that fire to
@@ -16,7 +15,7 @@
   
   @property {Boolean}
 */
-SC.LOG_BINDINGS = NO ;
+SC.LOG_BINDINGS = false ;
 
 /**
   Performance paramter.  This will benchmark the time spent firing each 
@@ -24,7 +23,7 @@ SC.LOG_BINDINGS = NO ;
   
   @property {Boolean}
 */
-SC.BENCHMARK_BINDING_NOTIFICATIONS = NO ;
+SC.BENCHMARK_BINDING_falseTIFICATIONS = false ;
 
 /**
   Performance parameter.  This will benchmark the time spend configuring each
@@ -32,7 +31,7 @@ SC.BENCHMARK_BINDING_NOTIFICATIONS = NO ;
   
   @property {Boolean}
 */
-SC.BENCHMARK_BINDING_SETUP = NO;
+SC.BENCHMARK_BINDING_SETUP = false;
   
 /** 
   Default placeholder for multiple values in bindings.
@@ -362,9 +361,9 @@ SC.Binding = {
   connect: function() {
     // If the binding is already connected, do nothing.
     if (this.isConnected) return this ;
-    this.isConnected = YES ;
-    this._connectionPending = YES ; // its connected but not really...    
-    this._syncOnConnect = YES ;
+    this.isConnected = true ;
+    this._connectionPending = true ; // its connected but not really...    
+    this._syncOnConnect = true ;
     SC.Binding._connectQueue.add(this) ;
     return this; 
   },
@@ -376,7 +375,7 @@ SC.Binding = {
   */
   _connect: function() {
     if (!this._connectionPending) return; //nothing to do
-    this._connectionPending = NO ;
+    this._connectionPending = false ;
 
     var path, root,
         bench = SC.BENCHMARK_BINDING_SETUP;
@@ -418,7 +417,7 @@ SC.Binding = {
 
     // now try to sync if needed
     if (this._syncOnConnect) {
-      this._syncOnConnect = NO ;
+      this._syncOnConnect = false ;
       if (bench) SC.Benchmark.start("SC.Binding.connect().sync");
       this.sync();
       if (bench) SC.Benchmark.end("SC.Binding.connect().sync");
@@ -436,7 +435,7 @@ SC.Binding = {
     
     // if connection is still pending, just cancel
     if (this._connectionPending) {
-      this._connectionPending = NO ;
+      this._connectionPending = false ;
       
     // connection is completed, disconnect.
     } else {
@@ -446,7 +445,7 @@ SC.Binding = {
       }
     }
     
-    this.isConnected = NO ;
+    this.isConnected = false ;
     return this ;  
   },
 
@@ -464,7 +463,7 @@ SC.Binding = {
     if (v !== this._bindingValue) {
 
       this._setBindingValue(target, key) ;
-      this._changePending = YES ;
+      this._changePending = true ;
       SC.Binding._changeQueue.add(this) ; // save for later.  
     }
   },
@@ -488,7 +487,7 @@ SC.Binding = {
     // schedule to register an update.
     if (v !== this._transformedBindingValue) {
       this._setBindingValue(target, key) ;
-      this._changePending = YES ;
+      this._changePending = true ;
       SC.Binding._changeQueue.add(this) ; // save for later.  
     }
   },
@@ -536,21 +535,21 @@ SC.Binding = {
   _alternateConnectQueue: SC.CoreSet.create(),
   _changeQueue: SC.CoreSet.create(),
   _alternateChangeQueue: SC.CoreSet.create(),
-  _changePending: NO,
+  _changePending: false,
 
   /**
     Call this method on SC.Binding to flush all bindings with changed pending.
     
-    @returns {Boolean} YES if changes were flushed.
+    @returns {Boolean} true if changes were flushed.
   */
   flushPendingChanges: function() {
     
     // don't allow flushing more than one at a time
-    if (this._isFlushing) return NO; 
-    this._isFlushing = YES ;
+    if (this._isFlushing) return false; 
+    this._isFlushing = true ;
     SC.Observers.suspendPropertyObserving();
 
-    var didFlush = NO,
+    var didFlush = false,
         log = SC.LOG_BINDINGS,
         // connect any bindings
         queue, binding ;
@@ -564,7 +563,7 @@ SC.Binding = {
     while ((queue = this._changeQueue).length > 0) {
       if (log) console.log("Begin: Trigger changed bindings") ;
       
-      didFlush = YES ;
+      didFlush = true ;
       
       // first, swap the change queues.  This way any binding changes that
       // happen while we flush the current queue can be queued up.
@@ -583,7 +582,7 @@ SC.Binding = {
     }
     
     // clean up
-    this._isFlushing = NO ;
+    this._isFlushing = false ;
     SC.Observers.resumePropertyObserving();
 
     return didFlush ;
@@ -594,7 +593,7 @@ SC.Binding = {
     binding value from one side to the other.
   */
   applyBindingValue: function() {
-    this._changePending = NO ;
+    this._changePending = false ;
 
     // compute the binding targets if needed.
     this._computeBindingTargets() ;
@@ -639,7 +638,7 @@ SC.Binding = {
     
     // connection is pending, just note that we should sync also
     if (this._connectionPending) {
-      this._syncOnConnect = YES ;
+      this._syncOnConnect = true ;
       
     // we are connected, go ahead and sync
     } else {
@@ -655,7 +654,7 @@ SC.Binding = {
       // schedule to register an update.
       if (v !== this._bindingValue) {
         this._setBindingValue(target, key) ;
-        this._changePending = YES ;
+        this._changePending = true ;
         SC.Binding._changeQueue.add(this) ; // save for later.  
       }
     }
@@ -664,7 +663,7 @@ SC.Binding = {
   },
   
   // set if you call sync() when the binding connection is still pending.
-  _syncOnConnect: NO,
+  _syncOnConnect: false,
   
   _computeBindingTargets: function() {
     if (!this._fromTarget) {
@@ -711,7 +710,7 @@ SC.Binding = {
     a different value.
     
     @param fromPath {String} optional from path to connect.
-    @param aFlag {Boolean} Optionally pass NO to set the binding back to two-way
+    @param aFlag {Boolean} Optionally pass false to set the binding back to two-way
     @returns {SC.Binding} this
   */
   oneWay: function(fromPath, aFlag) {
@@ -724,7 +723,7 @@ SC.Binding = {
     // beget if needed.
     var binding = this.from(fromPath) ;
     if (binding === SC.Binding) binding = binding.beget() ;
-    binding._oneWay = (aFlag === undefined) ? YES : aFlag ;
+    binding._oneWay = (aFlag === undefined) ? true : aFlag ;
     return binding ;
   },
   
@@ -784,7 +783,7 @@ SC.Binding = {
     end of the transform chain.
     
     @param fromPath {String} optional from path to connect.
-    @param aFlag {Boolean} optionally pass NO to allow error objects again.
+    @param aFlag {Boolean} optionally pass false to allow error objects again.
     @returns {SC.Binding} this
   */
   noError: function(fromPath, aFlag) {
@@ -796,7 +795,7 @@ SC.Binding = {
     // beget if needed.
     var binding = this.from(fromPath) ;
     if (binding === SC.Binding) binding = binding.beget() ;
-    binding._noError = (aFlag === undefined) ? YES : aFlag ;
+    binding._noError = (aFlag === undefined) ? true : aFlag ;
     return binding ;
   },
   
@@ -884,8 +883,8 @@ SC.Binding = {
   
   /**
     Adds a transform to convert the value to a bool value.  If the value is
-    an array it will return YES if array is not empty.  If the value is a string
-    it will return YES if the string is not empty.
+    an array it will return true if array is not empty.  If the value is a string
+    it will return true if the string is not empty.
   
     @param fromPath {String} optional from path
     @returns {SC.Binding} this
@@ -894,7 +893,7 @@ SC.Binding = {
     return this.from(fromPath).transform(function(v) {
       var t = SC.typeOf(v) ;
       if (t === SC.T_ERROR) return v ;
-      return (t == SC.T_ARRAY) ? (v.length > 0) : (v === '') ? NO : !!v ;
+      return (t == SC.T_ARRAY) ? (v.length > 0) : (v === '') ? false : !!v ;
     }) ;
   },
   
@@ -909,12 +908,12 @@ SC.Binding = {
     return this.from(fromPath).transform(function(v) {
       var t = SC.typeOf(v) ;
       if (t === SC.T_ERROR) return v ;
-      return !((t == SC.T_ARRAY) ? (v.length > 0) : (v === '') ? NO : !!v) ;
+      return !((t == SC.T_ARRAY) ? (v.length > 0) : (v === '') ? false : !!v) ;
     }) ;
   },
   
   /**
-    Adds a transform that will return YES if the value is null, NO otherwise.
+    Adds a transform that will return true if the value is null, false otherwise.
     
     @returns {SC.Binding} this
   */

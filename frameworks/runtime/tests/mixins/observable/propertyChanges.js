@@ -8,7 +8,7 @@
 "import system/object";
 "import mixins/observable";
 
-var revMatches = NO , ObjectA;
+var revMatches = false , ObjectA;
 
 module("object.propertyChanges", {  
   setup: function() {

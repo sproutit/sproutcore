@@ -52,7 +52,7 @@ module("Array's - isEqual",{
 });
 	
 test("array should be equal  ",function(){
-	// NOTE: We don't test for array contents -- that would be too expensive.
+	// falseTE: We don't test for array contents -- that would be too expensive.
 	equals(SC.isEqual(objectA,objectB),false, 'two array instances with the same values should not be equal');
 	equals(SC.isEqual(objectA,objectC),false, 'two array instances with different values should not be equal');
 });	

@@ -5,12 +5,11 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import core";
-"import mixins/observable";
-"import system/set";
-"export package";
+var SC = require('core');
+require('mixins/observable');
+require('system/set');
 
-SC.BENCHMARK_OBJECTS = NO;
+SC.BENCHMARK_OBJECTS = false;
 
 // ..........................................................
 // PRIVATE HELPER METHODS
@@ -61,18 +60,18 @@ SC._object_extend = function _object_extend(base, ext) {
   // setup arrays for bindings, observers, and properties.  Normally, just
   // save the arrays from the base.  If these need to be changed during 
   // processing, then they will be cloned first.
-  var bindings = base._bindings, clonedBindings = NO;
-  var observers = base._observers, clonedObservers = NO;
-  var properties = base._properties, clonedProperties = NO;
+  var bindings = base._bindings, clonedBindings = false;
+  var observers = base._observers, clonedObservers = false;
+  var properties = base._properties, clonedProperties = false;
   var paths, pathLoc, local ;
 
   // outlets are treated a little differently because you can manually 
   // name outlets in the passed in hash. If this is the case, then clone
   // the array first.
-  var outlets = base.outlets, clonedOutlets = NO ;
+  var outlets = base.outlets, clonedOutlets = false ;
   if (ext.outlets) { 
     outlets = (outlets || SC.EMPTY_ARRAY).concat(ext.outlets);
-    clonedOutlets = YES ;
+    clonedOutlets = true ;
   }
 
   // now copy properties, add superclass to func.
@@ -90,7 +89,7 @@ SC._object_extend = function _object_extend(base, ext) {
     if (key.slice(-7) === "Binding") {
       if (!clonedBindings) {
         bindings = (bindings || SC.EMPTY_ARRAY).slice() ;
-        clonedBindings = YES ;
+        clonedBindings = true ;
       }
 
       if (bindings === null) bindings = (base._bindings || SC.EMPTY_ARRAY).slice();
@@ -109,7 +108,7 @@ SC._object_extend = function _object_extend(base, ext) {
       if (value.propertyPaths) {
         if (!clonedObservers) {
           observers = (observers || SC.EMPTY_ARRAY).slice() ;
-          clonedObservers = YES ;
+          clonedObservers = true ;
         }
         observers[observers.length] = key ;
 
@@ -126,7 +125,7 @@ SC._object_extend = function _object_extend(base, ext) {
       } else if (value.dependentKeys) {
         if (!clonedProperties) {
           properties = (properties || SC.EMPTY_ARRAY).slice() ;
-          clonedProperties = YES ;
+          clonedProperties = true ;
         }
         properties[properties.length] = key ;
 
@@ -134,7 +133,7 @@ SC._object_extend = function _object_extend(base, ext) {
       } else if (value.autoconfiguredOutlet) {
         if (!clonedOutlets) {
           outlets = (outlets || SC.EMPTY_ARRAY).slice();
-          clonedOutlets = YES ;
+          clonedOutlets = true ;
         }
         outlets[outlets.length] = key ;          
       }
@@ -302,7 +301,7 @@ SC.mixin(SC.Object, /** @scope SC.Object */ {
     
     @property {Boolean}
   */
-  isClass: YES,
+  isClass: true,
 
   /**
     Set of subclasses that extend from this class.  You can observe this 
@@ -320,8 +319,8 @@ SC.mixin(SC.Object, /** @scope SC.Object */ {
   //
 
   /** 
-    Returns YES if the receiver is a subclass of the named class.  If the 
-    receiver is the class passed, this will return NO since the class is not
+    Returns true if the receiver is a subclass of the named class.  If the 
+    receiver is the class passed, this will return false since the class is not
     a subclass of itself.  See also kindOf().
 
     h2. Example
@@ -330,34 +329,34 @@ SC.mixin(SC.Object, /** @scope SC.Object */ {
       ClassA = SC.Object.extend();
       ClassB = ClassA.extend();
 
-      ClassB.subclassOf(ClassA) => YES
-      ClassA.subclassOf(ClassA) => NO
+      ClassB.subclassOf(ClassA) => true
+      ClassA.subclassOf(ClassA) => false
     }}}
     
     @param {Class} scClass class to compare
     @returns {Boolean} 
   */
   subclassOf: function(scClass) {
-    if (this === scClass) return NO ;
+    if (this === scClass) return false ;
     var t = this ;
-    while(t = t.superclass) if (t === scClass) return YES ;
-    return NO ;
+    while(t = t.superclass) if (t === scClass) return true ;
+    return false ;
   },
   
   /**
-    Returns YES if the passed object is a subclass of the receiver.  This is 
+    Returns true if the passed object is a subclass of the receiver.  This is 
     the inverse of subclassOf() which you call on the class you want to test.
     
     @param {Class} scClass class to compare
     @returns {Boolean}
   */
   hasSubclass: function(scClass) {
-    return (scClass && scClass.subclassOf) ? scClass.subclassOf(this) : NO;
+    return (scClass && scClass.subclassOf) ? scClass.subclassOf(this) : false;
   },
 
   /**
-    Returns YES if the receiver is the passed class or is a subclass of the 
-    passed class.  Unlike subclassOf(), this method will return YES if you
+    Returns true if the receiver is the passed class or is a subclass of the 
+    passed class.  Unlike subclassOf(), this method will return true if you
     pass the receiver itself, since class is a kind of itself.  See also 
     subclassOf().
 
@@ -367,8 +366,8 @@ SC.mixin(SC.Object, /** @scope SC.Object */ {
       ClassA = SC.Object.extend();
       ClassB = ClassA.extend();
 
-      ClassB.kindOf(ClassA) => YES
-      ClassA.kindOf(ClassA) => YES
+      ClassB.kindOf(ClassA) => true
+      ClassA.kindOf(ClassA) => true
     }}}
     
     @param {Class} scClass class to compare
@@ -385,7 +384,7 @@ SC.mixin(SC.Object, /** @scope SC.Object */ {
 // 
 SC.Object.prototype = {
   
-  _kvo_enabled: YES,
+  _kvo_enabled: true,
   
   /** @private
     This is the first method invoked on a new instance.  It will first apply
@@ -474,11 +473,11 @@ SC.Object.prototype = {
   },
 
   /**
-    Set to NO once this object has been destroyed. 
+    Set to false once this object has been destroyed. 
     
     @property {Boolean}
   */
-  isDestroyed: NO,
+  isDestroyed: false,
 
   /**
     Call this method when you are finished with an object to teardown its
@@ -494,7 +493,7 @@ SC.Object.prototype = {
   */
   destroy: function() {
     if (this.get('isDestroyed')) return this; // nothing to do
-    this.set('isDestroyed', YES);
+    this.set('isDestroyed', true);
 
     // destroy any mixins
     var idx, inits = this.destroyMixin, len = (inits) ? inits.length : 0 ;
@@ -504,14 +503,14 @@ SC.Object.prototype = {
   },
 
   /**
-    Walk like a duck. Always YES since this is an object and not a class.
+    Walk like a duck. Always true since this is an object and not a class.
     
     @property {Boolean}
   */
   isObject: true,
 
   /**
-    Returns YES if the named value is an executable function.
+    Returns true if the named value is an executable function.
 
     @param methodName {String} the property name to check
     @returns {Boolean}
@@ -521,9 +520,9 @@ SC.Object.prototype = {
   },
   
   /**
-    Attemps to invoke the named method, passing the included two arguments.  
-    Returns NO if the method is either not implemented or if the handler 
-    returns NO (indicating that it did not handle the event).  This method 
+    Attemps to invoked the named method, passing the included two arguments.  
+    Returns false if the method is either not implemented or if the handler 
+    returns false (indicating that it did not handle the event).  This method 
     is invoked to deliver actions from menu items and to deliver events.  
     You can override this method to provide additional handling if you 
     prefer.
@@ -531,10 +530,10 @@ SC.Object.prototype = {
     @param {String} methodName
     @param {Object} arg1
     @param {Object} arg2
-    @returns {Boolean} YES if handled, NO if not handled
+    @returns {Boolean} true if handled, false if not handled
   */
   tryToPerform: function(methodName, arg1, arg2) {
-    return this.respondsTo(methodName) && (this[methodName](arg1, arg2) !== NO);
+    return this.respondsTo(methodName) && (this[methodName](arg1, arg2) !== false);
   },
 
   /**  
@@ -553,7 +552,7 @@ SC.Object.prototype = {
     {{{
       SC.Object.create({
         
-        // DOES NOT WORK IN SAFARI 2 OR EARLIER
+        // DOES falseT WORK IN SAFARI 2 OR EARLIER
         method1: function() {
           this.superclass();
         },
@@ -580,7 +579,7 @@ SC.Object.prototype = {
   },
 
   /**  
-    returns YES if the receiver is an instance of the named class.  See also
+    returns true if the receiver is an instance of the named class.  See also
     kindOf().
 
     h2. Example
@@ -592,8 +591,8 @@ SC.Object.prototype = {
       var instA = ClassA.create();
       var instB = ClassB.create();
       
-      instA.instanceOf(ClassA) => YES
-      instB.instanceOf(ClassA) => NO
+      instA.instanceOf(ClassA) => true
+      instB.instanceOf(ClassA) => false
     }}}
     
     @param {Class} scClass the class
@@ -616,8 +615,8 @@ SC.Object.prototype = {
       var instA = ClassA.create();
       var instB = ClassB.create();
       
-      instA.kindOf(ClassA) => YES
-      instB.kindOf(ClassA) => YES
+      instA.kindOf(ClassA) => true
+      instB.kindOf(ClassA) => true
     }}}
 
     @param scClass {Class} the class

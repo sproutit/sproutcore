@@ -7,11 +7,10 @@
 
 // note: SC.Observable also enhances array.  make sure we are called after
 // SC.Observable so our version of unknownProperty wins.
-"import core";
-"import mixins/observable";
-"import mixins/enumerable";
-"import system/range_observer";
-"export package";
+var SC = require('core');
+require('mixins/observable');
+require('mixins/enumerable');
+require('system/range_observer');
 
 SC.OUT_OF_RANGE_EXCEPTION = "Index out of range" ;
 
@@ -52,7 +51,7 @@ SC.Array = {
   /**
     Walk like a duck - use isSCArray to avoid conflicts
   */
-  isSCArray: YES,
+  isSCArray: true,
   
   /**
     @field {Number} length
@@ -361,13 +360,13 @@ SC.Array = {
     }
     
     var C = this.rangeObserverClass ;
-    var isDeep = NO; //disable this feature for now
+    var isDeep = false; //disable this feature for now
     var ret = C.create(this, indexes, target, method, context, isDeep) ;
     rangeob.add(ret);
     
     // first time a range observer is added, begin observing the [] property
     if (!this._array_isNotifyingRangeObservers) {
-      this._array_isNotifyingRangeObservers = YES ;
+      this._array_isNotifyingRangeObservers = true ;
       this.addObserver('[]', this, this._array_notifyRangeObservers);
     }
     

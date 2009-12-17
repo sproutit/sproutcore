@@ -30,7 +30,7 @@ module("SC.RangeObserver#destroy", {
       
     });
 
-    obj = SC.RangeObserver.create(source, indexes, observer, observer.rangeDidChange, "context", YES);
+    obj = SC.RangeObserver.create(source, indexes, observer, observer.rangeDidChange, "context", true);
     
   }
 });
@@ -45,7 +45,7 @@ test("returns receiver", function() {
 // OBSERVING
 // 
 
-// NOTE: Since we are lazy about observing changes, we want to test both what
+// falseTE: Since we are lazy about observing changes, we want to test both what
 // happens if you destroy the observer before any changes have happend and 
 // after changes have happened.
 

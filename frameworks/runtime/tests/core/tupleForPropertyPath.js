@@ -38,7 +38,7 @@ test("should check for the tuple property", function() {
 test("should check for the tuple property when path is undefined",function(){     //test case where no property defined
      var object2;
      object2 = SC.tupleForPropertyPath(object.value,'');
-     equals(YES,object2 === null,'returns null for undefined path');	
+     equals(true,object2 === null,'returns null for undefined path');	
 });
 
 plan.run();

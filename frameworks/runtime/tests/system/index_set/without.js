@@ -67,7 +67,7 @@ test("using without should properly hint returned index set", function() {
 });
 
 // ..........................................................
-// NORMALIZED PARAMETER CASES
+// falseRMALIZED PARAMETER CASES
 // 
 
 test("passing no params should return clone", function() {

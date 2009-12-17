@@ -20,28 +20,28 @@ module("SC.SelectionSet.isEqual", {
 });
 
 test("set.isEqual(same instance)", function() {
-  ok(set1.isEqual(set1), 'same instance should return YES');
+  ok(set1.isEqual(set1), 'same instance should return true');
 });
 
 test("set.isEqual(null)", function() {
-  ok(!set1.isEqual(null), 'null should return NO');
+  ok(!set1.isEqual(null), 'null should return false');
 });
 
 
 test("set1.isEqual(set2)", function() {
-  ok(set1.isEqual(set2), 'same content should return YES');
+  ok(set1.isEqual(set2), 'same content should return true');
   
   set1.add(content, 4,4);
   set2.add(content, 4,4);
-  ok(set1.isEqual(set2), 'same content should return YES');
+  ok(set1.isEqual(set2), 'same content should return true');
 
   set1.remove(content, 6);
   set2.remove(content, 6);
-  ok(set1.isEqual(set2), 'same content should return YES');
+  ok(set1.isEqual(set2), 'same content should return true');
 
   set1.remove(content, 4,4);
   set2.remove(content, 4,4);
-  ok(set1.isEqual(set2), 'same content should return YES');
+  ok(set1.isEqual(set2), 'same content should return true');
   
 });
 
@@ -60,7 +60,7 @@ test("multiple content objects", function() {
 
 test("set1.isEqual(set2) after set2 is filled and emptied", function() {
   set2.add(content,4,4).remove(content,4,4);
-  ok(set1.isEqual(set2), 'same content should return YES');
+  ok(set1.isEqual(set2), 'same content should return true');
 });
 
 plan.run();
