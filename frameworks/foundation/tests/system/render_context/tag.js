@@ -27,19 +27,19 @@ test("should respect passed opts when emitting", function() {
   equals(SC.RenderContext.escapeHTML(context.get(2)), SC.RenderContext.escapeHTML('<'+'/foo>'));
 });
 
-test("should NOT emit self closing tag if tag is script", function() {
+test("should falseT emit self closing tag if tag is script", function() {
   context.tag("script");
   equals(SC.RenderContext.escapeHTML(context.get(1)), SC.RenderContext.escapeHTML('<script>'));
   equals(SC.RenderContext.escapeHTML(context.get(2)), SC.RenderContext.escapeHTML('<'+'/script>'));
 });
 
-test("should NOT emit self closing tag if tag is div", function() {
+test("should falseT emit self closing tag if tag is div", function() {
   context.tag("div");
   equals(SC.RenderContext.escapeHTML(context.get(1)), SC.RenderContext.escapeHTML('<div>'));
   equals(SC.RenderContext.escapeHTML(context.get(2)), SC.RenderContext.escapeHTML('<'+'/div>'));
 });
 
-test("should NOT emit self closing tag if no tag is passed", function() {
+test("should falseT emit self closing tag if no tag is passed", function() {
   context.tag();
   equals(SC.RenderContext.escapeHTML(context.get(1)), SC.RenderContext.escapeHTML('<div>'));
   equals(SC.RenderContext.escapeHTML(context.get(2)), SC.RenderContext.escapeHTML('<'+'/div>'));

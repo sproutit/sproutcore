@@ -47,7 +47,7 @@ htmlbody('<style> .sc-static-layout { border: 1px red dotted; } </style>');
       var testToolTip = 'This is a test tooltip';
       
       SC.RunLoop.begin();
-      imageView.set('localization', NO);
+      imageView.set('localization', false);
       imageView.set('toolTip', testToolTip);
       SC.RunLoop.end();
       

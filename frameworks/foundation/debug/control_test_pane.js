@@ -5,11 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import sproutcore/runtime";
-"import core";
-"import panes/pane";
-
-/*global test */
+var SC = require('core');
+require('panes/pane');
 
 // TODO: IMPROVE CODE QUALITY.  This code was put together quickly in order to
 // test the SproutCore framework.  It does not match up to the project's 
@@ -27,7 +24,7 @@
     var pane = SC.ControlTestPane.design()
       .add('basic', SC.CheckboxView.design({ title: "Hello World" }))
       .add('disabled', SC.CheckboxView.design({
-        title: "Hello World", isEnabled: NO
+        title: "Hello World", isEnabled: false
       }));
       
     module("CheckboxView UI", pane);

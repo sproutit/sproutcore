@@ -27,8 +27,8 @@ test("changes mainPane to new pane", function() {
 
 test("if current mainpane is also keypane, automatically make new main pane key also", function() {
   // acceptsKeyPane is required to allow keyPane to change
-  var p1 = SC.Pane.create({ acceptsKeyPane: YES });
-  var p2 = SC.Pane.create({ acceptsKeyPane: YES });
+  var p1 = SC.Pane.create({ acceptsKeyPane: true });
+  var p2 = SC.Pane.create({ acceptsKeyPane: true });
 
   var r= SC.RootResponder.create({ mainPane: p1, keyPane: p1 });
   r.makeMainPane(p2);

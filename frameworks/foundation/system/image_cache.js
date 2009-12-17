@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('system/locale');
+var SC = require('core');
+require('system/locale');
 
 SC.IMAGE_ABORTED_ERROR = SC.$error("SC.Image.AbortedError", "Image", -100) ;
 
@@ -156,7 +157,7 @@ SC.imageCache = SC.Object.create(/** @scope SC.imageCache.prototype */ {
     
     // get entry.  if there is no entry, just return as there is nothing to 
     // do.
-    var entry = this._imageEntryFor(url, NO) ;
+    var entry = this._imageEntryFor(url, false) ;
     if (!entry) return this ;
     
     // there is an entry, decrement the retain count.  If <=0, delete!
@@ -183,7 +184,7 @@ SC.imageCache = SC.Object.create(/** @scope SC.imageCache.prototype */ {
     Forces the image to reload the next time you try to load it.
   */
   reloadImage: function(url) {
-    var entry = this._imageEntryFor(url, NO); 
+    var entry = this._imageEntryFor(url, false); 
     if (entry && entry.status===this.IMAGE_LOADED) {
       entry.status = this.IMAGE_WAITING;
     }
@@ -237,7 +238,7 @@ SC.imageCache = SC.Object.create(/** @scope SC.imageCache.prototype */ {
 
   /** @private Find or create an entry for the URL. */
   _imageEntryFor: function(url, createIfNeeded) {
-    if (createIfNeeded === undefined) createIfNeeded = YES;
+    if (createIfNeeded === undefined) createIfNeeded = true;
     var entry = this._images[url] ;
     if (!entry && createIfNeeded) {
       var img = new Image() ;
@@ -317,7 +318,7 @@ SC.imageCache = SC.Object.create(/** @scope SC.imageCache.prototype */ {
     
     // if the image loader is not already running, start it...
     if (!this.isLoading) this.invokeLater(this.loadNextImage, 100);
-    this.set('isLoading', YES);
+    this.set('isLoading', true);
     
     return this ; // done!
   },
@@ -364,7 +365,7 @@ SC.imageCache = SC.Object.create(/** @scope SC.imageCache.prototype */ {
   */
   // imageStatusDidChange: function(url, status) {
   imageStatusDidChange: function(entry, status) {
-    // var entry = this._imageEntryFor(url, NO);
+    // var entry = this._imageEntryFor(url, false);
     if (!entry) return; // nothing to do...
     
     var url = entry.url ;

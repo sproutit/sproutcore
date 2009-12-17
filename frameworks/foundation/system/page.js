@@ -5,6 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+var SC = require('core');
+
 /**
   @class SC.Page
 
@@ -89,9 +91,9 @@ SC.Page = SC.Object.extend(
     return this ;
   }
   
-  //needsDesigner: YES,
+  //needsDesigner: true,
   
-  //inDesignMode: YES
+  //inDesignMode: true
     
 }) ;
 

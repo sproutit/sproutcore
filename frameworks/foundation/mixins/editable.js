@@ -5,8 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"export package";
+var SC = require('core');
 
 /**
   @namespace
@@ -23,11 +22,11 @@
   To use a view that includes the Editable mixin, you simply call three
   methods on the view:
   
-  - To begin editing, call beginEditing().  This will make the view first responder and allow the user to make changes to it.  If the view cannot begin editing for some reason, it will return NO.
+  - To begin editing, call beginEditing().  This will make the view first responder and allow the user to make changes to it.  If the view cannot begin editing for some reason, it will return false.
   
-  - If you want to cancel editing, you should try calling discardEditing().  This will cause the editor to discard its changed value and resign first responder.  Some editors do not support cancelling editing and will return NO.  If this is the case, you may optionally try calling commitEditing() instead to force the view to resign first responder, even though this will commit the changes.
+  - If you want to cancel editing, you should try calling discardEditing().  This will cause the editor to discard its changed value and resign first responder.  Some editors do not support cancelling editing and will return false.  If this is the case, you may optionally try calling commitEditing() instead to force the view to resign first responder, even though this will commit the changes.
   
-  - If you want to end editing, while saving any changes that were made, try calling commitEditing().  This will cause the editor to validate and apply its changed value and resign first responder.  If the editor cannot validate its contents for some reason, it will return NO.  In this case you may optionally try calling discardEditing() instead to force the view to resign first responder, even though this will discard the changes.
+  - If you want to end editing, while saving any changes that were made, try calling commitEditing().  This will cause the editor to validate and apply its changed value and resign first responder.  If the editor cannot validate its contents for some reason, it will return false.  In this case you may optionally try calling discardEditing() instead to force the view to resign first responder, even though this will discard the changes.
   
   
   h2. Implementing an Editable View
@@ -47,11 +46,11 @@ SC.Editable = {
   /**
     Indicates whether a view is editable or not.  You can optionally 
     implement the methods in this mixin to disallow editing is isEditable is
-    NO.
+    false.
     
     @property {Boolean}
   */
-  isEditable: NO,
+  isEditable: false,
   
   /**
     Indicates whether editing is currently in progress.  The methods you
@@ -60,34 +59,34 @@ SC.Editable = {
     
     @property {Boolean}
   */
-  isEditing: NO,
+  isEditing: false,
   
   /**
     Begins editing on the view.
     
     This method is called by other views when they want you to begin editing.
     You should write this method to become first responder, perform any 
-    additional setup needed to begin editing and then return YES.
+    additional setup needed to begin editing and then return true.
     
     If for some reason you do not want to allow editing right now, you can
-    also return NO.  If your view is already editing, then you should not
-    restart editing again but just return YES.
+    also return false.  If your view is already editing, then you should not
+    restart editing again but just return true.
 
     The default implementation checks to see if editing is allowed, then
     becomes first responder and updates the isEditing property if appropriate.
     Generally you will want to replace this method with your own 
     implementation and not call the default.
     
-    @returns {Boolean} YES if editing began or is in progress, NO otherwise
+    @returns {Boolean} true if editing began or is in progress, false otherwise
   */
   beginEditing: function() {
-    if (!this.get('isEditable')) return NO ;
-    if (this.get('isEditing')) return YES ;
+    if (!this.get('isEditable')) return false ;
+    if (this.get('isEditing')) return true ;
     
     // begin editing
-    this.set('isEditing', YES) ;
+    this.set('isEditing', true) ;
     this.becomeFirstResponder() ;
-    return YES ;
+    return true ;
   },
   
   /**
@@ -96,23 +95,23 @@ SC.Editable = {
     
     This method is called by other views when they want to cancel editing
     that began earlier.  When this method is called you should resign first
-    responder, restore the original value of the view and return YES.
+    responder, restore the original value of the view and return true.
     
     If your view cannot revert back to its original state before editing began
-    then you can implement this method to simply return NO.  A properly
+    then you can implement this method to simply return false.  A properly
     implemented client may try to call commitEditing() instead to force your
     view to end editing anyway.
     
     If this method is called on a view that is not currently editing, you
-    should always just return YES.
+    should always just return true.
     
     The default implementation does not support discarding changes and always
-    returns NO.
+    returns false.
     
-    @returns {Boolean} YES if changes were discarded and editing ended.
+    @returns {Boolean} true if changes were discarded and editing ended.
   */
   discardEditing: function() {
-    // if we are not editing, return YES, otherwise NO.
+    // if we are not editing, return true, otherwise false.
     return !this.get('isEditing') ;
   },
   
@@ -123,10 +122,10 @@ SC.Editable = {
     This method is called by other views when they want to end editing, 
     saving any changes that were made to the view in the meantime.  When this
     method is called you should resign first responder, save the latest
-    value of the view and return YES.
+    value of the view and return true.
     
     If your view cannot save the current state of the view for some reason 
-    (for example if validation fails), then you should return NO.  Properly
+    (for example if validation fails), then you should return false.  Properly
     implemented clients may then try to call discardEditing() to force your
     view to resign first responder anyway.
     
@@ -136,18 +135,18 @@ SC.Editable = {
     changes.
   
     If this method is called on a view that is not currently editing, you
-    should always just reutrn YES.
+    should always just reutrn true.
     
-    The default implementation sets isEditing to NO, resigns first responder
-    and returns YES.
+    The default implementation sets isEditing to false, resigns first responder
+    and returns true.
     
-    @returns {Boolean} YES if changes were discarded and editing ended.
+    @returns {Boolean} true if changes were discarded and editing ended.
   */
   commitEditing: function() {
-    if (!this.get('isEditing')) return YES;
-    this.set('isEditing', NO) ;
+    if (!this.get('isEditing')) return true;
+    this.set('isEditing', false) ;
     this.resignFirstResponder() ;
-    return YES ;
+    return true ;
   }
 
 } ;

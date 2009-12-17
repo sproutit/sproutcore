@@ -29,7 +29,7 @@ var CommonSetup = {
     
     // explicit pane
     pane = SC.Pane.create({ 
-      acceptsKeyPane: YES,
+      acceptsKeyPane: true,
       defaultResponder: defaultResponder,
       childViews: [SC.View.extend({
         bar: action,  // implement bar action
@@ -42,13 +42,13 @@ var CommonSetup = {
     });
     
     keyPane = SC.Pane.create({
-      acceptsKeyPane: YES,
+      acceptsKeyPane: true,
       keyAction: action
     });
     keyPane.firstResponder = keyPane ;
 
     mainPane = SC.Pane.create({
-      acceptsKeyPane: YES,
+      acceptsKeyPane: true,
       mainAction: action
     });
     mainPane.firstResponder = mainPane ;
@@ -128,7 +128,7 @@ test("no target, explicit pane, top-level firstResponder", function() {
   pane.set('firstResponder', barView) ; // fooView is child...
   
   equals(r.targetForAction('foo', null, null, pane), null, 
-    'should NOT return child of firstResponder');
+    'should falseT return child of firstResponder');
     
   equals(r.targetForAction('bar', null, null, pane), barView, 
     'should return firstResponder');
@@ -148,10 +148,10 @@ test("no target, explicit pane, pane is first responder", function() {
   pane.set('firstResponder', pane) ; 
   
   equals(r.targetForAction('foo', null, null, pane), null, 
-    'should NOT return child view');
+    'should falseT return child view');
     
   equals(r.targetForAction('bar', null, null, pane), null, 
-    'should NOT return child view');
+    'should falseT return child view');
 
   equals(r.targetForAction('paneAction', null, null, pane), pane, 
     'should return pane action');
@@ -168,10 +168,10 @@ test("no target, explicit pane, no first responder", function() {
   pane.set('firstResponder', null) ; 
   
   equals(r.targetForAction('foo', null, null, pane), null, 
-    'should NOT return child view');
+    'should falseT return child view');
     
   equals(r.targetForAction('bar', null, null, pane), null, 
-    'should NOT return child view');
+    'should falseT return child view');
 
   equals(r.targetForAction('paneAction', null, null, pane), pane, 
     'should return pane');

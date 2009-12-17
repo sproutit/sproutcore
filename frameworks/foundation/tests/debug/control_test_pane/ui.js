@@ -27,13 +27,13 @@
   //   })
   //   
   //   .add("disabled", SC.ListView, {
-  //     isEnabled: NO,
+  //     isEnabled: false,
   //     content: content,
   //     contentValueKey: 'title'
   //   })
   //   
   //   .add("disabled - single selection", SC.ListView, {
-  //     isEnabled: NO,
+  //     isEnabled: false,
   //     content: content,
   //     contentValueKey: 'title',
   //     selection: singleSelection
@@ -77,7 +77,7 @@
     pane.remove() ;
     
     ok(pane.get('isVisible'), 'control test pane still should be visible after we remove it');
-    ok(!pane.get('isVisibleInWindow'), 'control tast pane should NOT be visible in the window after we remove it');
+    ok(!pane.get('isVisibleInWindow'), 'control tast pane should falseT be visible in the window after we remove it');
   });
   
   test("adding named children to the pane", function() {

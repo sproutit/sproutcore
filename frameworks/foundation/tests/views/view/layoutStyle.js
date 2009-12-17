@@ -40,7 +40,7 @@ function performLayoutTest(layout, no_f, no_s, with_f, with_s) {
 
   // test
   keys.forEach(function(key) {
-    equals(child.get('layoutStyle')[key], no_s[key], "STYLE NO PARENT %@".fmt(key)) ;  
+    equals(child.get('layoutStyle')[key], no_s[key], "STYLE false PARENT %@".fmt(key)) ;  
   });
   
   // add parent
@@ -50,7 +50,7 @@ function performLayoutTest(layout, no_f, no_s, with_f, with_s) {
   
   // test again
   keys.forEach(function(key) {
-    equals(child.get('layoutStyle')[key], with_s[key], "STYLE NO PARENT %@".fmt(key)) ;  
+    equals(child.get('layoutStyle')[key], with_s[key], "STYLE false PARENT %@".fmt(key)) ;  
   });
 }
 
@@ -76,12 +76,12 @@ var commonSetup = {
   }
 };
 
-module("NOTIFICATIONS", commonSetup) ;
+module("falseTIFICATIONS", commonSetup) ;
 
 test("Setting layout will notify frame observers", function() {
-  var didNotify = NO, didNotifyStyle = NO;
-  child.addObserver('frame', this, function() { didNotify = YES; }) ;
-  child.addObserver('layoutStyle', this, function() { didNotifyStyle = YES; });
+  var didNotify = false, didNotifyStyle = false;
+  child.addObserver('frame', this, function() { didNotify = true; }) ;
+  child.addObserver('layoutStyle', this, function() { didNotifyStyle = true; });
   
   child.set('layout', { left: 0, top: 10, bottom: 20, right: 50 }) ;
   ok(didNotify, "didNotify");
@@ -91,7 +91,7 @@ test("Setting layout will notify frame observers", function() {
 // ..........................................................
 // TEST FRAME/STYLEFRAME WITH BASIC LAYOUT VARIATIONS
 // 
-// NOTE:  Each test evaluates the frame before and after adding it to the 
+// falseTE:  Each test evaluates the frame before and after adding it to the 
 // parent.
 
 module('BASIC LAYOUT VARIATIONS', commonSetup);
@@ -138,7 +138,7 @@ test("layout {centerX, centerY, width, height}", function() {
 
 test("layout {top, left, width: auto, height: auto}", function() {
   child = SC.View.create({
-    useStaticLayout: YES,
+    useStaticLayout: true,
     render: function(context) {
       // needed for auto
       context.push('<div style="padding: 10px"></div>');
@@ -242,7 +242,7 @@ test("layout {top, left, width: auto, height: auto}", function() {
 // ..........................................................
 // TEST FRAME/STYLEFRAME WITH INVALID LAYOUT VARIATIONS
 // 
-// NOTE:  Each test evaluates the frame before and after adding it to the 
+// falseTE:  Each test evaluates the frame before and after adding it to the 
 // parent.
 
 module('INVALID LAYOUT VARIATIONS', commonSetup);

@@ -16,7 +16,7 @@ module("SC.Pane#appendTo");
 test("adding to document for first time", function() {
   var pane = SC.Pane.create();
   ok(!pane.get('layer'), 'precond - does not yet have layer');
-  ok(!pane.get('isVisibleInWindow'), 'precond - isVisibleInWindow = NO');
+  ok(!pane.get('isVisibleInWindow'), 'precond - isVisibleInWindow = false');
   
   var elem = Q$('body').get(0);
   ok(elem, 'precond - found element to add to');
@@ -26,7 +26,7 @@ test("adding to document for first time", function() {
   var layer = pane.get('layer');
   ok(layer, 'should create layer');
   equals(layer.parentNode, elem, 'layer should belong to parent');
-  ok(pane.get('isVisibleInWindow'), 'isVisibleInWindow should  = YES');
+  ok(pane.get('isVisibleInWindow'), 'isVisibleInWindow should  = true');
   ok(pane.rootResponder, 'should have rootResponder');
   
 });
@@ -57,7 +57,7 @@ test("readding pane", function() {
   
   pane.appendTo(elem2);
   equals(layer.parentNode, elem2, 'layer moved to new parent');
-  ok(pane.get('isVisibleInWindow'), 'isVisibleInWindow should  = YES');
+  ok(pane.get('isVisibleInWindow'), 'isVisibleInWindow should  = true');
   ok(pane.rootResponder, 'should have rootResponder');
 });
 
@@ -72,12 +72,12 @@ test("adding/remove/adding pane", function() {
   equals(layer.parentNode, elem1, 'layer belongs to parent');
   ok(pane.get('isVisibleInWindow'), 'isVisibleInWindow is YES before remove');
   pane.remove();
-  ok(!pane.get('isVisibleInWindow'), 'isVisibleInWindow is NO');
+  ok(!pane.get('isVisibleInWindow'), 'isVisibleInWindow is false');
   
   pane.appendTo(elem2);
   layer = pane.get('layer');
   equals(layer.parentNode, elem2, 'layer moved to new parent');
-  ok(pane.get('isVisibleInWindow'), 'isVisibleInWindow should  = YES');
+  ok(pane.get('isVisibleInWindow'), 'isVisibleInWindow should  = true');
   ok(pane.rootResponder, 'should have rootResponder');
 });
   
@@ -97,7 +97,7 @@ test("removes pane from DOM", function() {
   
   pane.remove();
   ok(layer.parentNode !== elem, 'layer no longer belongs to parent');
-  ok(!pane.get('isVisibleInWindow'), 'isVisibleInWindow is NO');
+  ok(!pane.get('isVisibleInWindow'), 'isVisibleInWindow is false');
 });
 
 

@@ -25,7 +25,7 @@ test("invokes layoutDidChangeFor() on layoutView each time it is called", functi
 	var callCount = 0 ;
 	var layoutView = SC.View.create({
 		layoutDidChangeFor: function(changedView){
-			equals(this.get('childViewsNeedLayout'), YES, 'should set childViewsNeedLayout to YES before calling layoutDidChangeFor()');
+			equals(this.get('childViewsNeedLayout'), true, 'should set childViewsNeedLayout to true before calling layoutDidChangeFor()');
 			
 			equals(view, changedView, 'should pass view');
 			callCount++;
@@ -62,12 +62,12 @@ test("invokes layoutChildViewsIfNeeded() on layoutView once per runloop", functi
 });
 
 
-test("should not invoke layoutChildViewsIfNeeded() if layoutDidChangeFor() sets childViewsNeedLayout to NO each time", function() {
+test("should not invoke layoutChildViewsIfNeeded() if layoutDidChangeFor() sets childViewsNeedLayout to false each time", function() {
 
 	var callCount = 0 ;
 	var layoutView = SC.View.create({
 		layoutDidChangeFor: function() {
-			this.set('childViewsNeedLayout', NO);
+			this.set('childViewsNeedLayout', false);
 		},
 		
 		layoutChildViewsIfNeeded: function(){

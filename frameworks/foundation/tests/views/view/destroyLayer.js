@@ -13,7 +13,7 @@ test("it if has no layer, does nothing", function() {
   var view = SC.View.create({ 
     willDestroyLayer: function() { callCount++; }
   });
-  ok(!view.get('layer'), 'precond - does NOT have layer');
+  ok(!view.get('layer'), 'precond - does falseT have layer');
   
   view.destroyLayer();
   equals(callCount, 0, 'did not invoke callback');

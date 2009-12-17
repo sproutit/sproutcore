@@ -59,7 +59,7 @@ function verifyObjectAt(obs, expected, eindexes, desc) {
     if (eindexes) {
       ok(delegate.rangeCallCount>0, 'range observer should be called (actual callCount=%@)'.fmt(delegate.rangeCallCount));
     } else {
-      ok(delegate.rangeCallCount===0, 'range observer should NOT be called (actual callCount=%@)'.fmt(delegate.rangeCallCount));
+      ok(delegate.rangeCallCount===0, 'range observer should falseT be called (actual callCount=%@)'.fmt(delegate.rangeCallCount));
     }
     
     same(delegate.rangeIndexes, eindexes, 'range observer should be called with expected indexes');
@@ -72,7 +72,7 @@ module("SC.TreeItemObserver - Outline Use Case", {
     content = [
       TestObject.create({
         title: "A",
-        isExpanded: YES,
+        isExpanded: true,
         outline: 0,
         
         children: [
@@ -80,7 +80,7 @@ module("SC.TreeItemObserver - Outline Use Case", {
 
           TestObject.create({ title: "A.ii",
             outline: 1,
-            isExpanded: NO,
+            isExpanded: false,
             children: [
               TestObject.create({ title: "A.ii.1", outline: 2 }),
               TestObject.create({ title: "A.ii.2", outline: 2 }),
@@ -92,11 +92,11 @@ module("SC.TreeItemObserver - Outline Use Case", {
 
       TestObject.create({
         title: "B",
-        isExpanded: YES,
+        isExpanded: true,
         outline: 0,
         children: [
           TestObject.create({ title: "B.i",
-            isExpanded: YES,
+            isExpanded: true,
             outline: 1,
             children: [
               TestObject.create({ title: "B.i.1", outline: 2 }),
@@ -116,14 +116,14 @@ module("SC.TreeItemObserver - Outline Use Case", {
     root = TestObject.create({
       title: "ROOT",
       children: content,
-      isExpanded: YES
+      isExpanded: true
     });
   
     extra = TestObject.create({ title: "EXTRA" });
 
     extrachild = TestObject.create({
       title: "EXTRA",
-      isExpanded: YES,
+      isExpanded: true,
       children: "0 1".w().map(function(x) { 
         return TestObject.create({ title: "EXTRA.%@".fmt(x) });
       })
@@ -131,13 +131,13 @@ module("SC.TreeItemObserver - Outline Use Case", {
 
     extranested = TestObject.create({
       title: "EXTRA",
-      isExpanded: YES,
+      isExpanded: true,
       
       children: [
         TestObject.create({ title: "EXTRA.i" }),
         TestObject.create({ 
           title: "EXTRA.ii",
-          isExpanded: YES,
+          isExpanded: true,
           children: "0 1 2".w().map(function(x) { 
             return TestObject.create({ title: "EXTRA.ii.%@".fmt(x) });
           })
@@ -255,7 +255,7 @@ test("replacing nested children array", function() {
 
 test("changing expansion property on nested", function() {
   var base = content[1].children[0];
-  SC.run(function() { base.set('isExpanded', NO); });
+  SC.run(function() { base.set('isExpanded', false); });
   flattened.removeAt(6,3);
   
   // changed reflect nearest top-level group
@@ -265,7 +265,7 @@ test("changing expansion property on nested", function() {
 
 test("changing expansion property on top level", function() {
   var base = content[1];
-  SC.run(function() { base.set('isExpanded', NO); });
+  SC.run(function() { base.set('isExpanded', false); });
   flattened.removeAt(5,6);
   
   // changed reflect nearest top-level group
@@ -407,18 +407,18 @@ test("removing regular item to middle", function() {
 // 
 
 test("contentGroupIndexes - not grouped", function() {
-  equals(delegate.get('treeItemIsGrouped'), NO, 'precond - delegate.treeItemIsGrouped == NO');
+  equals(delegate.get('treeItemIsGrouped'), false, 'precond - delegate.treeItemIsGrouped == false');
   equals(obs.contentGroupIndexes(null, obs), null, 'contentGroupIndexes should be null');
   
   var idx, len = obs.get('length');
   for(idx=0;idx<len;idx++) {
-    equals(obs.contentIndexIsGroup(null, obs, idx), NO, 'obs.contentIndexIsGroup(null, obs, %@) should be NO'.fmt(idx));
+    equals(obs.contentIndexIsGroup(null, obs, idx), false, 'obs.contentIndexIsGroup(null, obs, %@) should be false'.fmt(idx));
   }
 });
 
 test("contentGroupIndexes - grouped", function() {
-  delegate.set('treeItemIsGrouped', YES);
-  equals(delegate.get('treeItemIsGrouped'), YES, 'precond - delegate.treeItemIsGrouped == YES');
+  delegate.set('treeItemIsGrouped', true);
+  equals(delegate.get('treeItemIsGrouped'), true, 'precond - delegate.treeItemIsGrouped == true');
   
   var set = SC.IndexSet.create(0).add(4).add(11);
   same(obs.contentGroupIndexes(null, obs), set, 'contentGroupIndexes should cover just top leve items');
@@ -442,7 +442,7 @@ test("contentIndexDisclosureState", function() {
   var idx, len = obs.get('length');
   for(idx=0;idx<len;idx++) {
     var expected = flattened[idx].isExpanded;
-    expected = (expected === NO) ? SC.BRANCH_CLOSED : (expected ? SC.BRANCH_OPEN : SC.LEAF_NODE);
+    expected = (expected === false) ? SC.BRANCH_CLOSED : (expected ? SC.BRANCH_OPEN : SC.LEAF_falseDE);
     
     var str ;
     switch(expected) {
@@ -453,7 +453,7 @@ test("contentIndexDisclosureState", function() {
         str = "SC.BRANCH_OPEN";
         break;
       default:
-         str = "SC.LEAF_NODE";
+         str = "SC.LEAF_falseDE";
          break;
     }
     

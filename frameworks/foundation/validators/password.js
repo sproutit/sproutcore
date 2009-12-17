@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('validators/validator') ;
+var SC = require('core');
+require('validators/validator');
 
 /**
   Ensures all fields with the Password validator attached in the same form
@@ -80,7 +81,7 @@ SC.Validator.Password = SC.Validator.extend(
     var isInvalid = !this._field.get('isValid') ;
     if (isInvalid) {
       return this.updateFields(form, this.validate(false)) ;
-    } else return SC.VALIDATE_NO_CHANGE ;
+    } else return SC.VALIDATE_false_CHANGE ;
   }
     
 }) ;

@@ -60,7 +60,7 @@ function verifyObjectAt(obs, expected, eindexes, desc) {
     if (eindexes) {
       ok(delegate.rangeCallCount>0, 'range observer should be called (actual callCount=%@)'.fmt(delegate.rangeCallCount));
     } else {
-      ok(delegate.rangeCallCount===0, 'range observer should NOT be called (actual callCount=%@)'.fmt(delegate.rangeCallCount));
+      ok(delegate.rangeCallCount===0, 'range observer should falseT be called (actual callCount=%@)'.fmt(delegate.rangeCallCount));
     }
     
     same(delegate.rangeIndexes, eindexes, 'range observer should be called with expected indexes');
@@ -78,7 +78,7 @@ module("SC.TreeItemObserver - Flat Array Use Case", {
     root = TestObject.create({
       title: "ROOT",
       children: content,
-      isExpanded: YES
+      isExpanded: true
     });
     
     flattened = content.slice();
@@ -289,23 +289,23 @@ test("replace object in middle", function() {
 // 
 
 test("contentGroupIndexes - not grouped", function() {
-  equals(delegate.get('treeItemIsGrouped'), NO, 'precond - delegate.treeItemIsGrouped == NO');
+  equals(delegate.get('treeItemIsGrouped'), false, 'precond - delegate.treeItemIsGrouped == false');
   equals(obs.contentGroupIndexes(null, obs), null, 'contentGroupIndexes should be null');
   
   var idx, len = obs.get('length');
   for(idx=0;idx<len;idx++) {
-    equals(obs.contentIndexIsGroup(null, obs, idx), NO, 'obs.contentIndexIsGroup(null, obs, %@) should be NO'.fmt(idx));
+    equals(obs.contentIndexIsGroup(null, obs, idx), false, 'obs.contentIndexIsGroup(null, obs, %@) should be false'.fmt(idx));
   }
 });
 
 test("contentGroupIndexes - grouped", function() {
-  delegate.set('treeItemIsGrouped', YES);
-  equals(delegate.get('treeItemIsGrouped'), YES, 'precond - delegate.treeItemIsGrouped == YES');
+  delegate.set('treeItemIsGrouped', true);
+  equals(delegate.get('treeItemIsGrouped'), true, 'precond - delegate.treeItemIsGrouped == true');
   same(obs.contentGroupIndexes(null, obs), SC.IndexSet.create(0, obs.get('length')), 'contentGroupIndexes should cover entire set');
   
   var idx, len = obs.get('length');
   for(idx=0;idx<len;idx++) {
-    equals(obs.contentIndexIsGroup(null, obs, idx), YES, 'obs.contentIndexIsGroup(null, obs, %@) should be YES'.fmt(idx));
+    equals(obs.contentIndexIsGroup(null, obs, idx), true, 'obs.contentIndexIsGroup(null, obs, %@) should be true'.fmt(idx));
   }
 });
 
@@ -319,7 +319,7 @@ test("contentIndexOutlineLevel", function() {
 test("contentIndexDisclosureState", function() {
   var idx, len = obs.get('length');
   for(idx=0;idx<len;idx++) {
-    equals(obs.contentIndexDisclosureState(null, obs, idx), SC.LEAF_NODE, 'obs.contentIndexDisclosureState(null, obs, %@) should eql SC.LEAF_NODE'.fmt(idx));
+    equals(obs.contentIndexDisclosureState(null, obs, idx), SC.LEAF_falseDE, 'obs.contentIndexDisclosureState(null, obs, %@) should eql SC.LEAF_falseDE'.fmt(idx));
   }
 });
 

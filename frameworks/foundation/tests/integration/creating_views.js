@@ -19,7 +19,7 @@ test("layer creation and management", function() {
     displayProperties: 'cv'.w(),
     
     render: function(context, firstTime) {
-      this.renderChildViews(context, YES); // always re-render...
+      this.renderChildViews(context, true); // always re-render...
       context.begin()
         .push('View %@'.fmt(this.get('cv')))
       .end();
@@ -56,29 +56,29 @@ test("layer creation and management", function() {
   var runCount = 0; 
   cv2.updateLayer = function() { runCount++; };
   SC.RunLoop.begin();
-  cv2.set('displayNeedsUpdate', YES) ;
+  cv2.set('displayNeedsUpdate', true) ;
   SC.RunLoop.end();
   
-  // updateLayer should NOT have run...
+  // updateLayer should falseT have run...
   equals(runCount, 0, 'cv2.updateLayer did not run');
   
   // restore original updateLayer
   delete cv2.updateLayer ;
   
-  // all the views should have their isVisibleInWindow set to NO now
-  ok(!pane.get('isVisibleInWindow'), 'pane.isVisibleInWindow should be NO');
-  ok(!cv1.get('isVisibleInWindow'), 'cv1.isVisibleInWindow should be NO');
-  ok(!cv2.get('isVisibleInWindow'), 'cv2.isVisibleInWindow should be NO');
+  // all the views should have their isVisibleInWindow set to false now
+  ok(!pane.get('isVisibleInWindow'), 'pane.isVisibleInWindow should be false');
+  ok(!cv1.get('isVisibleInWindow'), 'cv1.isVisibleInWindow should be false');
+  ok(!cv2.get('isVisibleInWindow'), 'cv2.isVisibleInWindow should be false');
   // -----
   // OK, let's add this baby to the window
   SC.RunLoop.begin();
   pane.append();
   SC.RunLoop.end();
   
-  // all the views should have their isVisibleInWindow set to YES now
-  ok(pane.get('isVisibleInWindow'), 'pane.isVisibleInWindow should be YES');
-  ok(cv1.get('isVisibleInWindow'), 'cv1.isVisibleInWindow should be YES');
-  ok(cv2.get('isVisibleInWindow'), 'cv2.isVisibleInWindow should be YES');
+  // all the views should have their isVisibleInWindow set to true now
+  ok(pane.get('isVisibleInWindow'), 'pane.isVisibleInWindow should be true');
+  ok(cv1.get('isVisibleInWindow'), 'cv1.isVisibleInWindow should be true');
+  ok(cv2.get('isVisibleInWindow'), 'cv2.isVisibleInWindow should be true');
 
   // pane should have layer...cv's should not have had to find their layers
   // yet.

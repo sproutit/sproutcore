@@ -5,8 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"export package";
+var SC = require('core');
 
 /**
   @namespace
@@ -42,7 +41,7 @@ SC.TreeItemContent = {
     
     @property {Boolean}
   */
-  isTreeItemContent: YES,
+  isTreeItemContent: true,
   
   /**
     Property returns the children for this tree item.  The default simply 
@@ -61,21 +60,21 @@ SC.TreeItemContent = {
     
     @property {Boolean}
   */
-  treeItemIsExpanded: YES,
+  treeItemIsExpanded: true,
   
   /**
     Indicates whether the tree item should be rendered as a group or not. 
     This property is only useful on the root item in your tree.  Setting it to
-    YES on any other item will be ignored.
+    true on any other item will be ignored.
     
     @property {Boolean}
   */
-  treeItemIsGrouped: NO,
+  treeItemIsGrouped: false,
   
   /**
     Returns the disclosure state for the tree item, which appears at the 
     index of the parent's treeItemChildren array.  The response must be one of 
-    SC.BRANCH_OPEN, SC.BRANCH_CLOSED or SC.LEAF_NODE.
+    SC.BRANCH_OPEN, SC.BRANCH_CLOSED or SC.LEAF_falseDE.
      
     If the parent parameter is null, then this item is part of the root 
     children array.
@@ -104,7 +103,7 @@ SC.TreeItemContent = {
     @returns {void}
   */
   treeItemCollapse: function(parent, idx) {
-    this.setIfChanged('treeItemIsExpanded', NO);    
+    this.setIfChanged('treeItemIsExpanded', false);    
   },
 
   /**
@@ -117,7 +116,7 @@ SC.TreeItemContent = {
     @returns {void}
   */
   treeItemExpand: function(parent, idx) {
-    this.setIfChanged('treeItemIsExpanded', YES);    
+    this.setIfChanged('treeItemIsExpanded', true);    
   },
   
   /**
@@ -154,7 +153,7 @@ SC.TreeItemContent = {
     for(idx=0;idx<lim;idx++) {
       if (!(item = children.objectAt(idx))) continue;
       if (!item.get('treeItemChildren')) continue;
-      if (item.treeItemDisclosureState(this,idx)!==SC.LEAF_NODE) ret.add(idx);
+      if (item.treeItemDisclosureState(this,idx)!==SC.LEAF_falseDE) ret.add(idx);
     }
 
     return ret.get('length')>0 ? ret : null;

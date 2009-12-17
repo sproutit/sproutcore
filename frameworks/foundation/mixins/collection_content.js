@@ -5,8 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"export package";
+var SC = require('core');
 
 /**
   Used for contentIndexDisclosureState().  Indicates open branch node.
@@ -27,7 +26,7 @@ SC.BRANCH_CLOSED = 0x0012;
   
   @property {Number}
 */
-SC.LEAF_NODE = 0x0020;
+SC.LEAF_falseDE = 0x0020;
 
 /**
   @namespace
@@ -49,31 +48,31 @@ SC.CollectionContent = {
 
     @property {Boolean}
   */
-  isCollectionContent: YES,
+  isCollectionContent: true,
   
   /**
-    Return YES if the content index should be selected.  Default behavior 
+    Return true if the content index should be selected.  Default behavior 
     looks at the selection property on the view.
     
     @param {SC.CollectionView} view the collection view
     @param {SC.Array} content the content object
     @param {Number} idx the content index
-    @returns {Boolean} YES, NO, or SC.MIXED_STATE
+    @returns {Boolean} true, false, or SC.MIXED_STATE
   */
   contentIndexIsSelected: function(view, content, idx) {
     var sel = view.get('selection');
-    return sel ? sel.contains(content, idx) : NO ;
+    return sel ? sel.contains(content, idx) : false ;
   },
   
   /**
-    Returns YES if the content index should be enabled.  Default looks at the
+    Returns true if the content index should be enabled.  Default looks at the
     isEnabled state of the collection view.
     looks at the selection property on the view.
     
     @param {SC.CollectionView} view the collection view
     @param {SC.Array} content the content object
     @param {Number} idx the content index
-    @returns {Boolean} YES, NO, or SC.MIXED_STATE
+    @returns {Boolean} true, false, or SC.MIXED_STATE
   */
   contentIndexIsEnabled: function(view, content, idx) {
     return view.get('isEnabled');
@@ -99,20 +98,20 @@ SC.CollectionContent = {
   },
   
   /**
-    Returns YES if the item at the specified content index should be rendered
+    Returns true if the item at the specified content index should be rendered
     using the groupExampleView instead of the regular exampleView.  Note that
     a group view is different from a branch/leaf view.  Group views often 
     appear with different layout and a different look and feel.
 
-    Default always returns NO.
+    Default always returns false.
     
     @param {SC.CollectionView} view the collection view
     @param {SC.Array} content the content object
     @param {Number} idx the content index
-    @returns {Boolean} YES, NO, or SC.MIXED_STATE
+    @returns {Boolean} true, false, or SC.MIXED_STATE
   */
   contentIndexIsGroup: function(view, content, idx) {
-    return NO ;
+    return false ;
   },
   
   // ..........................................................
@@ -128,7 +127,7 @@ SC.CollectionContent = {
     @param {SC.CollectionView} view the collection view
     @param {SC.Array} content the content object
     @param {Number} idx the content index
-    @returns {Boolean} YES, NO, or SC.MIXED_STATE
+    @returns {Boolean} true, false, or SC.MIXED_STATE
   */
   contentIndexOutlineLevel: function(view, content, idx) {
     return -1;
@@ -136,20 +135,20 @@ SC.CollectionContent = {
   
   /**
     Returns a constant indicating the disclosure state of the item.  Must be
-    one of SC.BRANCH_OPEN, SC.BRANCH_CLOSED, SC.LEAF_NODE.  If you return one
+    one of SC.BRANCH_OPEN, SC.BRANCH_CLOSED, SC.LEAF_falseDE.  If you return one
     of the BRANCH options then the item may be rendered with a disclosure 
-    triangle open or closed.  If you return SC.LEAF_NODe then the item will 
+    triangle open or closed.  If you return SC.LEAF_falseDe then the item will 
     be rendered as a leaf node.  
 
-    Default returns SC.LEAF_NODE.
+    Default returns SC.LEAF_falseDE.
     
     @param {SC.CollectionView} view the collection view
     @param {SC.Array} content the content object
     @param {Number} idx the content index
-    @returns {Boolean} YES, NO, or SC.MIXED_STATE
+    @returns {Boolean} true, false, or SC.MIXED_STATE
   */
   contentIndexDisclosureState: function(view, content, idx) {
-    return SC.LEAF_NODE;    
+    return SC.LEAF_falseDE;    
   },
   
   /**

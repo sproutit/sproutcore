@@ -244,13 +244,13 @@ Z</textarea>\
 		<input type="hidden" name="H2" />\
 		<input name="PWD" type="password" value="" />\
 		<input name="T1" type="text" />\
-		<input name="T2" type="text" value="YES" readonly="readonly" />\
+		<input name="T2" type="text" value="true" readonly="readonly" />\
 		<input type="checkbox" name="C1" value="1" />\
 		<input type="checkbox" name="C2" />\
 		<input type="radio" name="R1" value="1" />\
 		<input type="radio" name="R1" value="2" />\
 		<input type="text" name="My Name" value="me" />\
-		<input type="reset" name="reset" value="NO" />\
+		<input type="reset" name="reset" value="false" />\
 		<select name="S1">\
 			<option value="abc">ABC</option>\
 			<option value="abc">ABC</option>\
@@ -262,20 +262,20 @@ Z</textarea>\
 			<option value="abc">ABC</option>\
 		</select>\
 		<select name="S3">\
-			<option selected="selected">YES</option>\
+			<option selected="selected">true</option>\
 		</select>\
 		<select name="S4">\
-			<option value="" selected="selected">NO</option>\
+			<option value="" selected="selected">false</option>\
 		</select>\
-		<input type="submit" name="sub1" value="NO" />\
-		<input type="submit" name="sub2" value="NO" />\
-		<input type="image" name="sub3" value="NO" />\
-		<button name="sub4" type="submit" value="NO">NO</button>\
-		<input name="D1" type="text" value="NO" disabled="disabled" />\
-		<input type="checkbox" checked="checked" disabled="disabled" name="D2" value="NO" />\
-		<input type="radio" name="D3" value="NO" checked="checked" disabled="disabled" />\
+		<input type="submit" name="sub1" value="false" />\
+		<input type="submit" name="sub2" value="false" />\
+		<input type="image" name="sub3" value="false" />\
+		<button name="sub4" type="submit" value="false">false</button>\
+		<input name="D1" type="text" value="false" disabled="disabled" />\
+		<input type="checkbox" checked="checked" disabled="disabled" name="D2" value="false" />\
+		<input type="radio" name="D3" value="false" checked="checked" disabled="disabled" />\
 		<select name="D4" disabled="disabled">\
-			<option selected="selected" value="NO">NO</option>\
+			<option selected="selected" value="false">false</option>\
 		</select>\
 	</form>\
 	<div id="moretests">\
@@ -639,11 +639,11 @@ test("SC.$.css(elem, 'height') doesn't clear radio buttons (bug #1095)", functio
  SC.$.css($checkedtest[0], "height");
  var input = SC.$("input.radio", $checkedtest);
  ok( !! SC.$(input[0]).attr("checked"), "Check first radio still checked." );
- ok( ! SC.$(input[input.length]).attr("checked"), "Check last radio still NOT checked." );
+ ok( ! SC.$(input[input.length]).attr("checked"), "Check last radio still falseT checked." );
  
  var input = SC.$("input.checkbox", $checkedtest);
  ok( !! SC.$(input[0]).attr("checked"), "Check first checkbox still checked." );
- ok( ! SC.$(input[input.length]).attr("checked"), "Check last checkbox still NOT checked." );
+ ok( ! SC.$(input[input.length]).attr("checked"), "Check last checkbox still falseT checked." );
 });
 
 test("width()", function() {
@@ -1076,7 +1076,7 @@ test("filter()", function() {
 test("not()", function() {
  expect(8);
  
- // NOTE: These two tests were altered to use simpler selectors.
+ // falseTE: These two tests were altered to use simpler selectors.
  equals( SC.$("#main p#ap a").length, 4, 'base before not should return A');
  equals( SC.$("#main p#ap a").not("#google").length, 3, "not('selector')" );
  equals( SC.$("#main p#ap a").not(document.getElementById("google")).length, 3, "not(DOMElement)" );
@@ -1298,7 +1298,7 @@ test("SC.$.makeArray", function(){
  ok( !!SC.$.makeArray( document.documentElement.childNodes ).slice(0,1)[0].nodeName, "Pass makeArray a childNodes array" );
 
  // function, is tricky as it has length
- // NOTE: Due to the conflict with Scriptaculous (http://dev.SC.$.com/ticket/3248)
+ // falseTE: Due to the conflict with Scriptaculous (http://dev.SC.$.com/ticket/3248)
  // We remove support for functions since SC.$ 1.3
  //equals( SC.$.makeArray( function(){ return 1;} )[0](), 1, "Pass makeArray a function" );
  

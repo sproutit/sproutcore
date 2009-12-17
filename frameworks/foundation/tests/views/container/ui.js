@@ -13,15 +13,15 @@
   var pane = SC.ControlTestPane.design({ height: 100 });
   
   pane.add("basic", SC.ContainerView, {
-      isEnabled: YES
+      isEnabled: true
     });
     
   pane.add("disabled", SC.ContainerView, {
-      isEnabled: NO
+      isEnabled: false
     });
     
     // .add("disabled - single selection", SC.ListView, {
-    //   isEnabled: NO,
+    //   isEnabled: false,
     //   content: content,
     //   contentValueKey: 'title',
     //   selection: singleSelection

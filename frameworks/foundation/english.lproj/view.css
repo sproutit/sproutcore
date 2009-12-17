@@ -16,7 +16,7 @@
   margin:             0px;
 }
 
-/* Views do not allow text selection unless you set isTextSelectable to YES.*/
+/* Views do not allow text selection unless you set isTextSelectable to true.*/
 .sc-view.allow-select {
   -moz-user-select: text;
   -khtml-user-select: text;

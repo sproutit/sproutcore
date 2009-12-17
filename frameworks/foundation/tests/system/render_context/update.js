@@ -26,10 +26,10 @@ test("should replace innerHTML of DIV if strings were pushed", function() {
   equals(elem.innerHTML, "changed", "innerHTML did change");
 });
 
-test("should NOT replace innerHTML of DIV if no strings were pushed", function() {
+test("should falseT replace innerHTML of DIV if no strings were pushed", function() {
   elem.innerHTML = "initial";
   context.update();
-  equals(elem.innerHTML, "initial", "innerHTML did NOT change");
+  equals(elem.innerHTML, "initial", "innerHTML did falseT change");
 });
 
 test("returns receiver if no prevObject", function() {

@@ -248,13 +248,13 @@ Z</textarea>\
 		<input type="hidden" name="H2" />\
 		<input name="PWD" type="password" value="" />\
 		<input name="T1" type="text" />\
-		<input name="T2" type="text" value="YES" readonly="readonly" />\
+		<input name="T2" type="text" value="true" readonly="readonly" />\
 		<input type="checkbox" name="C1" value="1" />\
 		<input type="checkbox" name="C2" />\
 		<input type="radio" name="R1" value="1" />\
 		<input type="radio" name="R1" value="2" />\
 		<input type="text" name="My Name" value="me" />\
-		<input type="reset" name="reset" value="NO" />\
+		<input type="reset" name="reset" value="false" />\
 		<select name="S1">\
 			<option value="abc">ABC</option>\
 			<option value="abc">ABC</option>\
@@ -266,20 +266,20 @@ Z</textarea>\
 			<option value="abc">ABC</option>\
 		</select>\
 		<select name="S3">\
-			<option selected="selected">YES</option>\
+			<option selected="selected">true</option>\
 		</select>\
 		<select name="S4">\
-			<option value="" selected="selected">NO</option>\
+			<option value="" selected="selected">false</option>\
 		</select>\
-		<input type="submit" name="sub1" value="NO" />\
-		<input type="submit" name="sub2" value="NO" />\
-		<input type="image" name="sub3" value="NO" />\
-		<button name="sub4" type="submit" value="NO">NO</button>\
-		<input name="D1" type="text" value="NO" disabled="disabled" />\
-		<input type="checkbox" checked="checked" disabled="disabled" name="D2" value="NO" />\
-		<input type="radio" name="D3" value="NO" checked="checked" disabled="disabled" />\
+		<input type="submit" name="sub1" value="false" />\
+		<input type="submit" name="sub2" value="false" />\
+		<input type="image" name="sub3" value="false" />\
+		<button name="sub4" type="submit" value="false">false</button>\
+		<input name="D1" type="text" value="false" disabled="disabled" />\
+		<input type="checkbox" checked="checked" disabled="disabled" name="D2" value="false" />\
+		<input type="radio" name="D3" value="false" checked="checked" disabled="disabled" />\
 		<select name="D4" disabled="disabled">\
-			<option selected="selected" value="NO">NO</option>\
+			<option selected="selected" value="false">false</option>\
 		</select>\
 	</form>\
 	<div id="moretests">\

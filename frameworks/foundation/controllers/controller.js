@@ -5,9 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import core";
-"export package";
+var SC = require('core');
 
 /**
   @class
@@ -43,6 +41,6 @@ SC.Controller = SC.Object.extend(
     
     @property {Boolean}
   */
-  isEditable: YES
+  isEditable: true
   
 });

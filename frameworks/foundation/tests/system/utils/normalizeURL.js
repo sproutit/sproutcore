@@ -14,5 +14,5 @@ test("should normalize the url passed as the parameter",function(){
  equals(SC.normalizeURL(url1), '%@/desktop/mydocuments/music'.fmt(window.location.href),'Path without slash');  
 
  url2 = 'http:';
- equals(YES,SC.normalizeURL(url2) === url2,'Path with http:');	
+ equals(true,SC.normalizeURL(url2) === url2,'Path with http:');	
 });

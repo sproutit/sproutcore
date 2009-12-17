@@ -19,7 +19,7 @@ module('SC.MainPane');
 test("should attach when calling append()", function() {
   var pane = SC.MainPane.create() ;
   pane.append() ;
-  equals(pane.get('isPaneAttached'), YES) ;
+  equals(pane.get('isPaneAttached'), true) ;
 });
 
 test("appending should make pane main & key", function() {

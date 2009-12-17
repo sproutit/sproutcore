@@ -6,6 +6,8 @@
 // ==========================================================================
 /*global ActiveXObject */
 
+var SC = require('core');
+
 /**
   A response represents a single response from a server request.  An instance
   of this class is returned whenever you call SC.Request.send().
@@ -23,7 +25,7 @@ SC.Response = SC.Object.extend(
     
     @property {Boolean}
   */
-  isError: NO,
+  isError: false,
   
   /**
     Always the current response
@@ -90,7 +92,7 @@ SC.Response = SC.Object.extend(
     @property {Boolean}
   */
   isJSON: function() {
-    return this.getPath('request.isJSON') || NO;
+    return this.getPath('request.isJSON') || false;
   }.property('request').cacheable(),
 
   /**
@@ -100,7 +102,7 @@ SC.Response = SC.Object.extend(
     @property {Boolean}
   */
   isXML: function() {
-    return this.getPath('request.isXML') || NO ;
+    return this.getPath('request.isXML') || false ;
   }.property('request').cacheable(),
   
   /** 
@@ -169,9 +171,9 @@ SC.Response = SC.Object.extend(
   }.property('body').cacheable(),
   
   /**
-    Set to YES if response is cancelled
+    Set to true if response is cancelled
   */
-  isCancelled: NO,
+  isCancelled: false,
   
   /**
     Set to YES if the request timed out.  Set to NO if the request has
@@ -285,8 +287,8 @@ SC.Response = SC.Object.extend(
   */
   cancel: function() {
     if (!this.get('isCancelled')) {
-      this.set('isCancelled', YES) ;
-      this.cancelTransport() ;
+      this.set('isCancelled', true);
+      this.cancelTransport();
       SC.Request.manager.transportDidClose(this) ;
     }
   },
@@ -328,7 +330,7 @@ SC.Response = SC.Object.extend(
   */
   _notifyListener: function(listeners, status) {
     var info = listeners[status], params, target, action;
-    if (!info) return NO ;
+    if (!info) return false ;
     
     params = (info.params || []).copy();
     params.unshift(this);
@@ -349,7 +351,7 @@ SC.Response = SC.Object.extend(
     var listeners = this.get('listeners'), 
         status    = this.get('status'),
         baseStat  = Math.floor(status / 100) * 100,
-        handled   = NO ;
+        handled   = false ;
         
     if (!listeners) return this ; // nothing to do
     
@@ -440,7 +442,7 @@ SC.XHRResponse = SC.Response.extend({
           return item ;
         } catch (e) {}
       }
-      return NO;
+      return false;
     }
     
     rawRequest = tryThese(
@@ -521,7 +523,7 @@ SC.XHRResponse = SC.Response.extend({
           
           error = SC.$error(msg || "HTTP Request failed", "Request", status) ;
           error.set("errorValue", this) ;
-          this.set('isError', YES);
+          this.set('isError', true);
           this.set('errorObject', error);
         }
 
@@ -531,9 +533,9 @@ SC.XHRResponse = SC.Response.extend({
       }, this);
       // avoid memory leak in MSIE: clean up
       rawRequest.onreadystatechange = function() {} ;
-      return YES;
+      return true;
     }
-    return NO; 
+    return false; 
   }
 
   

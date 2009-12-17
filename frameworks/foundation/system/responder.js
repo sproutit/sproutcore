@@ -5,9 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import core";
-"export package";
+var SC = require('core');
 
 /** @class
 
@@ -21,7 +19,7 @@
 */
 SC.Responder = SC.Object.extend( /** SC.Responder.prototype */ {
 
-  isResponder: YES,
+  isResponder: true,
   
   /** @property
     The pane this responder belongs to.  This is used to determine where you 
@@ -48,24 +46,24 @@ SC.Responder = SC.Object.extend( /** SC.Responder.prototype */ {
   nextResponder: null,
   
   /** @property 
-    YES if the view is currently first responder.  This property is always 
+    true if the view is currently first responder.  This property is always 
     edited by the pane during its makeFirstResponder() method.
   */
-  isFirstResponder: NO,
+  isFirstResponder: false,
   
   /** @property
   
-    YES the responder is somewhere in the responder chain.  This currently
+    true the responder is somewhere in the responder chain.  This currently
     only works when used with a ResponderContext.
     
     @type {Boolean}
   */
-  hasFirstResponder: NO,    
+  hasFirstResponder: false,    
   
   /** @property
-    Set to YES if your view is willing to accept first responder status.  This is used when calculcating key responder loop.
+    Set to true if your view is willing to accept first responder status.  This is used when calculcating key responder loop.
   */
-  acceptsFirstResponder: YES,
+  acceptsFirstResponder: true,
   
   becomingFirstResponder: NO,
   
@@ -96,7 +94,7 @@ SC.Responder = SC.Object.extend( /** SC.Responder.prototype */ {
     if (pane && (pane.get('firstResponder') === this)) {
       pane.makeFirstResponder(null);
     }
-    return YES;  
+    return true;  
   },
 
   /**

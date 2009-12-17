@@ -21,7 +21,7 @@ test("invokes parentViewDidResize on all child views - ignoring views that do no
     childViews: [ChildView, ChildView, ChildView]    
   });
   
-  // one of the childViews should NOT implement method
+  // one of the childViews should falseT implement method
   view.childViews[2].parentViewDidResize = null ;
   
   // now test...

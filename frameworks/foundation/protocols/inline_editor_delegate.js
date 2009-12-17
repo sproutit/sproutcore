@@ -5,8 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"export package";
+var SC = require('core');
 
 /**
   @namespace
@@ -68,10 +67,10 @@ SC.InlineEditorDelegate = {
       
       @param inlineEditor {SC.InlineTextFieldView} the inline editor
       @param finalValue {Object} the final value
-      @returns {Boolean} YES to allow the editor to end editing.
+      @returns {Boolean} true to allow the editor to end editing.
     */
     inlineEditorShouldEndEditing: function(inlineEditor, finalValue) {
-      return YES ;
+      return true ;
     },
     
     /**

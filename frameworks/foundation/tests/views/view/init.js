@@ -14,10 +14,10 @@ test("registers view in the global views hash using layerId for event targeted",
 });
 
 test("adds displayDidChange observer on all display properties", function() {
-  var didChange = NO ;
+  var didChange = false ;
   var v = SC.View.create({
     // override just to make sure the registration works...
-    displayDidChange: function() { didChange = YES ; },
+    displayDidChange: function() { didChange = true ; },
     
     displayProperties: 'foo bar'.w(),
     
@@ -27,22 +27,22 @@ test("adds displayDidChange observer on all display properties", function() {
   
   v.set('foo', 'baz');
   ok(didChange, 'didChange on set(foo)');
-  didChange = NO ;
+  didChange = false ;
   
   v.set('bar', 'baz');
   ok(didChange, 'didChange on set(bar)');
 });
 
 test("invokes createChildViews()", function() {
-  var didInvoke = NO ;
+  var didInvoke = false ;
   var v = SC.View.create({
     // override just for test
-    createChildViews: function() { didInvoke = YES; }
+    createChildViews: function() { didInvoke = true; }
   });
   ok(didInvoke, 'did invoke createChildViews()');
 });
 
-test("does NOT create layer", function() {
+test("does falseT create layer", function() {
   var v = SC.View.create();
   equals(v.get('layer'), null, 'did not create layer');  
 });

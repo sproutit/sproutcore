@@ -15,7 +15,7 @@ test("setting isPaused should stop firing", function() {
     target: this,
     action: function() { firedCount++ ; },
     interval: 100,
-    repeats: YES
+    repeats: true
   });
   SC.RunLoop.end() ;
   
@@ -26,12 +26,12 @@ test("setting isPaused should stop firing", function() {
       if (--tries1 >= 0) {
         setTimeout(f1, 100) ;
       } else {
-        equals(NO, YES, 'Timer never fired 2 times - f1') ;
+        equals(false, true, 'Timer never fired 2 times - f1') ;
         window.start() ; // starts the test runner
       }
     } else {
-      equals(NO, t.get('isPaused'), 'should start with isPaused = NO');
-      t.set('isPaused', YES) ;
+      equals(false, t.get('isPaused'), 'should start with isPaused = false');
+      t.set('isPaused', true) ;
       firedCount = 0 ; // Reset count here.
       setTimeout(f2, 300) ;
     }
@@ -40,8 +40,8 @@ test("setting isPaused should stop firing", function() {
   // once timer paused, make sure it did not fire again.
   f2 = function f2() {
     equals(0, firedCount, 'timer kept firing!') ;
-    equals(YES, t.get('isPaused'), 'timer is not paused') ;
-    t.set('isPaused', NO) ;
+    equals(true, t.get('isPaused'), 'timer is not paused') ;
+    t.set('isPaused', false) ;
     setTimeout(f3, 300) ;
   } ;
   
@@ -52,14 +52,14 @@ test("setting isPaused should stop firing", function() {
       if (--tries2 >= 0) {
         setTimeout(f3, 100) ;
       } else {
-        equals(NO, YES, "Timer did not resume") ;
+        equals(false, true, "Timer did not resume") ;
         window.start() ; // starts the test runner
       }
       
     // timer fired, clean up.
     } else {
       t.invalidate() ;
-      equals(NO, t.get('isPaused'), 'timer did not unpause') ;
+      equals(false, t.get('isPaused'), 'timer did not unpause') ;
       window.start() ; // starts the test runner
     }
   };

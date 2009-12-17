@@ -5,8 +5,10 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-SC.VALIDATE_OK = YES;
-SC.VALIDATE_NO_CHANGE = NO;
+var SC = require('core');
+
+SC.VALIDATE_OK = true;
+SC.VALIDATE_false_CHANGE = false;
 
 /**
   @class
@@ -88,18 +90,18 @@ SC.Validator = SC.Object.extend(
   /**
     Validate the field value.  
     
-    You can implement standard behavior for your validator by using the validate() and validateError() methods.  validate() should return NO if the field is not valid, YES otherwise.  If you return NO from this method, then the validateError() method will be called so you can generate an error object describing the specific problem.
+    You can implement standard behavior for your validator by using the validate() and validateError() methods.  validate() should return false if the field is not valid, true otherwise.  If you return false from this method, then the validateError() method will be called so you can generate an error object describing the specific problem.
 
     @param {SC.FormView} form the form this view belongs to
     @param {SC.View} field the field to validate.  Responds to fieldValue.
-    @returns {Boolean} YES if field is valid.
+    @returns {Boolean} true if field is valid.
   */
   validate: function(form, field) { return true; },
 
   /**
     Returns an error object if the field is invalid.
   
-    This is the other standard validator method that can be used to impement basic validation.  Return an error object explaining why the field is not valid.  It will only be called if validate() returned NO.
+    This is the other standard validator method that can be used to impement basic validation.  Return an error object explaining why the field is not valid.  It will only be called if validate() returned false.
     
     The default implementation of htis method returns a generic error message with the loc string "Invalid.Generate({fieldValue})".  You can simply define this loc string in strings.js if you prefer or you can override this method to provide a more specific error message.
   
@@ -122,7 +124,7 @@ SC.Validator = SC.Object.extend(
 
     This is a primitive validation method.  You can implement the two higher-level methods (validate() and validateError()) if you prefer.
     
-    The default implementation calls your validate() method and then validateError() if valiate() returns NO.  This method should return SC.VALIDATE_OK if validation succeeded or an error object if it fails.
+    The default implementation calls your validate() method and then validateError() if valiate() returns false.  This method should return SC.VALIDATE_OK if validation succeeded or an error object if it fails.
   
     @param {SC.FormView} form the form for the field
     @param {SC.View} field the field to validate
@@ -159,19 +161,19 @@ SC.Validator = SC.Object.extend(
     needed. The default will validate a partial only if there was already an 
     error. This allows the user to try to get it right before you bug them.
   
-    Unlike the other methods, you should return SC.VALIDATE_NO_CHANGE if you
+    Unlike the other methods, you should return SC.VALIDATE_false_CHANGE if you
     did not actually validate the partial string.  If you return 
     SC.VALIDATE_OK then any showing errors will be hidden.
   
     @param {SC.FormView} form the form for the field
     @param {SC.View} field the field to validate
 
-    @returns SC.VALIDATE_OK, SC.VALIDATE_NO_CHANGE or an error object.
+    @returns SC.VALIDATE_OK, SC.VALIDATE_false_CHANGE or an error object.
   */  
   validatePartial: function(form, field) { 
     if (!field.get('isValid')) {
       return this.validate(form,field) ? SC.VALIDATE_OK : this.validateError(form, field);
-    } else return SC.VALIDATE_NO_CHANGE ;
+    } else return SC.VALIDATE_false_CHANGE ;
   },
   
   /**
@@ -185,7 +187,7 @@ SC.Validator = SC.Object.extend(
     @param {SC.View} field the field to validate
     @param {String} char the characters being added
     
-    @returns {Boolean} YES if allowed, NO otherwise
+    @returns {Boolean} true if allowed, false otherwise
   */
   validateKeyDown: function(form, field,charStr) { return true; },
 
@@ -223,7 +225,7 @@ SC.Validator.mixin(/** @scope SC.Validator */ {
   /**
     Return value when validation was not performed.
   */
-  NO_CHANGE: false,  
+  false_CHANGE: false,  
 
   /**
     Invoked by a field whenever a validator is attached to the field.

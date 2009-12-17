@@ -34,12 +34,12 @@ test("returns styles if set", function() {
   equals(context.styles(), styles, 'styles');
 });
 
-test("clone on next retrieval if styles(foo) set with cloneOnModify=YES", function() {
+test("clone on next retrieval if styles(foo) set with cloneOnModify=true", function() {
   var styles = { foo: 'bar' };
-  context.styles(styles, YES);
+  context.styles(styles, true);
   
   var result = context.styles();
-  ok(result !== styles, "styles is NOT same instance");
+  ok(result !== styles, "styles is falseT same instance");
   same(result, styles, "but styles are equivalent");
   
   equals(result, context.styles(), "2nd retrieval is same instance");

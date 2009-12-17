@@ -37,10 +37,10 @@ test("returns receiver", function() {
 function parentHasChild(parent, child) {
 	var cur = parent.firstChild;
 	while(cur) {
-		if (cur === child) return YES;
+		if (cur === child) return true;
 		cur = cur.nextSibling ;
 	}
-	return NO ;
+	return false ;
 }
 
 test("CASE 1: remove child from parent - remove child layer from parent layer", function() {
@@ -124,7 +124,7 @@ test("CASE 5a: insert child before a sibling w/ layer - should insert child laye
 });
 
 
-test("CASE 5b: insert child w/ layer before a sibling w/ NO layer - should create and insert sibling & child's layers", function() {
+test("CASE 5b: insert child w/ layer before a sibling w/ false layer - should create and insert sibling & child's layers", function() {
 
 	var newParent = SC.View.create().createLayer();
 	var newParentLayer = newParent.get('layer');
@@ -132,13 +132,13 @@ test("CASE 5b: insert child w/ layer before a sibling w/ NO layer - should creat
 	var sibling = SC.View.create();
 
 	ok(newParentLayer, 'precond - newParent has layer');
-	ok(!sibling.get('layer'), 'precond - sibling should have NO layer');
+	ok(!sibling.get('layer'), 'precond - sibling should have false layer');
 	
 	// add layer-less sibling to parent before child..
 	newParent.appendChild(sibling);
 	newParent.insertBefore(child, sibling);
 	
-	ok(sibling.get('layerLocationNeedsUpdate'), 'sibling.layerLocationNeedsUpdate should be YES');
+	ok(sibling.get('layerLocationNeedsUpdate'), 'sibling.layerLocationNeedsUpdate should be true');
 	
 	child.updateLayerLocation();
 	
@@ -169,25 +169,25 @@ test("returns receiver", function() {
 	equals(view.updateLayerLocationIfNeeded(), view, 'returns receiver');
 });
 
-test("invokes updateLayerLocation if layerLocationNeedsUpdate is YES", function() {
+test("invokes updateLayerLocation if layerLocationNeedsUpdate is true", function() {
   
-  view.set('layerLocationNeedsUpdate', YES);
+  view.set('layerLocationNeedsUpdate', true);
   view.updateLayerLocationIfNeeded();
   equals(runCount, 1, 'did invoke');  
 });
 
-test("does NOT invoke updateLayerLocation if layerLocationNeedsUpdate is NO", function() {
+test("does falseT invoke updateLayerLocation if layerLocationNeedsUpdate is false", function() {
   
-  view.set('layerLocationNeedsUpdate', NO);
+  view.set('layerLocationNeedsUpdate', false);
   view.updateLayerLocationIfNeeded();
-  equals(runCount, 0, 'did NOT invoke');  
+  equals(runCount, 0, 'did falseT invoke');  
 });
 
-test("sets layerLocationNeedsUpdate to NO when run", function() {
+test("sets layerLocationNeedsUpdate to false when run", function() {
   
-  view.set('layerLocationNeedsUpdate', YES);
+  view.set('layerLocationNeedsUpdate', true);
   view.updateLayerLocationIfNeeded();
-  equals(view.get('layerLocationNeedsUpdate'), NO, 'did reset');
+  equals(view.get('layerLocationNeedsUpdate'), false, 'did reset');
 });
 
 

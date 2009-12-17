@@ -10,7 +10,7 @@ var view ;
 module("SC.Button#displayProperties", {
   setup: function() {
     view = SC.View.create(SC.Control, SC.Button, { 
-        isVisibleInWindow: YES 
+        isVisibleInWindow: true 
     }).createLayer();
   },
   
@@ -19,9 +19,9 @@ module("SC.Button#displayProperties", {
   }
 });
 
-test("setting isSelected to YES adds sel class name", function() {
+test("setting isSelected to true adds sel class name", function() {
   SC.RunLoop.begin();
-  view.set('isSelected', YES);
+  view.set('isSelected', true);
   SC.RunLoop.end();
   ok(view.$().hasClass('sel'), 'should have css class sel');
 });
@@ -31,53 +31,53 @@ test("setting isSelected to SC.MIXED_STATE add mixed class name, and removes sel
   view.set('isSelected', SC.MIXED_STATE);
   SC.RunLoop.end();
   ok(view.$().hasClass('mixed'), 'should have css class mixed');
-  ok(!view.$().hasClass('sel'), 'should NOT have css class sel');
+  ok(!view.$().hasClass('sel'), 'should falseT have css class sel');
 });
 
 test("setting isSelected to ON removes sel class name", function() {
   SC.RunLoop.begin();
-  view.set('isSelected', YES);
+  view.set('isSelected', true);
   SC.RunLoop.end();
   ok(view.$().hasClass('sel'), 'precond - should have sel class');
   
   SC.RunLoop.begin();
-  view.set('isSelected', NO);
+  view.set('isSelected', false);
   SC.RunLoop.end();
   ok(!view.$().hasClass('sel'), 'should no longer have sel class');
 });
 
-test("setting isEnabled to NO adds disabled class", function() {
+test("setting isEnabled to false adds disabled class", function() {
   SC.RunLoop.begin();
-  view.set('isEnabled', NO);
+  view.set('isEnabled', false);
   SC.RunLoop.end();
   ok(view.$().hasClass('disabled'), 'should have disabled class');
 
   SC.RunLoop.begin();
-  view.set('isEnabled', YES);
+  view.set('isEnabled', true);
   SC.RunLoop.end();
   ok(!view.$().hasClass('disabled'), 'should remove disabled class');
 });
 
 test("should gain focus class if isFirstResponder", function() {
   SC.RunLoop.begin();
-  view.set('isFirstResponder', YES);
+  view.set('isFirstResponder', true);
   SC.RunLoop.end();
   ok(view.$().hasClass('focus'), 'should have focus class');
 
   SC.RunLoop.begin();
-  view.set('isFirstResponder', NO);
+  view.set('isFirstResponder', false);
   SC.RunLoop.end();
   ok(!view.$().hasClass('focus'), 'should remove focus class');
 });
 
 test("should gain active class if isActive", function() {
   SC.RunLoop.begin();
-  view.set('isActive', YES);
+  view.set('isActive', true);
   SC.RunLoop.end();
   ok(view.$().hasClass('active'), 'should have active class');
 
   SC.RunLoop.begin();
-  view.set('isActive', NO);
+  view.set('isActive', false);
   SC.RunLoop.end();
   ok(!view.$().hasClass('active'), 'should remove active class');
 });

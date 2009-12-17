@@ -5,6 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+var SC = require('core');
+
 /**
   The Locale defined information about a specific locale, including date and
   number formatting conventions, and localization strings.  You can define
@@ -58,14 +60,14 @@ SC.Locale = SC.Object.extend({
         strings = String[langs[idx]];
       }
       if (strings) {
-        this.hasStrings = YES; 
+        this.hasStrings = true; 
         this.strings = strings ;
       }
     }
   },
   
-  /** Set to YES when strings have been added to this locale. */
-  hasStrings: NO,
+  /** Set to true when strings have been added to this locale. */
+  hasStrings: false,
   
   /** The strings hash for this locale. */
   strings: {},
@@ -93,10 +95,10 @@ SC.Locale = SC.Object.extend({
 SC.Locale.mixin(/** @scope SC.Locale */ {
 
   /**
-    If YES, localization will favor the detected language instead of the
+    If true, localization will favor the detected language instead of the
     preferred one.
   */
-  useAutodetectedLanguage: NO,
+  useAutodetectedLanguage: false,
   
   /**
     This property is set by the build tools to the current build language.
@@ -207,7 +209,7 @@ SC.Locale.mixin(/** @scope SC.Locale */ {
     
     // add strings hash
     if (stringsHash)  this.prototype.strings = SC.mixin(strings, stringsHash) ;
-    this.prototype.hasStrings = YES ;
+    this.prototype.hasStrings = true ;
     return this;
   },
   

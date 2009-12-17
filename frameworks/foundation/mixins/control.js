@@ -5,9 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import mixins/string";
-"export package";
+var SC = require('core');
+require('mixins/string');
 
 /** 
   Indicates a value has a mixed state of both on and off. 
@@ -111,18 +110,18 @@ SC.Control = {
   },
   
   /** 
-    The selected state of this control.  Possible options are YES, NO or 
+    The selected state of this control.  Possible options are true, false or 
     SC.MIXED_STATE.
     
     @property {Boolean}
   */
-  isSelected: NO,
+  isSelected: false,
   
   /** @private */
   isSelectedBindingDefault: SC.Binding.oneWay().bool(),
   
   /**
-    Set to YES when the item is currently active.  Usually this means the 
+    Set to true when the item is currently active.  Usually this means the 
     mouse is current pressed and hovering over the control, however the 
     specific implementation my vary depending on the control.
     
@@ -131,7 +130,7 @@ SC.Control = {
     
     @property {Boolean}
   */
-  isActive: NO,
+  isActive: false,
   
   /** @private */
   isActiveBindingDefault: SC.Binding.oneWay().bool(),

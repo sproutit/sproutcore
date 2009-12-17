@@ -26,7 +26,7 @@ module("SC.TextFieldView",{
           SC.TextFieldView.extend({
             hint:'Name',
             value:'SproutCore',
-            isEnabled: NO
+            isEnabled: false
           }),
           SC.TextFieldView.extend({
             layerId: 'fieldWithCustomId'
@@ -50,8 +50,8 @@ module("SC.TextFieldView",{
 test("renders an text field input tag with appropriate attributes", function() {
   equals(view.get('value'), '', 'value should be empty');
   equals(view1.get('value'), 'SproutCore', 'value should not be empty ');
-  equals(view.get('isEnabled'),YES,'field enabled' );
-  equals(view1.get('isEnabled'),NO,'field not enabled' );
+  equals(view.get('isEnabled'),true,'field enabled' );
+  equals(view1.get('isEnabled'),false,'field not enabled' );
   var q = Q$('input', view.get('layer'));
   equals(q.attr('type'), 'text', 'should have type as text');
   equals(q.attr('name'), view.get('layerId'), 'should have name as view_layerid');
@@ -62,19 +62,19 @@ test("renders an text field with a custom layerId with correct id and name html 
   equals(view2.$input().attr('name'), 'fieldWithCustomId', 'input html element should have the custom name');
 });
 
-test("isEnabled=NO should add disabled class", function() {
+test("isEnabled=false should add disabled class", function() {
   SC.RunLoop.begin();
-  view.set('isEnabled', NO);
+  view.set('isEnabled', false);
   SC.RunLoop.end();  
   ok(view.$().hasClass('disabled'), 'should have disabled class');
 });
 
-// test("isEnabled=NO should add disabled attr to input", function() {
+// test("isEnabled=false should add disabled attr to input", function() {
 //   SC.RunLoop.begin();
-//   view1.set('isEnabled', NO);
+//   view1.set('isEnabled', false);
 //   SC.RunLoop.end();  
 //   ok(view1.$input().attr('disabled'), 'should have disabled attr');  
-//   view1.set('isEditing',YES);
+//   view1.set('isEditing',true);
 //   ok(view1.get('value') === 'SproutCore', 'value cannot be changed');
 //   });
 

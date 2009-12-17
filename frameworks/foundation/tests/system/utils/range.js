@@ -7,8 +7,8 @@ module("SC.Range");
 
 test("to find the maxRange() and minRange() values of a given range",function(){
 	var obj = {start:15,length:75};
-	equals(YES,SC.minRange(obj) == 15,'Minimum range');
-    equals(YES,SC.maxRange(obj) == 90,'Maximum range');
+	equals(true,SC.minRange(obj) == 15,'Minimum range');
+    equals(true,SC.maxRange(obj) == 90,'Maximum range');
 });
 
 test("unionRanges() to find the union of two ranges",function(){

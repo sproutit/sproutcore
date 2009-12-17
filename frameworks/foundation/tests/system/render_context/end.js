@@ -69,14 +69,14 @@ test("should return prevObject if receiver has prevObject", function() {
   equals(c2.end(), context, "should return prevObject");
 });
 
-test("emits self closing tag if tag has no content and c._selfClosing !== NO", function() {
+test("emits self closing tag if tag has no content and c._selfClosing !== false", function() {
   var c2 = context.begin('input');
   c2.end();
   equals(c2.get(0), "<input />");
 });
 
-test("emits two tags even if tag has no content if opts.selfClosing == NO", function() {
-  context._selfClosing = NO;
+test("emits two tags even if tag has no content if opts.selfClosing == false", function() {
+  context._selfClosing = false;
   
   context.end();
   equals(context.length, 2, "has two lines");
@@ -84,8 +84,8 @@ test("emits two tags even if tag has no content if opts.selfClosing == NO", func
   equals(context.get(1), "</div>", "has closing tag");
 });
 
-test("does NOT emit self closing tag if it has content, even if opts.selfClosing == YES (because that would yield invalid HTML)", function() {
-  context._selfClosing = YES;
+test("does falseT emit self closing tag if it has content, even if opts.selfClosing == true (because that would yield invalid HTML)", function() {
+  context._selfClosing = true;
   context.push("line").end();
   equals(context.length, 3, "has 3 lines");
   equals(context.get(2), "</div>", "has closing tag");

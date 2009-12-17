@@ -5,8 +5,10 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+var SC = require('core');
+require('system/browser');
+
 // These are helpful utility functions for calculating range and rect values
-sc_require('system/browser');
 
 SC.mixin( /** @scope SC */ {
 
@@ -145,11 +147,11 @@ SC.mixin( /** @scope SC */ {
   rectsEqual: function(r1, r2, delta) {
     if (!r1 || !r2) return (r1 == r2) ;
     if (!delta && delta !== 0) delta = 0.1;
-    if ((r1.y != r2.y) && (Math.abs(r1.y - r2.y) > delta)) return NO ; 
-    if ((r1.x != r2.x) && (Math.abs(r1.x - r2.x) > delta)) return NO ; 
-    if ((r1.width != r2.width) && (Math.abs(r1.width - r2.width) > delta)) return NO ; 
-    if ((r1.height != r2.height) && (Math.abs(r1.height - r2.height) > delta)) return NO ; 
-    return YES ;
+    if ((r1.y != r2.y) && (Math.abs(r1.y - r2.y) > delta)) return false ; 
+    if ((r1.x != r2.x) && (Math.abs(r1.x - r2.x) > delta)) return false ; 
+    if ((r1.width != r2.width) && (Math.abs(r1.width - r2.width) > delta)) return false ; 
+    if ((r1.height != r2.height) && (Math.abs(r1.height - r2.height) > delta)) return false ; 
+    return true ;
   },
   
   /** Returns the insersection between two rectangles. 
@@ -523,7 +525,7 @@ SC.mixin( /** @scope SC */ {
   /** A zero length range at zero. */
   ZERO_RANGE: { start: 0, length: 0 },
 
-  RANGE_NOT_FOUND: { start: 0, length: -1 },
+  RANGE_falseT_FOUND: { start: 0, length: -1 },
   
   /** Returns true if the passed index is in the specified range */
   valueInRange: function(value, range) {
@@ -547,23 +549,23 @@ SC.mixin( /** @scope SC */ {
     return { start: min, length: max - min } ;
   },
   
-  /** Returns the intersection of the two ranges or SC.RANGE_NOT_FOUND */
+  /** Returns the intersection of the two ranges or SC.RANGE_falseT_FOUND */
   intersectRanges: function(r1, r2) {
-    if ((r1 == null) || (r2 == null)) return SC.RANGE_NOT_FOUND ;
-    if ((r1.length < 0) || (r2.length < 0)) return SC.RANGE_NOT_FOUND;
+    if ((r1 == null) || (r2 == null)) return SC.RANGE_falseT_FOUND ;
+    if ((r1.length < 0) || (r2.length < 0)) return SC.RANGE_falseT_FOUND;
     var min = Math.max(SC.minRange(r1), SC.minRange(r2)) ;
     var max = Math.min(SC.maxRange(r1), SC.maxRange(r2)) ;
-    if (max < min) return SC.RANGE_NOT_FOUND ;
+    if (max < min) return SC.RANGE_falseT_FOUND ;
     return { start: min, length: max-min };
   },
   
-  /** Returns the difference of the two ranges or SC.RANGE_NOT_FOUND */
+  /** Returns the difference of the two ranges or SC.RANGE_falseT_FOUND */
   subtractRanges: function(r1, r2) {
-    if ((r1 == null) || (r2 == null)) return SC.RANGE_NOT_FOUND ;
-    if ((r1.length < 0) || (r2.length < 0)) return SC.RANGE_NOT_FOUND;
+    if ((r1 == null) || (r2 == null)) return SC.RANGE_falseT_FOUND ;
+    if ((r1.length < 0) || (r2.length < 0)) return SC.RANGE_falseT_FOUND;
     var max = Math.max(SC.minRange(r1), SC.minRange(r2)) ;
     var min = Math.min(SC.maxRange(r1), SC.maxRange(r2)) ;
-    if (max < min) return SC.RANGE_NOT_FOUND ;
+    if (max < min) return SC.RANGE_falseT_FOUND ;
     return { start: min, length: max-min };
   },
   
@@ -573,7 +575,7 @@ SC.mixin( /** @scope SC */ {
   },
   
   /** Returns true if the two passed ranges are equal.  A null value is
-    treated like RANGE_NOT_FOUND.
+    treated like RANGE_falseT_FOUND.
   */
   rangesEqual: function(r1, r2) {
     if (r1===r2) return true ;

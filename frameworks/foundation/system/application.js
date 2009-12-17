@@ -5,9 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import system/responder_context";
-"export package";
+var SC = require('core');
+require('system/responder_context');
 
 /** @class
 

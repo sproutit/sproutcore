@@ -5,10 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import core";
-"import controllers/controller";
-"export package";
+var SC = require('core');
+require('controllers/controller');
 
 /** @class
 
@@ -73,24 +71,24 @@ SC.ObjectController = SC.Controller.extend(
   content: null,
 
   /**
-    If YES, then setting the content to an enumerable or an array with more 
+    If true, then setting the content to an enumerable or an array with more 
     than one item will cause the Controller to attempt to treat the array as
     a single object.  Use of get(), for example, will get every property on
     the enumerable and return it.  set() will set the property on every item
     in the enumerable. 
     
-    If NO, then setting content to an enumerable with multiple items will be
-    treated like setting a null value.  hasContent will be NO.
+    If false, then setting content to an enumerable with multiple items will be
+    treated like setting a null value.  hasContent will be false.
     
     @property {Boolean}
   */
-  allowsMultipleContent: NO,
+  allowsMultipleContent: false,
 
   /**
-    Becomes YES whenever this object is managing content.  Usually this means
+    Becomes true whenever this object is managing content.  Usually this means
     the content property contains a single object or an array or enumerable
     with a single item.  Array's or enumerables with multiple items will 
-    normally make this property NO unless allowsMultipleContent is YES.
+    normally make this property false unless allowsMultipleContent is true.
     
     @property {Boolean}
   */
@@ -105,7 +103,7 @@ SC.ObjectController = SC.Controller.extend(
     
     @property {Boolean}
   */
-  isEditable: YES,
+  isEditable: true,
   
   /**
     Primarily for internal use.  Normally you should not access this property 
@@ -116,7 +114,7 @@ SC.ObjectController = SC.Controller.extend(
     when setting content to an enumerable, this may return a different object.
     
     Note that if you set the content to an enumerable which itself contains
-    enumerables and allowsMultipleContent is NO, this will become null.
+    enumerables and allowsMultipleContent is false, this will become null.
     
     @property {Object}
   */
@@ -172,7 +170,7 @@ SC.ObjectController = SC.Controller.extend(
     some custom work when the content property changes.
     
     If you have set the content property to an enumerable with multiple 
-    objects and you set allowsMultipleContent to YES, this method will be 
+    objects and you set allowsMultipleContent to true, this method will be 
     called anytime any property in the set changes.
 
     If all properties have changed on the content or if the content itself 
@@ -219,10 +217,10 @@ SC.ObjectController = SC.Controller.extend(
         // just return that value
         loc = value.get('length');
         if (loc>0) {
-          isSame = YES;
+          isSame = true;
           cur = value.objectAt(0);
           while((--loc > 0) && isSame) {
-            if (cur !== value.objectAt(loc)) isSame = NO ;
+            if (cur !== value.objectAt(loc)) isSame = false ;
           }
           if (isSame) value = cur;
         } else value = undefined; // empty array.

@@ -35,7 +35,7 @@ test("fireTime() should return the next time the timer should fire", function(){
 	
 	timerObj = SC.Timer.create();
 
-	equals(-1,timerObj.fireTime(),'for isValid YES');	
+	equals(-1,timerObj.fireTime(),'for isValid true');	
 	equals(-1,timerObj.fireTime(),'for startTime not set');	
 	
 	timerObj.startTime = 10;

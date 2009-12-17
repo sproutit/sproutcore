@@ -6,9 +6,7 @@
 // ==========================================================================
 /*globals $A*/
 
-"import package sproutcore/runtime";
-"import core";
-"export package";
+var SC = require('core');
  
 /** @namespace
 
@@ -49,7 +47,7 @@ SC.Benchmark = {
   
     @property {Boolean}
   */
-  verbose: NO,
+  verbose: false,
   
   /**
     If false, benchmarking will be disabled.  You might want to disable this
@@ -57,7 +55,7 @@ SC.Benchmark = {
   
     @property {Boolean}
   */
-  enabled: YES,
+  enabled: true,
   
   /** 
      This hash stores collected stats.  It contains key value pairs.  The value

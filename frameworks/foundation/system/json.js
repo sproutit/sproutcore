@@ -5,6 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+var SC = require('core');
+
 SC.json = {
   
   /**
@@ -37,7 +39,7 @@ SC.json = {
 
     Public Domain.
 
-    NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
+    false WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
 
     See http://www.JSON.org/js.html
 
@@ -174,7 +176,7 @@ SC.json = {
     See http://javascript.crockford.com/jsmin.html
 
     USE YOUR OWN COPY. IT IS EXTREMELY UNWISE TO LOAD CODE FROM SERVERS YOU DO
-    NOT CONTROL.
+    falseT CONTROL.
 */
 
 /*jslint evil: true, strict: false */

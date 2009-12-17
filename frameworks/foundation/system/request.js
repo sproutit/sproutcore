@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('system/response');
+var SC = require('core');
+require('system/response');
 
 /**
   @class
@@ -36,31 +37,31 @@ SC.Request = SC.Object.extend(SC.Copyable, SC.Freezable,
     should almost always make requests asynchronous.  You can change this 
     options with the async() helper option (or simply set it directly).
     
-    Defaults to YES. 
+    Defaults to true. 
     
     @property {Boolean}
   */
-  isAsynchronous: YES,
+  isAsynchronous: true,
 
   /**
     Processes the request and response as JSON if possible.  You can change
     this option with the json() helper method.
 
-    Defaults to NO 
+    Defaults to false 
     
     @property {Boolean}
   */
-  isJSON: NO,
+  isJSON: false,
 
   /**
     Process the request and response as XML if possible.  You can change this
     option with the xml() helper method.
     
-    Defaults to NO
+    Defaults to false
   
     @property {Boolean}
   */
-  isXML: NO,
+  isXML: false,
   
   /**
     Current set of headers for the request
@@ -283,24 +284,24 @@ SC.Request = SC.Object.extend(SC.Copyable, SC.Freezable,
   /**
     Converts the current request to use JSON.
     
-    @property {Boolean} flag YES to make JSON, NO or undefined
+    @property {Boolean} flag true to make JSON, false or undefined
     @returns {SC.Request} receiver
   */
   json: function(flag) {
-    if (flag === undefined) flag = YES;
-    if (flag) this.set('isXML', NO);
+    if (flag === undefined) flag = true;
+    if (flag) this.set('isXML', false);
     return this.set('isJSON', flag);
   },
   
   /**
     Converts the current request to use XML.
     
-    @property {Boolean} flag YES to make XML, NO or undefined
+    @property {Boolean} flag true to make XML, false or undefined
     @returns {SC.Request} recevier
   */
   xml: function(flag) {
-    if (flag === undefined) flag = YES ;
-    if (flag) this.set('isJSON', NO);
+    if (flag === undefined) flag = true ;
+    if (flag) this.set('isJSON', false);
     return this.set('isXML', flag);
   },
   
@@ -369,11 +370,11 @@ SC.Request = SC.Object.extend(SC.Copyable, SC.Freezable,
     
     You can also pass "generic" status codes such as 200, 300, or 400, which
     will be invoked anytime the status code is the range if a more specific 
-    notifier was not registered first and returned YES.  
+    notifier was not registered first and returned true.  
     
     Finally, passing a status code of 0 or no status at all will cause your
     method to be executed no matter what the resulting status is unless a 
-    more specific notifier was registered and returned YES.
+    more specific notifier was registered and returned true.
     
     h2. Callback Format
     
@@ -389,13 +390,13 @@ SC.Request = SC.Object.extend(SC.Copyable, SC.Freezable,
   notify: function(status, target, action, params) {
     
     // normalize status
-    var hasStatus = YES ;
+    var hasStatus = true ;
     if (SC.typeOf(status) !== SC.T_NUMBER) {
       params = SC.A(arguments).slice(2);
       action = target;
       target = status;
       status = 0 ;
-      hasStatus = NO ;
+      hasStatus = false ;
     } else params = SC.A(arguments).slice(3);
     
     var listeners = this.get('listeners');
@@ -519,7 +520,7 @@ SC.Request.manager = SC.Object.create( SC.DelegateSupport, {
     be removed.  Otherwise it will actually be cancelled.
     
     @param {Object} response a response object
-    @returns {Boolean} YES if cancelled
+    @returns {Boolean} true if cancelled
   */
   cancel: function(response) {
 
@@ -531,7 +532,7 @@ SC.Request.manager = SC.Object.create( SC.DelegateSupport, {
       this.propertyWillChange('pending');
       pending.removeObject(response);
       this.propertyDidChange('pending');
-      return YES;
+      return true;
       
     } else if (inflight.indexOf(response) >= 0) {
       
@@ -539,24 +540,24 @@ SC.Request.manager = SC.Object.create( SC.DelegateSupport, {
       
       inflight.removeObject(response);
       this.fireRequestIfNeeded();
-      return YES;
+      return true;
 
-    } else return NO ;
+    } else return false ;
   },  
 
   /**
     Cancels all inflight and pending requests.  
     
-    @returns {Boolean} YES if any items were cancelled.
+    @returns {Boolean} true if any items were cancelled.
   */
   cancelAll: function() {
     if (this.get('pending').length || this.get('inflight').length) {
       this.set('pending', []);
       this.get('inflight').forEach(function(r) { r.cancel(); });
       this.set('inflight', []);
-      return YES;
+      return true;
       
-    } else return NO ;
+    } else return false ;
   },
   
   /**

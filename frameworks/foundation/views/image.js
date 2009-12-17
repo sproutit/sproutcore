@@ -5,10 +5,11 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('views/view') ;
-sc_require('mixins/control') ;
+var SC = require('core');
+require('views/view');
+require('mixins/control');
 
-SC.IMAGE_STATE_NONE = 'none';
+SC.IMAGE_STATE_falseNE = 'none';
 SC.IMAGE_STATE_LOADING = 'loading';
 SC.IMAGE_STATE_LOADED = 'loaded';
 SC.IMAGE_STATE_FAILED = 'failed';
@@ -50,12 +51,12 @@ SC.ImageView = SC.View.extend(SC.Control,
     
     This status changes as an image is loaded from the server.  If spriting
     is used, this will always be loaded.  Must be one of the following
-    constants: SC.IMAGE_STATE_NONE, SC.IMAGE_STATE_LOADING, 
+    constants: SC.IMAGE_STATE_falseNE, SC.IMAGE_STATE_LOADING, 
     SC.IMAGE_STATE_LOADED, SC.IMAGE_STATE_FAILED, SC.IMAGE_STATE_SPRITE
     
     @property {String}
   */
-  status: SC.IMAGE_STATE_NONE,
+  status: SC.IMAGE_STATE_falseNE,
   
   /**
     A url or CSS class name.
@@ -77,24 +78,24 @@ SC.ImageView = SC.View.extend(SC.Control,
   value: null,
 
   /**
-    If YES, image view will use the imageCache to control loading.  This 
+    If true, image view will use the imageCache to control loading.  This 
     setting is generally preferred.
     
     @property {String}
   */
-  useImageCache: YES,
+  useImageCache: true,
   
   /**
-    If YES, this image can load in the background.  Otherwise, it is treated
+    If true, this image can load in the background.  Otherwise, it is treated
     as a foreground image.  If the image is not visible on screen, it will
     always be treated as a background image.
   */
-  canLoadInBackground: NO,
+  canLoadInBackground: false,
   
   /**
-    If YES, any specified toolTip will be localized before display.
+    If true, any specified toolTip will be localized before display.
   */
-  localize: YES,
+  localize: true,
   
   displayProperties: 'status toolTip'.w(),
   
@@ -102,7 +103,7 @@ SC.ImageView = SC.View.extend(SC.Control,
     // the image source is the value if the status is LOADED or blank
     var status = this.get('status'), value = this.get('value') ;
     
-    if (status === SC.IMAGE_STATE_NONE && value) this._image_valueDidChange() ; // setup initial state
+    if (status === SC.IMAGE_STATE_falseNE && value) this._image_valueDidChange() ; // setup initial state
     
     // query the status again, as calling this._image_valueDidChange() may
     // update status to SC.IMAGE_STATE_LOADED or SC.IMAGE_STATE_SPRITE
@@ -171,10 +172,10 @@ SC.ImageView = SC.View.extend(SC.Control,
 }) ;
 
 /**
-  Returns YES if the passed value looks like an URL and not a CSS class
+  Returns true if the passed value looks like an URL and not a CSS class
   name.
 */
 SC.ImageView.valueIsUrl = function(value) {
-  return value ? value.indexOf('/') >= 0 : NO ;
+  return value ? value.indexOf('/') >= 0 : false ;
 } ;
 

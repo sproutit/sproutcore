@@ -29,12 +29,12 @@ test("it should have a length of 1 with a null value for the first time, saving 
   equals(context.get(0), null, 'first item');
 });
 
-test("if script tag is passed, should mark context._selfClosing as NO" ,function() {
+test("if script tag is passed, should mark context._selfClosing as false" ,function() {
   var context = SC.RenderContext('script');
-  ok(context._selfClosing === NO, "selfClosing MUST be no");
+  ok(context._selfClosing === false, "selfClosing MUST be no");
   
   context = SC.RenderContext('SCRIPT');
-  ok(context._selfClosing === NO, "selfClosing MUST be no 2");
+  ok(context._selfClosing === false, "selfClosing MUST be no 2");
 });
 
 test("if element is passed, it should save element and not reserve space for string output", function() {

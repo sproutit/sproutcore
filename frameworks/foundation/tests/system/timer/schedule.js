@@ -14,7 +14,7 @@ test("single timer should execute once and invalidate", function() {
     target: this,
     action: function() { fired.push(Date.now()); },
     interval: 100, 
-    repeats: NO
+    repeats: false
   });
   SC.RunLoop.end() ;
   
@@ -31,7 +31,7 @@ test("single timer should execute once and invalidate", function() {
     equals(1, fired.length, 'fired count') ;
     
     // timer should no longer be valid
-    equals(NO, t.get('isValid'), 'isValid');
+    equals(false, t.get('isValid'), 'isValid');
     
     window.start() ; // starts the test runner
   } ;
@@ -55,7 +55,7 @@ test("repeating timer with no limit should repeat until terminated", function() 
       if (--runs <= 0) t.invalidate(); 
     },
     interval: 100, 
-    repeats: YES
+    repeats: true
   });
   SC.RunLoop.end() ;
   
@@ -66,7 +66,7 @@ test("repeating timer with no limit should repeat until terminated", function() 
     
     if (--checks < 0) {
       window.start();
-      equals(YES, NO, 'Check Count Exceeded') ;
+      equals(true, false, 'Check Count Exceeded') ;
     }
     
     if (runs > 0) {
@@ -75,7 +75,7 @@ test("repeating timer with no limit should repeat until terminated", function() 
     } else {
       var diffs = fired.map(function(x) { return x - start; });
       equals(4, fired.length, 'fired count: %@'.fmt(diffs.join(', '))) ;
-      equals(NO, t.get('isValid'), 'isValid') ;
+      equals(false, t.get('isValid'), 'isValid') ;
       window.start() ; // starts the test runner
     }
   };
@@ -98,7 +98,7 @@ test("repeating timer should terminate after expiration", function() {
       fired.push(Date.now()); 
     },
     interval: 100, 
-    repeats: YES,
+    repeats: true,
     until: start + 500
   });
   SC.RunLoop.end() ;
@@ -109,7 +109,7 @@ test("repeating timer should terminate after expiration", function() {
   var f = function f() {
     if (--checks < 0) {
       window.start();
-      equals(YES, NO, 'Timer never invalidated :') ;
+      equals(true, false, 'Timer never invalidated :') ;
     }
     
     if ((checks > 0) && t.get('isValid')) {
@@ -117,7 +117,7 @@ test("repeating timer should terminate after expiration", function() {
       setTimeout(f, 100) ;
     } else {
       var diffs = fired.map(function(x) { return x - start; });
-      equals(NO, t.get('isValid'), 'Timer did not terminate: %@'.fmt(diffs.join(', '))) ;
+      equals(false, t.get('isValid'), 'Timer did not terminate: %@'.fmt(diffs.join(', '))) ;
       window.start() ; // starts the test runner
     }
   };
@@ -160,8 +160,8 @@ test("scheduling multiple timers at the same time should cause them to fire at s
     }
     
     equals(f1, f2, 'execution time f1 == f2');
-    equals(NO, t1.get('isValid'), 't1.isValid') ;
-    equals(NO, t2.get('isValid'), 't2.isValid') ;
+    equals(false, t1.get('isValid'), 't1.isValid') ;
+    equals(false, t2.get('isValid'), 't2.isValid') ;
     window.start() ; // starts the test runner
   } ;
   

@@ -6,9 +6,8 @@
 // ==========================================================================
 /*globals ENV */
 
-"import package sproutcore/runtime";
-"import views/view";
-"export package";
+var SC = require('core');
+require('views/view');
 
 /** @class
   A Pane is like a regular view except that it does not need to live within a 
@@ -51,7 +50,7 @@
   document body, as well as deregistering it from the RootResponder so that it 
   no longer receives events.
   
-  The isVisibleInWindow method will also change to NO for the Pane and all of 
+  The isVisibleInWindow method will also change to false for the Pane and all of 
   its childViews and the views will no longer have their updateDisplay methods 
   called.  
   
@@ -74,7 +73,7 @@
   application.
   
   You can prevent your Pane from becoming key by setting the acceptsKeyPane 
-  to NO on the pane.  This is useful when creating palettes and other popups 
+  to false on the pane.  This is useful when creating palettes and other popups 
   that should not steal keyboard control from another view.
 
   @extends SC.View
@@ -84,10 +83,10 @@
 SC.Pane = SC.View.extend( /** @scope SC.Pane.prototype */ {
 
   /** 
-    Returns YES for easy detection of when you reached the pane. 
+    Returns true for easy detection of when you reached the pane. 
     @property {Boolean}
   */
-  isPane: YES,
+  isPane: true,
   
   /** 
     Set to the current page when the pane is instantiated from a page object.
@@ -182,7 +181,7 @@ SC.Pane = SC.View.extend( /** @scope SC.Pane.prototype */ {
     pass a target, this method will begin with the target and work up the 
     responder chain.  Otherwise, it will begin with the current firstResponder 
     and walk up the chain looking for any responder that implements a handler 
-    for the passed method and returns YES when executed.
+    for the passed method and returns true when executed.
     
     @param {String} action
     @param {SC.Event} evt
@@ -269,20 +268,20 @@ SC.Pane = SC.View.extend( /** @scope SC.Pane.prototype */ {
   firstResponder: null,
   
   /** 
-    If YES, this pane can become the key pane.  You may want to set this to NO 
+    If true, this pane can become the key pane.  You may want to set this to false 
     for certain types of panes.  For example, a palette may never want to 
-    become key.  The default value is YES.
+    become key.  The default value is true.
     
     @property {Boolean}
   */
-  acceptsKeyPane: YES,
+  acceptsKeyPane: true,
   
   /**
-    This is set to YES when your pane is currently the target of key events. 
+    This is set to true when your pane is currently the target of key events. 
     
     @property {Boolean}
   */
-  isKeyPane: NO,
+  isKeyPane: false,
 
   /**
     Make the pane receive key events.  Until you call this method, the 
@@ -333,7 +332,7 @@ SC.Pane = SC.View.extend( /** @scope SC.Pane.prototype */ {
     // change setting
     if (current) {
       current.beginPropertyChanges()
-        .set('isFirstResponder', NO).set('isKeyResponder', NO)
+        .set('isFirstResponder', false).set('isKeyResponder', false)
       .endPropertyChanges();
     }
 
@@ -341,7 +340,7 @@ SC.Pane = SC.View.extend( /** @scope SC.Pane.prototype */ {
     
     if (view) {
       view.beginPropertyChanges()
-        .set('isFirstResponder', YES).set('isKeyResponder', isKeyPane)
+        .set('isFirstResponder', true).set('isKeyResponder', isKeyPane)
       .endPropertyChanges();
     }
     
@@ -378,7 +377,7 @@ SC.Pane = SC.View.extend( /** @scope SC.Pane.prototype */ {
     @returns {SC.Pane} reciever
   */
   willLoseKeyPaneTo: function(pane) {
-    this._forwardKeyChange(this.get('isKeyPane'), 'willLoseKeyResponderTo', pane, NO);
+    this._forwardKeyChange(this.get('isKeyPane'), 'willLoseKeyResponderTo', pane, false);
     return this ;
   },
   
@@ -392,7 +391,7 @@ SC.Pane = SC.View.extend( /** @scope SC.Pane.prototype */ {
     @returns {SC.Pane} receiver
   */
   willBecomeKeyPaneFrom: function(pane) {
-    this._forwardKeyChange(!this.get('isKeyPane'), 'willBecomeKeyResponderFrom', pane, YES);
+    this._forwardKeyChange(!this.get('isKeyPane'), 'willBecomeKeyResponderFrom', pane, true);
     return this ;
   },
 
@@ -407,7 +406,7 @@ SC.Pane = SC.View.extend( /** @scope SC.Pane.prototype */ {
   */
   didLoseKeyPaneTo: function(pane) {
     var isKeyPane = this.get('isKeyPane');
-    this.set('isKeyPane', NO);
+    this.set('isKeyPane', false);
     this._forwardKeyChange(isKeyPane, 'didLoseKeyResponderTo', pane);
     return this ;
   },
@@ -424,8 +423,8 @@ SC.Pane = SC.View.extend( /** @scope SC.Pane.prototype */ {
   */
   didBecomeKeyPaneFrom: function(pane) {
     var isKeyPane = this.get('isKeyPane');
-    this.set('isKeyPane', YES);
-    this._forwardKeyChange(!isKeyPane, 'didBecomeKeyResponderFrom', pane, YES);
+    this.set('isKeyPane', true);
+    this._forwardKeyChange(!isKeyPane, 'didBecomeKeyResponderFrom', pane, true);
     return this ;
   },
   
@@ -434,12 +433,12 @@ SC.Pane = SC.View.extend( /** @scope SC.Pane.prototype */ {
   //
   
   /**
-    Returns YES whenever the pane has been set as the main pane for the 
+    Returns true whenever the pane has been set as the main pane for the 
     application.
     
     @property {Boolean}
   */
-  isMainPane: NO,
+  isMainPane: false,
   
   /**
     Invoked when the pane is about to become the focused pane.  Override to
@@ -468,7 +467,7 @@ SC.Pane = SC.View.extend( /** @scope SC.Pane.prototype */ {
     @returns {void}
   */
   blurMainTo: function(pane) {
-    this.set('isMainPane', NO) ;
+    this.set('isMainPane', false) ;
   },
   
   /** 
@@ -481,7 +480,7 @@ SC.Pane = SC.View.extend( /** @scope SC.Pane.prototype */ {
     @returns {void}
   */
   focusMainFrom: function(pane) {
-    this.set('isMainPane', YES);
+    this.set('isMainPane', true);
   },
   
   // .......................................................
@@ -651,7 +650,7 @@ SC.Pane = SC.View.extend( /** @scope SC.Pane.prototype */ {
     this.set('currentWindowSize', responder.computeWindowSize()) ;
     
     // update my own location
-    this.set('isPaneAttached', YES) ;
+    this.set('isPaneAttached', true) ;
     this.parentViewDidChange() ;
     
     //notify that the layers have been appended to the document
@@ -661,12 +660,12 @@ SC.Pane = SC.View.extend( /** @scope SC.Pane.prototype */ {
   },
   
   /**
-    YES when the pane is currently attached to a document DOM.  Read only.
+    true when the pane is currently attached to a document DOM.  Read only.
     
     @property {Boolean}
     @readOnly
   */
-  isPaneAttached: NO,
+  isPaneAttached: false,
 
   /**
     Updates the isVisibleInWindow state on the pane and its childViews if 

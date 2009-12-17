@@ -31,7 +31,7 @@ test("invoked with key = * whenever content changes", function() {
 });
 
 test("invoked with key = foo whenever a propery on content is changed", function() {
-  var isTesting = NO, curKey ;
+  var isTesting = false, curKey ;
   view.contentPropertyDidChange = function(target, key) {
     if (!isTesting) return ; //wait until testing should begin...
     ok(target === content, 'should pass content object as target');
@@ -39,7 +39,7 @@ test("invoked with key = foo whenever a propery on content is changed", function
   };
   view.set('content', content);
   
-  isTesting = YES ;
+  isTesting = true ;
   
   curKey= 'foo';
   content.set('foo', 'foo');
@@ -49,17 +49,17 @@ test("invoked with key = foo whenever a propery on content is changed", function
 });
 
 test("should no longer be invoked when a key is changed on a former content object", function() {
-  var isTesting = NO;
+  var isTesting = false;
   view.contentPropertyDidChange = function(target, key) {
     if (!isTesting) return ; //wait until testing should begin...
-    ok(NO, 'should not invoke contentPropertyDidChange after content is removed');
+    ok(false, 'should not invoke contentPropertyDidChange after content is removed');
   };
   
   view.set('content', content);
   content.set('foo', 'foo');
   view.set('content', null);
   
-  isTesting= YES ;
+  isTesting= true ;
   content.set('bar', 'bar');
 });
 

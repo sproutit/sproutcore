@@ -43,7 +43,7 @@ function performLayoutTest(layout, no_f, no_s, with_f, with_s) {
 
   // test
   keys.forEach(function(key) {
-    equals(child.get('layoutStyle')[key], no_s[key], "STYLE NO PARENT %@".fmt(key)) ;  
+    equals(child.get('layoutStyle')[key], no_s[key], "STYLE false PARENT %@".fmt(key)) ;  
   });
   
   // add parent
@@ -53,7 +53,7 @@ function performLayoutTest(layout, no_f, no_s, with_f, with_s) {
   
   // test again
   keys.forEach(function(key) {
-    equals(child.get('layoutStyle')[key], with_s[key], "STYLE NO PARENT %@".fmt(key)) ;  
+    equals(child.get('layoutStyle')[key], with_s[key], "STYLE false PARENT %@".fmt(key)) ;  
   });
 }
 
@@ -84,7 +84,7 @@ module('SC.StaticLayout', commonSetup) ;
 test("Test that auto as a value for width height is set correctly when"
   +" setting the element style", function() {
   child = SC.View.create({
-    useStaticLayout:YES,
+    useStaticLayout:true,
     render: function(context) {
       // needed for auto
       context.push('<div style="padding: 10px"></div>');

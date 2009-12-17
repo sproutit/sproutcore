@@ -43,7 +43,7 @@ test("make firstResponder from null, not keyPane", function() {
   
   equals(pane.get('firstResponder'), view0, 'should set firstResponder to view');
   
-  ok(view0.get('isFirstResponder'), 'should set view.isFirstResponder to YES');
+  ok(view0.get('isFirstResponder'), 'should set view.isFirstResponder to true');
   ok(!view0.get('isKeyResponder'), 'should not set view.isKeyResponder');
 });
 
@@ -60,7 +60,7 @@ test("make firstResponder from null, is keyPane", function() {
   
   equals(pane.get('firstResponder'), view0, 'should set firstResponder to view');
   
-  ok(view0.get('isFirstResponder'), 'should set view.isFirstResponder to YES');
+  ok(view0.get('isFirstResponder'), 'should set view.isFirstResponder to true');
   ok(view0.get('isKeyResponder'), 'should set view.isKeyResponder');
 });
 
@@ -86,10 +86,10 @@ test("make firstResponder from other view, not keyPane", function() {
   
   equals(pane.get('firstResponder'), view0, 'should set firstResponder to view');
   
-  ok(view0.get('isFirstResponder'), 'should set view.isFirstResponder to YES');
+  ok(view0.get('isFirstResponder'), 'should set view.isFirstResponder to true');
   ok(!view0.get('isKeyResponder'), 'should not set view.isKeyResponder');
   
-  ok(!view1.get('isFirstResponder'), 'view1.isFirstResponder should now be set to NO');
+  ok(!view1.get('isFirstResponder'), 'view1.isFirstResponder should now be set to false');
   
 });
 
@@ -100,8 +100,8 @@ test("make firstResponder from other view, as keyPane", function() {
   pane.becomeKeyPane();
   pane.makeFirstResponder(view1);
   equals(pane.get('firstResponder'), view1, 'precond - view1 is firstResponder');
-  ok(view1.get('isFirstResponder'), 'precond - view1.isFirstResponder should be YES');
-  ok(view1.get('isKeyResponder'), 'precond - view1.isFirstResponder should be YES');
+  ok(view1.get('isFirstResponder'), 'precond - view1.isFirstResponder should be true');
+  ok(view1.get('isKeyResponder'), 'precond - view1.isFirstResponder should be true');
   
   var okCount = 0 ;
   view0.didBecomeFirstResponder = view1.willLoseFirstResponder = 
@@ -114,11 +114,11 @@ test("make firstResponder from other view, as keyPane", function() {
   
   equals(pane.get('firstResponder'), view0, 'should set firstResponder to view');
   
-  ok(view0.get('isFirstResponder'), 'should set view.isFirstResponder to YES');
+  ok(view0.get('isFirstResponder'), 'should set view.isFirstResponder to true');
   ok(view0.get('isKeyResponder'), 'should set view.isKeyResponder');
   
-  ok(!view1.get('isFirstResponder'), 'view1.isFirstResponder should now be set to NO');
-  ok(!view1.get('isKeyResponder'), 'view1.isFirstResponder should now be set to NO');
+  ok(!view1.get('isFirstResponder'), 'view1.isFirstResponder should now be set to false');
+  ok(!view1.get('isKeyResponder'), 'view1.isFirstResponder should now be set to false');
   
 });
 
@@ -129,8 +129,8 @@ test("makeFirstResponder(view) when view is already first responder", function()
   pane.becomeKeyPane();
   pane.makeFirstResponder(view0);
   equals(pane.get('firstResponder'), view0, 'precond - view0 is firstResponder');
-  ok(view0.get('isFirstResponder'), 'precond - view0.isFirstResponder should be YES');
-  ok(view0.get('isKeyResponder'), 'precond - view0.isFirstResponder should be YES');
+  ok(view0.get('isFirstResponder'), 'precond - view0.isFirstResponder should be true');
+  ok(view0.get('isKeyResponder'), 'precond - view0.isFirstResponder should be true');
   
   var callCount = 0 ;
   view0.didBecomeFirstResponder = view0.willLoseFirstResponder = 
@@ -142,7 +142,7 @@ test("makeFirstResponder(view) when view is already first responder", function()
   equals(callCount, 0, 'should invoke no FirstResponder + KeyResponder callbacks on view');
   
   equals(pane.get('firstResponder'), view0, 'should keep firstResponder to view');
-  ok(view0.get('isFirstResponder'), 'should keep view.isFirstResponder to YES');
+  ok(view0.get('isFirstResponder'), 'should keep view.isFirstResponder to true');
   ok(view0.get('isKeyResponder'), 'should keep view.isKeyResponder');
   
 });

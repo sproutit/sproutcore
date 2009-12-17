@@ -3,9 +3,8 @@
 // copyright 2006-2008 Sprout Systems, Inc.
 // ========================================================================
 
-"import package sproutcore/runtime";
-"import views/text_field";
-"export package";
+var SC = require('core');
+require('views/text_field');
 
 /**
   @class
@@ -72,7 +71,7 @@
   
   Note that it is possible an editor may not be able to commit editing 
   changes because either the delegate disallowed it or because its validator
-  failed.  In this case commitEditing() will return NO.  If you want to
+  failed.  In this case commitEditing() will return false.  If you want to
   end editing anyway, you can discard the editing changes instead by calling
   discardEditing().  This method will generally suceed unless your delegate
   refuses it as well.
@@ -97,7 +96,7 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.DelegateSupport,
     instance.
 
     @params options {Hash} hash of options for editing
-    @returns {Boolean} YES if editor began editing, NO if it failed.
+    @returns {Boolean} true if editor began editing, false if it failed.
   */
   beginEditing: function(options) {
     if (!options) return;
@@ -107,7 +106,7 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.DelegateSupport,
     // end existing editing if necessary
     this.beginPropertyChanges();
     if (this.get('isEditing') && !this.blurEditor()) {
-      this.endPropertyChanges();  return NO ;
+      this.endPropertyChanges();  return false ;
     }
 
     this._optframe = options.frame ;
@@ -121,20 +120,20 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.DelegateSupport,
     }
     
     this._originalValue = options.value || '' ;
-    this._multiline = (options.multiline !== undefined) ? options.multiline : NO ;
-    if (this._multiline) {
-      this.set('isTextArea', YES);
-    } else {
-      this.set('isTextArea', NO);
+    this._multiline = (options.multiline !== undefined) ? options.multiline : false ;
+    if(this._multiline){
+      this.set('isTextArea', true);
+    }else{
+    this.set('isTextArea', false);
     }
-    this._commitOnBlur =  (options.commitOnBlur !== undefined) ? options.commitOnBlur : YES ;
+    this._commitOnBlur =  (options.commitOnBlur !== undefined) ? options.commitOnBlur : true ;
 
     // set field values
     this.set('validator', options.validator) ;
     this.set('value', this._originalValue) ;
     //this.set('selectedRange', options.selectedRange || { start: this._originalValue.length, length: 0 }) ;
 
-    this.set('isEditing', YES) ;
+    this.set('isEditing', true) ;
     
     // add to window.
     
@@ -201,7 +200,7 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.DelegateSupport,
   */
   commitEditing: function() {
     // try to validate field.  If it fails, return false.  
-    if (!SC.$ok(this.validateSubmit())) return NO ;
+    if (!SC.$ok(this.validateSubmit())) return false ;
     return this._endEditing(this.get('value')) ;
   },
   
@@ -223,21 +222,21 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.DelegateSupport,
     @returns {Boolean}
   */
   blurEditor: function() {
-    if (!this.get('isEditing')) return YES ;
+    if (!this.get('isEditing')) return true ;
     return this._commitOnBlur ? this.commitEditing() : this.discardEditing();  
   },
   
   /** @private
     Called by commitEditing and discardEditing to actually end editing.
 
-    @returns {Boolean} NO if editing did not exit
+    @returns {Boolean} false if editing did not exit
   */
   _endEditing: function(finalValue) {
-    if (!this.get('isEditing')) return YES ;
+    if (!this.get('isEditing')) return true ;
     
     // get permission from the delegate.
     var del = this._delegate ;
-    if (!this.invokeDelegateMethod(del, 'inlineEditorShouldEndEditing', this, finalValue)) return NO ; 
+    if (!this.invokeDelegateMethod(del, 'inlineEditorShouldEndEditing', this, finalValue)) return false ; 
 
     // OK, we are allowed to end editing.  Notify delegate of final value
     // and clean up.
@@ -248,10 +247,10 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.DelegateSupport,
     
     // cleanup cached values
     this._originalValue = this._delegate = this._exampleElement =  this._optframe = this._className = null ;
-    this.set('isEditing', NO) ;
+    this.set('isEditing', false) ;
 
     // resign first responder if not done already.  This may call us in a 
-    // loop but since isEditing is already NO, nothing will happen.
+    // loop but since isEditing is already false, nothing will happen.
     if (this.get('isFirstResponder')) {
       var pane = this.get('pane');
       if (pane && this._previousFirstResponder) {
@@ -262,15 +261,15 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.DelegateSupport,
     
     if (this.get('parentNode')) this.removeFromParent() ;  
     
-    return YES ;
+    return true ;
   },
   
   /**
-    YES if the editor is currently visible and editing.
+    true if the editor is currently visible and editing.
   
     @property {Boolean}
   */
-  isEditing: NO,
+  isEditing: false,
   
   // TODO: make this function work for 1.0
   // /**
@@ -313,7 +312,7 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.DelegateSupport,
   keyDown: function(evt) {
     var ret = this.interpretKeyEvents(evt) ;
     this.fieldValueDidChange(true);
-    return !ret ? NO : ret ;
+    return !ret ? false : ret ;
   },
   
   /** @private */
@@ -351,7 +350,7 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.DelegateSupport,
   */
   cancel: function() { 
     this.discardEditing(); 
-    return YES;
+    return true;
   },
   
   // do it here instead of waiting on the binding to make sure the UI
@@ -381,7 +380,7 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.DelegateSupport,
       
       
       this.commitEditing() ;
-      return YES ;
+      return true ;
     }
   },
   
@@ -395,7 +394,7 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.DelegateSupport,
       var next = this._delegate.nextValidKeyView();
       if(next && next.beginEditing) next.beginEditing();
     }
-    return YES ;
+    return true ;
   },
 
   /** @private */
@@ -405,19 +404,19 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.DelegateSupport,
       var prev = this._delegate.previousValidKeyView();
       if(prev) prev.beginEditing();
     }
-    return YES ;
+    return true ;
   },
   
   /** @private */
   deleteForward: function(evt) {
     evt.allowDefault();
-    return YES;
+    return true;
   },
   
   /** @private */
   deleteBackward: function(evt) {
     evt.allowDefault();
-    return YES ;
+    return true ;
   }
   
 });
@@ -438,7 +437,7 @@ SC.InlineTextFieldView.mixin(
       view.  See class definition for options.
       
       @params options {Hash} hash of options for editing
-      @returns {Boolean} YES if editor began editing, NO if it failed.
+      @returns {Boolean} true if editor began editing, false if it failed.
   */
   beginEditing: function(options) {
     this._exampleElement = options.exampleElement ;
@@ -472,13 +471,13 @@ SC.InlineTextFieldView.mixin(
     If the inline editor is being used it will try to end the editing and
     close.  If the inline editor could not end for some reason (for example
     if the delegate did not allow the editing to end) then this method will
-    return NO.
+    return false.
     
-    @returns {Boolean} YES if the inline editor ended or no edit was in 
+    @returns {Boolean} true if the inline editor ended or no edit was in 
       progress.
   */
   commitEditing: function() {
-    return this.editor ? this.editor.commitEditing() : YES ;
+    return this.editor ? this.editor.commitEditing() : true ;
   },
 
   /** Discard the current value of the inline editor and exit edit mode.
@@ -486,12 +485,12 @@ SC.InlineTextFieldView.mixin(
     If the inline editor is in use, this method will try to end the editing,
     restoring the original value of the target view.  If the inline editor
     could not end for some reason (for example if the delegate did not 
-    allow editing to end) then this method will return NO.
+    allow editing to end) then this method will return false.
     
-    @returns {Boolean} YES if the inline editor ended or no edit was in progress.
+    @returns {Boolean} true if the inline editor ended or no edit was in progress.
   */
   discardEditing: function() {
-    return this.editor ? this.editor.discardEditing() : YES ;  
+    return this.editor ? this.editor.discardEditing() : true ;  
   },
   
   /** @private */

@@ -51,7 +51,7 @@ test("Test Asynchronous GET Request", function() {
 
 test("Test Synchronous GET Request", function() {
 
-  request.set("isAsynchronous", NO);  
+  request.set("isAsynchronous", false);  
   var response = request.send();
   
   ok(response !== null, 'send() should return response') ;
@@ -60,7 +60,7 @@ test("Test Synchronous GET Request", function() {
 });
 
 test("Test Asynchronous GET Request, auto-deserializing JSON", function() {
-  request.set("isJSON", YES);
+  request.set("isJSON", true);
 
 
   var timer;
@@ -84,7 +84,7 @@ test("Test Asynchronous GET Request, auto-deserializing JSON", function() {
 });
 
 test("Test auto-deserializing malformed JSON", function() {
-  request = SC.Request.getUrl(sc_static('malformed.json')).set('isJSON', YES);
+  request = SC.Request.getUrl(sc_static('malformed.json')).set('isJSON', true);
 
   var timer = setTimeout(function() {
     ok(false, 'response did not invoke notify()');

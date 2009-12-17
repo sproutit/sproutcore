@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('validators/validator') ;
+var SC = require('core');
+require('validators/validator');
 
 /** @class
   Validate a field value as a credit card number. 
@@ -60,7 +61,7 @@ SC.Validator.CreditCard = SC.Validator.extend(
   
   checkNumber: function(ccNumb) {
     
-    if (!ccNumb || ccNumb.length===0) return YES; // do not validate empty
+    if (!ccNumb || ccNumb.length===0) return true; // do not validate empty
     
     // remove any spaces or dashes
     ccNumb = ccNumb.replace(/[^0-9]/g,'');
@@ -72,7 +73,7 @@ SC.Validator.CreditCard = SC.Validator.extend(
     sCCN = sCCN.replace (/^\s+|\s+$/g,'');  // strip spaces
     var iTotal = 0;  // integer total set at zero
     var bNum = true;  // by default assume it is a number
-    var bResult = false;  // by default assume it is NOT a valid cc
+    var bResult = false;  // by default assume it is falseT a valid cc
     var temp;  // temp variable for parsing string
     var calc;  // used for calculation of each digit
 
@@ -82,7 +83,7 @@ SC.Validator.CreditCard = SC.Validator.extend(
       if (valid.indexOf(temp) == "-1"){bNum = false;}
     }
 
-    // if it is NOT a number, you can either alert to the fact, 
+    // if it is falseT a number, you can either alert to the fact, 
     // or just pass a failure
     if(!bNum) bResult = false;
 
@@ -115,7 +116,7 @@ SC.Validator.CreditCard = SC.Validator.extend(
       if ((iTotal%10)===0){  // check to see if the sum Mod 10 is zero
         bResult = true;  // This IS (or could be) a valid credit card number.
       } else {
-        bResult = false;  // This could NOT be a valid credit card number
+        bResult = false;  // This could falseT be a valid credit card number
         }
       }
     }

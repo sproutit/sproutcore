@@ -17,13 +17,13 @@ module("Timer.invalidate") ;
 */
 test("invalidate immediately should never execute", function() {
   
-  var fired = NO ;
+  var fired = false ;
   
   SC.RunLoop.begin() ;
   var start = SC.RunLoop.currentRunLoop.get('startTime') ;
   var t = SC.Timer.schedule({
     target: this,
-    action: function() { fired = YES ; },
+    action: function() { fired = true ; },
     interval: 100
   });
   t.invalidate() ;
@@ -31,7 +31,7 @@ test("invalidate immediately should never execute", function() {
   
   stop(2500) ; // stops the test runner, fails after 2500ms
   setTimeout(function() {
-    equals(NO, fired) ;
+    equals(false, fired) ;
     window.start() ; // starts the test runner
   }, 1500);
   

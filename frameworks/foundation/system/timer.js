@@ -4,6 +4,8 @@
 // Portions copyright ©2008 Apple Inc.  All rights reserved.
 // ========================================================================
 
+var SC = require('core');
+
 /**
   @class
 
@@ -58,14 +60,14 @@
   
   In addition to scheduling one time timers, you can also schedule timers to
   execute periodically until some termination date.  You make a timer
-  repeating by adding the repeats: YES property:
+  repeating by adding the repeats: true property:
   
   {{{
     var timer = SC.Timer.schedule({
       target: myObject, 
       action: 'updateAnimation', 
       interval: 100,
-      repeats: YES, 
+      repeats: true, 
       until: Time.now() + 1000
     }) ;
   }}}
@@ -86,12 +88,12 @@
   
   If you do not want to invalidate a timer completely but you just want to
   stop the timer from execution temporarily, you can alternatively set the
-  isPaused property to YES:
+  isPaused property to true:
   
   {{{
-    timer.set('isPaused', YES) ;
+    timer.set('isPaused', true) ;
     // Perform some critical function; timer will not execute
-    timer.set('isPaused', NO) ;
+    timer.set('isPaused', false) ;
   }}}
   
   When a timer is paused, it will be scheduled and will fire like normal, 
@@ -146,11 +148,11 @@ SC.Timer = SC.Object.extend(
   /**
     Set if the timer should be created from a memory pool.  Normally you will
     want to leave this set, but if you plan to use bindings or observers with
-    this timer, then you must set isPooled to NO to avoid reusing your timer.
+    this timer, then you must set isPooled to false to avoid reusing your timer.
     
     @property {Boolean}
   */
-  isPooled: NO,
+  isPooled: false,
   
   /**
     The time interval in milliseconds.
@@ -182,16 +184,16 @@ SC.Timer = SC.Object.extend(
   startTime: null,
   
   /**
-    YES if you want the timer to execute repeatedly.
+    true if you want the timer to execute repeatedly.
     
     @type {Boolean}
   */
-  repeats: NO,
+  repeats: false,
   
   /**
     Last date when the timer will execute.
     
-    If you have set repeats to YES, then you can also set this property to
+    If you have set repeats to true, then you can also set this property to
     have the timer automatically stop executing past a certain date.
     
     This property should contain an offset value like startOffset.  However if
@@ -206,7 +208,7 @@ SC.Timer = SC.Object.extend(
   until: null,
   
   /**
-    Set to YES to pause the timer.
+    Set to true to pause the timer.
     
     Pausing a timer does not remove it from the run loop, but it will 
     temporarily suspend it from firing.  You should use this property if
@@ -218,24 +220,24 @@ SC.Timer = SC.Object.extend(
     
     @type {Boolean}
   */
-  isPaused: NO,
+  isPaused: false,
 
   /**
-    YES onces the timer has been scheduled for the first time.
+    true onces the timer has been scheduled for the first time.
   */
-  isScheduled: NO,
+  isScheduled: false,
   
   /**
-    YES if the timer can still execute.
+    true if the timer can still execute.
     
-    This read only property will return YES as long as the timer may possibly
+    This read only property will return true as long as the timer may possibly
     fire again in the future.  Once a timer has become invalid, it cannot 
     become valid again. 
     
     @field
     @type {Boolean}
   */
-  isValid: YES,
+  isValid: true,
   
   /**
     Set to the current time when the timer last fired.  Used to find the 
@@ -305,7 +307,7 @@ SC.Timer = SC.Object.extend(
     // fire time.  The first time lastFireTime is 0, so this will always go.
     var next = this.get('fireTime'), last = this.get('lastFireTime');
     if (next >= last) {
-      this.set('isScheduled', YES);
+      this.set('isScheduled', true);
       SC.RunLoop.currentRunLoop.scheduleTimer(this, next);
     }
     
@@ -321,7 +323,7 @@ SC.Timer = SC.Object.extend(
   */
   invalidate: function() {
     this.beginPropertyChanges();
-    this.set('isValid', NO);
+    this.set('isValid', false);
     SC.RunLoop.currentRunLoop.cancelTimer(this);
     this.action = this.target = null ; // avoid memory leaks
     this.endPropertyChanges();
@@ -408,8 +410,8 @@ SC.Timer = SC.Object.extend(
   /** @private - Default values to reset reused timers to. */
   RESET_DEFAULTS: {
     target: null, action: null, 
-    isPooled: NO, isPaused: NO, isScheduled: NO, isValid: YES,
-    interval: 0, repeats: NO, until: null,
+    isPooled: false, isPaused: false, isScheduled: false, isValid: true,
+    interval: 0, repeats: false, until: null,
     startTime: null, lastFireTime: 0
   },
   
@@ -507,7 +509,7 @@ SC.Timer = SC.Object.extend(
   Created a new timer with the passed properties and schedules it to 
   execute.  This is the same as calling SC.Time.create({ props }).schedule().
   
-  Note that unless you explicitly set isPooled to NO, this timer will be 
+  Note that unless you explicitly set isPooled to false, this timer will be 
   pulled from a shared memory pool of timers.  You cannot using bindings or
   observers on these timers as they may be reused for future timers at any
   time.
@@ -539,7 +541,7 @@ SC.Timer.timerFromPool = function(props) {
 
 /** 
   Returns a timer instance to the timer pool for later use.  This is done
-  automatically when a timer is invalidated if isPooled is YES.
+  automatically when a timer is invalidated if isPooled is true.
 */
 SC.Timer.returnTimerToPool = function(timer) {
   if (!this._timerPool) this._timerPool = [];

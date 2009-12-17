@@ -32,10 +32,10 @@ module("SC.ArrayController - null_case", {
 });
 
 test("state properties", function() {
-  equals(controller.get("hasContent"), NO, 'c.hasContent');
-  equals(controller.get("canRemoveContent"), NO, "c.canRemoveContent");
-  equals(controller.get("canReorderContent"), NO, "c.canReorderContent");
-  equals(controller.get("canAddContent"), NO, "c.canAddContent");
+  equals(controller.get("hasContent"), false, 'c.hasContent');
+  equals(controller.get("canRemoveContent"), false, "c.canRemoveContent");
+  equals(controller.get("canReorderContent"), false, "c.canReorderContent");
+  equals(controller.get("canAddContent"), false, "c.canAddContent");
 });
 
 test("addObject", function() {

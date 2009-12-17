@@ -5,10 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"require license";
-"import package sproutcore/runtime";
-"import mixins/string";
-"export package";
+var SC = require('index', 'sproutcore/runtime');
+require('mixins/string');
 
 /**
   Indicates that the collection view expects to accept a drop ON the specified
@@ -153,3 +151,5 @@ SC.mixin(Function.prototype, /** @scope Function.prototype */ {
   }    
 
 });
+
+exports = module.exports = SC; // same as sproutcore/runtime

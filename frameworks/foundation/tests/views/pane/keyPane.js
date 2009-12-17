@@ -35,16 +35,16 @@ test("should become keyPane if not already keyPane", function() {
   
   pane.becomeKeyPane();
   equals(r.get('keyPane'), pane, 'pane should be keyPane');
-  equals(pane.get('isKeyPane'), YES, 'isKeyPane should be set to YES');
+  equals(pane.get('isKeyPane'), true, 'isKeyPane should be set to true');
 });
 
-test("should do nothing if acceptsKeyPane is NO", function() {
+test("should do nothing if acceptsKeyPane is false", function() {
   ok(r.get('keyPane') !== pane, 'precond - pane is not currently key');
   
-  pane.acceptsKeyPane = NO ;
+  pane.acceptsKeyPane = false ;
   pane.becomeKeyPane();
   ok(r.get('keyPane') !== pane, 'pane should not be keyPane');
-  equals(pane.get('isKeyPane'), NO, 'isKeyPane should be NO');
+  equals(pane.get('isKeyPane'), false, 'isKeyPane should be false');
 });
 
 test("should invoke willBecomeKeyPane & didBecomeKeyPane", function() {
@@ -66,12 +66,12 @@ test("should invoke callbacks and update isKeyResponder state on firstResponder"
   view.willBecomeKeyResponderFrom = view.didBecomeKeyResponderFrom = 
     function() { callCount++; };
   
-  equals(view.get('isKeyResponder'), NO, 'precond - view is not keyResponder');
-  equals(view.get('isFirstResponder'), YES, 'precond - view is firstResponder');
+  equals(view.get('isKeyResponder'), false, 'precond - view is not keyResponder');
+  equals(view.get('isFirstResponder'), true, 'precond - view is firstResponder');
   
   pane.becomeKeyPane();
   equals(callCount, 2, 'should invoke both callbacks');
-  equals(view.get('isKeyResponder'), YES, 'should be keyResponder');
+  equals(view.get('isKeyResponder'), true, 'should be keyResponder');
 });
 
 // ..........................................................
@@ -84,20 +84,20 @@ test("should resign keyPane if keyPane", function() {
   ok(r.get('keyPane') === pane, 'precond - pane is currently key');
   
   pane.resignKeyPane();
-  ok(r.get('keyPane') !== pane, 'pane should NOT be keyPane');
-  equals(pane.get('isKeyPane'), NO, 'isKeyPane should be set to NO');
+  ok(r.get('keyPane') !== pane, 'pane should falseT be keyPane');
+  equals(pane.get('isKeyPane'), false, 'isKeyPane should be set to false');
 });
 
 // technically this shouldn't happen, but someone could screw up and change 
-// acceptsKeyPane to NO once the pane has already become key
-test("should still resign if acceptsKeyPane is NO", function() {
+// acceptsKeyPane to false once the pane has already become key
+test("should still resign if acceptsKeyPane is false", function() {
   pane.becomeKeyPane();
   ok(r.get('keyPane') === pane, 'precond - pane is currently key');
   
-  pane.acceptsKeyPane = NO ;
+  pane.acceptsKeyPane = false ;
   pane.resignKeyPane();
-  ok(r.get('keyPane') !== pane, 'pane should NOT be keyPane');
-  equals(pane.get('isKeyPane'), NO, 'isKeyPane should be set to NO');
+  ok(r.get('keyPane') !== pane, 'pane should falseT be keyPane');
+  equals(pane.get('isKeyPane'), false, 'isKeyPane should be set to false');
 });
 
 test("should invoke willLoseKeyPaneTo & didLoseKeyPaneTo", function() {
@@ -123,11 +123,11 @@ test("should invoke callbacks and update isKeyResponder state on firstResponder"
     function() { callCount++; };
   
   pane.becomeKeyPane();
-  equals(view.get('isKeyResponder'), YES, 'precond - view is keyResponder');
-  equals(view.get('isFirstResponder'), YES, 'precond - view is firstResponder');
+  equals(view.get('isKeyResponder'), true, 'precond - view is keyResponder');
+  equals(view.get('isFirstResponder'), true, 'precond - view is firstResponder');
   
   pane.resignKeyPane();
   equals(callCount, 2, 'should invoke both callbacks');
-  equals(view.get('isKeyResponder'), NO, 'should be keyResponder');
+  equals(view.get('isKeyResponder'), false, 'should be keyResponder');
 });
 

@@ -5,8 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"export package";
+var SC = require('core');
 
 /**
   @namespace
@@ -46,7 +45,7 @@ SC.Validatable = {
   errorLabel: null,
 
   /**
-    YES if the receiver is currently valid.
+    true if the receiver is currently valid.
     
     This property watches the value property by default.  You can override
     this property if you want to use some other method to calculate the
@@ -70,12 +69,12 @@ SC.Validatable = {
   /**
     Attempts to validate the receiver. 
     
-    Runs the validator and returns SC.VALIDATE_OK, SC.VALIDATE_NO_CHANGE,
+    Runs the validator and returns SC.VALIDATE_OK, SC.VALIDATE_false_CHANGE,
     or an error object.  If no validator is installed, this method will
     always return SC.VALIDATE_OK.
 
-    @param {Boolean} partialChange YES if this is a partial edit.
-    @returns {String} SC.VALIDATE_OK, error, or SC.VALIDATE_NO_CHANGE
+    @param {Boolean} partialChange true if this is a partial edit.
+    @returns {String} SC.VALIDATE_OK, error, or SC.VALIDATE_false_CHANGE
   */
   performValidate: function(partialChange) {
     var ret = SC.VALIDATE_OK ;
@@ -85,11 +84,11 @@ SC.Validatable = {
       if (partialChange) {
         ret = this._validator.validatePartial(form,this) ;
 
-        // if the partial returned NO_CHANGE, then check to see if the 
+        // if the partial returned false_CHANGE, then check to see if the 
         // field is valid anyway.  If it is not valid, then don't update the
         // value.  This way the user can have partially constructed values 
         // without the validator trying to convert it to an object.
-        if ((ret == SC.VALIDATE_NO_CHANGE) && (this._validator.validateChange(form, this) == SC.VALIDATE_OK)) {
+        if ((ret == SC.VALIDATE_false_CHANGE) && (this._validator.validateChange(form, this) == SC.VALIDATE_OK)) {
           ret = SC.VALIDATE_OK; 
         }
       } else ret = this._validator.validateChange(form, this) ;
@@ -109,8 +108,8 @@ SC.Validatable = {
   },
   
   /**
-    Runs a keypress validation.  Returns YES if the keypress should be 
-    allowed, NO otherwise.  If no validator is defined, always returns YES.
+    Runs a keypress validation.  Returns true if the keypress should be 
+    allowed, false otherwise.  If no validator is defined, always returns true.
     
     @param {String} charStr the key string
     @returns {Boolean}
@@ -118,8 +117,8 @@ SC.Validatable = {
   performValidateKeyDown: function(evt) {
     // ignore anything with ctrl or meta key press
     var charStr = evt.getCharString();
-    if (!charStr) return YES ;
-    return this._validator ? this._validator.validateKeyDown(this.get('ownerForm'), this, charStr) : YES;
+    if (!charStr) return true ;
+    return this._validator ? this._validator.validateKeyDown(this.get('ownerForm'), this, charStr) : true;
   },
   
   /**

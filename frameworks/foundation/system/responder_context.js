@@ -5,10 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import core";
-"import system/responder";
-"export package";
+var SC = require('core');
+require('system/responder');
 
 /** @class
 
@@ -33,14 +31,14 @@ SC.ResponderContext = SC.Responder.extend({
   // PROPERTIES
   // 
   
-  isResponderContext: YES,
+  isResponderContext: true,
   
   /** @property
   
-    When set to YES, logs tracing information about all actions sent and 
+    When set to true, logs tracing information about all actions sent and 
     responder changes.
   */
-  trace: NO,
+  trace: false,
   
   /** @property
     The default responder.  Set this to point to a responder object that can 
@@ -142,9 +140,9 @@ SC.ResponderContext = SC.Responder.extend({
       console.log('%@: makeFirstResponder => %@'.fmt(this, this.responderNameFor(responder)));
     }
     
-    responder.set("becomingFirstResponder", YES);
+    responder.set("becomingFirstResponder", true);
     
-    this._locked = YES;
+    this._locked = true;
     this._pendingResponder = null;
     
     // Find the nearest common responder in the responder chain for the new
@@ -159,7 +157,7 @@ SC.ResponderContext = SC.Responder.extend({
     
     // Cleanup old first responder
     this._notifyWillLoseFirstResponder(current, current, common);
-    if (current) current.set('isFirstResponder', NO);
+    if (current) current.set('isFirstResponder', false);
 
     // Set new first responder.  If new firstResponder does not have its 
     // responderContext property set, then set it.
@@ -168,14 +166,14 @@ SC.ResponderContext = SC.Responder.extend({
     this.beginPropertyChanges();
     
     this.set('firstResponder', responder) ;
-    if (responder) responder.set('isFirstResponder', YES);
+    if (responder) responder.set('isFirstResponder', true);
     
     this._notifyDidBecomeFirstResponder(responder, responder, common);
     
     // now, tell everyone the good news!
     this.endPropertyChanges();
     
-    this._locked = NO ;
+    this._locked = false ;
     if (this._pendingResponder) {
       this.makeFirstResponder(this._pendingResponder);
       this._pendingResponder = null;
@@ -190,7 +188,7 @@ SC.ResponderContext = SC.Responder.extend({
     if (cur === root) return ; // nothing to do
 
     cur.willLoseFirstResponder(responder);  
-    cur.set('hasFirstResponder', NO);
+    cur.set('hasFirstResponder', false);
 
     var next = this.nextResponderFor(cur);
     if (next) this._notifyWillLoseFirstResponder(responder, next, root);
@@ -202,14 +200,14 @@ SC.ResponderContext = SC.Responder.extend({
     var next = this.nextResponderFor(cur);
     if (next) this._notifyDidBecomeFirstResponder(responder, next, root);
     
-    cur.set('hasFirstResponder', YES);
+    cur.set('hasFirstResponder', true);
     cur.didBecomeFirstResponder(responder);  
   },
   
   /**
     Send the passed action down the responder chain, starting with the 
     current first responder.  This will look for the first responder that 
-    actually implements the action method and returns YES or no value when 
+    actually implements the action method and returns true or no value when 
     called.
     
     @param {String} action name of action
@@ -221,10 +219,10 @@ SC.ResponderContext = SC.Responder.extend({
     var working = this.get('firstResponder'),
         last    = this.get('nextResponder'),
         trace   = this.get('trace'),
-        handled = NO,
+        handled = false,
         responder;
 
-    this._locked = YES;
+    this._locked = true;
     if (trace) {
       console.log("%@: begin action '%@' (%@, %@)".fmt(this, action, sender, context));
     }
@@ -240,11 +238,11 @@ SC.ResponderContext = SC.Responder.extend({
     }
 
     if (trace) {
-      if (!handled) console.log("%@:  action '%@' NOT HANDLED".fmt(this,action));
+      if (!handled) console.log("%@:  action '%@' falseT HANDLED".fmt(this,action));
       else console.log("%@: action '%@' handled by %@".fmt(this, action, this.responderNameFor(working)));
     }
     
-    this._locked = NO ;
+    this._locked = false ;
     
     if (responder = this._pendingResponder) {
       this._pendingResponder= null ;

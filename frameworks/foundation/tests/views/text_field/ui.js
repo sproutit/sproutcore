@@ -21,39 +21,39 @@
   .add("disabled - empty", SC.TextFieldView, { 
     hint: "Full Name", 
     value: null,
-    isEnabled: NO
+    isEnabled: false
   })
   
   .add("disabled - with value", SC.TextFieldView, { 
     hint: "Full Name", 
     value: 'John Doe',
-    isEnabled: NO
+    isEnabled: false
   })
   
   .add("textarea - empty", SC.TextFieldView, { 
     hint: "Full Name", 
     value: '',
-    isTextArea: YES
+    isTextArea: true
   })
   
   .add("textarea - with value", SC.TextFieldView, { 
     hint: "Full Name", 
     value: 'John Doe',
-    isTextArea: YES
+    isTextArea: true
   })
   
   .add("textarea - disabled - empty", SC.TextFieldView, { 
     hint: "Full Name", 
     value: '',
-    isTextArea: YES,
-    isEnabled: NO
+    isTextArea: true,
+    isEnabled: false
   })
   
   .add("textarea - disabled - with value", SC.TextFieldView, { 
     hint: "Full Name", 
     value: 'John Doe',
-    isTextArea: YES,
-    isEnabled: NO
+    isTextArea: true,
+    isEnabled: false
   });
   
   
@@ -114,49 +114,49 @@ module('SC.TextFieldView ui', pane.standardSetup());
 test("empty", function() {
    var view = pane.view('empty');
    pane.verifyEmpty(view, 'Full Name');
-   pane.verifyDisabled(view, NO);
+   pane.verifyDisabled(view, false);
 });
 
 test("with value", function() {
   var view = pane.view('with value');
   pane.verifyNotEmpty(view, 'John Doe', 'Full Name');
-  pane.verifyDisabled(view, NO);
+  pane.verifyDisabled(view, false);
 });
 
 test("disabled - empty", function() {
   var view = pane.view('disabled - empty');
   pane.verifyEmpty(view, 'Full Name');
-  pane.verifyDisabled(view, YES);
+  pane.verifyDisabled(view, true);
 });
 
 test("disabled - with value", function() {
   var view = pane.view('disabled - with value');
   pane.verifyNotEmpty(view, 'John Doe', 'Full Name');
-  pane.verifyDisabled(view, YES);
+  pane.verifyDisabled(view, true);
 });
 
 test("textarea - empty", function() {
    var view = pane.view('empty');
    pane.verifyEmpty(view, 'Full Name');
-   pane.verifyDisabled(view, NO);
+   pane.verifyDisabled(view, false);
 });
 
 test("textarea - with value", function() {
   var view = pane.view('with value');
   pane.verifyNotEmpty(view, 'John Doe', 'Full Name');
-  pane.verifyDisabled(view, NO);
+  pane.verifyDisabled(view, false);
 });
 
 test("textarea - disabled - empty", function() {
   var view = pane.view('disabled - empty');
   pane.verifyEmpty(view, 'Full Name');
-  pane.verifyDisabled(view, YES);
+  pane.verifyDisabled(view, true);
 });
 
 test("textarea - disabled - with value", function() {
   var view = pane.view('disabled - with value');
   pane.verifyNotEmpty(view, 'John Doe', 'Full Name');
-  pane.verifyDisabled(view, YES);
+  pane.verifyDisabled(view, true);
 });
 
 // ..........................................................
@@ -178,9 +178,9 @@ test("disabling view", function() {
   
   // test changing enabled state updates like it should
   SC.RunLoop.begin();
-  view.set('isEnabled', NO);
+  view.set('isEnabled', false);
   SC.RunLoop.end();
-  pane.verifyDisabled(view, YES);
+  pane.verifyDisabled(view, true);
 });
 
 test("changing value to null", function() {
@@ -199,9 +199,9 @@ test("enabling disabled view", function() {
 
   // test changing enabled state updates like it should
   SC.RunLoop.begin();
-  view.set('isEnabled', YES);
+  view.set('isEnabled', true);
   SC.RunLoop.end();
-  pane.verifyDisabled(view, NO);
+  pane.verifyDisabled(view, false);
 });
 
 // ..........................................................
@@ -392,7 +392,7 @@ test("focus and blurring text field", function() {
   SC.Event.trigger(input, 'focus');
   
   // verify editing state changed...
-  ok(view.get('isEditing'), 'view.isEditing should be YES');
+  ok(view.get('isEditing'), 'view.isEditing should be true');
   ok(view.$().hasClass('focus'), 'view layer should have focus class');
   
   // simulate typing a letter
@@ -414,8 +414,8 @@ test("focus and blurring text field", function() {
     SC.Event.trigger(input, 'blur');
 
     // verify editing state changed...
-    ok(!view.get('isEditing'), 'view.isEditing should be NO');
-    ok(!view.$().hasClass('focus'), 'view layer should NOT have focus class');
+    ok(!view.get('isEditing'), 'view.isEditing should be false');
+    ok(!view.$().hasClass('focus'), 'view layer should falseT have focus class');
   }, 100);  
   
 });

@@ -5,9 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import panes/pane";
-"export package";
+var SC = require('core');
+require('panes/pane');
 
 /** @class
 
@@ -45,7 +44,7 @@ SC.MainPane = SC.Pane.extend({
   },
   
   /** @private */
-  acceptsKeyPane: YES,
+  acceptsKeyPane: true,
 
   /** @private */
   classNames: ['sc-main']

@@ -23,7 +23,7 @@ module("SC.ArrayController - single_case - SINGLE", {
   setup: function() {
     content = TestObject.create({ title: "FOO" });
     controller = SC.ArrayController.create({ 
-      content: content, allowsSingleContent: YES
+      content: content, allowsSingleContent: true
     });
   },
   
@@ -33,10 +33,10 @@ module("SC.ArrayController - single_case - SINGLE", {
 });
 
 test("state properties", function() {
-  equals(controller.get("hasContent"), YES, 'c.hasContent');
-  equals(controller.get("canRemoveContent"), YES, "c.canRemoveContent");
-  equals(controller.get("canReorderContent"), NO, "c.canReorderContent");
-  equals(controller.get("canAddContent"), NO, "c.canAddContent");
+  equals(controller.get("hasContent"), true, 'c.hasContent');
+  equals(controller.get("canRemoveContent"), true, "c.canRemoveContent");
+  equals(controller.get("canReorderContent"), false, "c.canReorderContent");
+  equals(controller.get("canAddContent"), false, "c.canAddContent");
 });
 
 // addObject should append to end of array + notify observers on Array itself
@@ -48,7 +48,7 @@ test("addObject", function() {
 
 test("removeObject - no destroyOnRemoval", function() {
   var callCount = 0;
-  controller.set('destroyOnRemoval', NO);
+  controller.set('destroyOnRemoval', false);
   controller.addObserver('[]', function() { callCount++; });
   
   controller.removeObject(content);
@@ -56,13 +56,13 @@ test("removeObject - no destroyOnRemoval", function() {
   equals(controller.get('content'), null, 'removeObject(content) should set content to null');
   equals(callCount, 1, 'should notify observer since content did not change');
   equals(controller.get('length'), 0, 'should now have length of 0');
-  equals(content.isDestroyed, NO, 'content.isDestroyed should be destroyed');
+  equals(content.isDestroyed, false, 'content.isDestroyed should be destroyed');
 });
 
 test("removeObject - destroyOnRemoval", function() {
-  controller.set('destroyOnRemoval', YES);
+  controller.set('destroyOnRemoval', true);
   SC.run(function() { controller.removeObject(content); });
-  equals(content.isDestroyed, YES, 'content.isDestroyed should be destroyed');
+  equals(content.isDestroyed, true, 'content.isDestroyed should be destroyed');
 });
 
 
@@ -83,14 +83,14 @@ test("arrangedObjects", function() {
 
 
 // ..........................................................
-// allowsSingleContent=NO
+// allowsSingleContent=false
 // 
 
-module("SC.ArrayController - single_case - allowsSingleContent=NO", {
+module("SC.ArrayController - single_case - allowsSingleContent=false", {
   setup: function() {
     content = TestObject.create({ title: "FOO" });
     controller = SC.ArrayController.create({ 
-      content: content, allowsSingleContent: NO
+      content: content, allowsSingleContent: false
     });
   },
   
@@ -100,10 +100,10 @@ module("SC.ArrayController - single_case - allowsSingleContent=NO", {
 });
 
 test("state properties", function() {
-  equals(controller.get("hasContent"), NO, 'c.hasContent');
-  equals(controller.get("canRemoveContent"), NO, "c.canRemoveContent");
-  equals(controller.get("canReorderContent"), NO, "c.canReorderContent");
-  equals(controller.get("canAddContent"), NO, "c.canAddContent");
+  equals(controller.get("hasContent"), false, 'c.hasContent');
+  equals(controller.get("canRemoveContent"), false, "c.canRemoveContent");
+  equals(controller.get("canReorderContent"), false, "c.canReorderContent");
+  equals(controller.get("canAddContent"), false, "c.canAddContent");
 });
 
 // addObject should append to end of array + notify observers on Array itself

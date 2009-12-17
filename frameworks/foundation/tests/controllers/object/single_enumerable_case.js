@@ -17,7 +17,7 @@ module("SC.ObjectController - single_enumerable_case - OBSERVABLE OBJECT", {
     content    = SC.Set.create().add(src); // use generic enumerable
     controller = SC.ObjectController.create({ 
       content: content,
-      allowsMultipleContent: NO 
+      allowsMultipleContent: false 
     });
   },
   
@@ -73,27 +73,27 @@ test("changing the content from one to another", function() {
   callCount = 0;
   content.set("foo", "BAR");
   equals(controller.get("foo"), "EDIT", "controller.get(foo) after edit of non-content object should not change value");
-  equals(callCount, 0, 'observer on controller should NOT have fired');
+  equals(callCount, 0, 'observer on controller should falseT have fired');
 });
 
 test("hasContent", function() {
-  equals(controller.get("hasContent"), YES, 'should have content');
+  equals(controller.get("hasContent"), true, 'should have content');
   
   var callCount = 0;
   controller.addObserver("hasContent", function() { callCount++; });
   
   controller.set("content", null);
-  equals(controller.get("hasContent"), NO, "hasContent should == NO after setting to null");
+  equals(controller.get("hasContent"), false, "hasContent should == false after setting to null");
   ok(callCount > 0, 'hasContent observer should fire when setting to null');
   
   callCount = 0;
   controller.set("content", content);
-  equals(controller.get("hasContent"), YES, "hasContent should == YES after setting back to content");
+  equals(controller.get("hasContent"), true, "hasContent should == true after setting back to content");
   ok(callCount > 0, "hasContent observer should fire");
 });
 
 // ..........................................................
-// SINGLE OBSERVABLE OBJECT WITH ALLOWS MULTIPLE YES
+// SINGLE OBSERVABLE OBJECT WITH ALLOWS MULTIPLE true
 // 
 
 module("SC.ObjectController - single_enumerable_case - ALLOWS MULTIPLE", {
@@ -102,7 +102,7 @@ module("SC.ObjectController - single_enumerable_case - ALLOWS MULTIPLE", {
     content    = SC.Set.create().add(src); // use generic enumerable
     controller = SC.ObjectController.create({ 
       content: content,
-      allowsMultipleContent: YES 
+      allowsMultipleContent: true 
     });
   },
   
@@ -158,22 +158,22 @@ test("changing the content from one to another", function() {
   callCount = 0;
   content.set("foo", "BAR");
   equals(controller.get("foo"), "EDIT", "controller.get(foo) after edit of non-content object should not change value");
-  equals(callCount, 0, 'observer on controller should NOT have fired');
+  equals(callCount, 0, 'observer on controller should falseT have fired');
 });
 
 test("hasContent", function() {
-  equals(controller.get("hasContent"), YES, 'should have content');
+  equals(controller.get("hasContent"), true, 'should have content');
   
   var callCount = 0;
   controller.addObserver("hasContent", function() { callCount++; });
   
   controller.set("content", null);
-  equals(controller.get("hasContent"), NO, "hasContent should == NO after setting to null");
+  equals(controller.get("hasContent"), false, "hasContent should == false after setting to null");
   ok(callCount > 0, 'hasContent observer should fire when setting to null');
   
   callCount = 0;
   controller.set("content", content);
-  equals(controller.get("hasContent"), YES, "hasContent should == YES after setting back to content");
+  equals(controller.get("hasContent"), true, "hasContent should == true after setting back to content");
   ok(callCount > 0, "hasContent observer should fire");
 });
 

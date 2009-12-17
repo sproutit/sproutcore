@@ -71,7 +71,7 @@ test("generated layer include HTML from child views as well", function() {
   ok(Q$('#foo', v.get('layer')).get(0), 'has element with child layerId');
 });
 
-test("does NOT assign layer to child views immediately", function() {
+test("does falseT assign layer to child views immediately", function() {
   var v = SC.View.create({
     childViews: [ SC.View.extend({ layerId: "foo" })]
   });
@@ -83,7 +83,7 @@ test("does NOT assign layer to child views immediately", function() {
 // USE CASES
 // 
 
-// when view is first created, createLayer is NOT called
+// when view is first created, createLayer is falseT called
 
 // when view is added to parent view, and parent view is already visible in
 // window, layer is created just before adding it to the DOM
@@ -92,6 +92,6 @@ test("does NOT assign layer to child views immediately", function() {
 
 // when a pane with an exiting layer is removed from the DOM, the layer is removed from the DOM, but it is not destroyed.
 
-// what if we move a view from a parentView that has a layer to a parentView that does NOT have a layer.   Delete layer.
+// what if we move a view from a parentView that has a layer to a parentView that does falseT have a layer.   Delete layer.
 
-// what if a move a view from a parentView that does NOT have a layer to a parentView that DOES have a layer.
+// what if a move a view from a parentView that does falseT have a layer to a parentView that DOES have a layer.

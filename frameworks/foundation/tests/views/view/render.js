@@ -11,7 +11,7 @@
 //
 module("SC.View#render");
 
-test("default implementation invokes renderChildViews if firstTime = YES", function() {
+test("default implementation invokes renderChildViews if firstTime = true", function() {
 
 	var runCount = 0, curContext, curFirstTime;
 	var view = SC.View.create({
@@ -22,18 +22,18 @@ test("default implementation invokes renderChildViews if firstTime = YES", funct
 		}
 	});
 	
-	// VERIFY firstTime = YES
+	// VERIFY firstTime = true
 	curContext = view.renderContext();
-	curFirstTime = YES ;
+	curFirstTime = true ;
 	view.render(curContext, curFirstTime);
 	equals(runCount, 1, 'did invoke renderChildViews()');
 
-	// VERIFY firstTime = NO
+	// VERIFY firstTime = false
 	runCount = 0 ;
 	curContext = view.renderContext();
-	curFirstTime = NO ;
+	curFirstTime = false ;
 	view.render(curContext, curFirstTime);
-	equals(runCount, 0, 'did NOT invoke renderChildViews()');
+	equals(runCount, 0, 'did falseT invoke renderChildViews()');
 		
 });
   
@@ -66,17 +66,17 @@ test("creates a context and then invokes prepareContext on each childView", func
 		]
 	});
 
-	// VERIFY: firstTime= YES 	
+	// VERIFY: firstTime= true 	
 	curContext = view.renderContext('div');
-	curFirstTime= YES ;
+	curFirstTime= true ;
 	equals(view.renderChildViews(curContext, curFirstTime), curContext, 'returns context');
 	equals(runCount, 3, 'prepareContext() invoked for each child view');
 	
 
-	// VERIFY: firstTime= NO 	
+	// VERIFY: firstTime= false 	
 	runCount = 0 ; //reset
 	curContext = view.renderContext('div');
-	curFirstTime= NO ;
+	curFirstTime= false ;
 	equals(view.renderChildViews(curContext, curFirstTime), curContext, 'returns context');
 	equals(runCount, 3, 'prepareContext() invoked for each child view');
 

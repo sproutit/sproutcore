@@ -4,6 +4,8 @@
 // Portions copyright ©2008 Apple Inc.  All rights reserved.
 // ========================================================================
 
+var SC = require('core');
+
 /**
   The time library provides a common way for working with time offsets.
 
@@ -18,7 +20,7 @@
   t = SC.time(123).month(3) ;
 */
 SC.time = function(timeoffset) {
-  var ret = SC.beget(fn) ;
+  var ret = SC.beget(this.fn) ;
   ret.value = timeOffset ;
   return ret ;
 } ;
@@ -137,7 +139,7 @@ SC.time.fn = {
 // Second       | ss (2 digits)      | s (1 or 2 digits)
 // AM/PM        | a                  |
 //
-// NOTE THE DIFFERENCE BETWEEN MM and mm! Month=MM, not mm!
+// falseTE THE DIFFERENCE BETWEEN MM and mm! Month=MM, not mm!
 // Examples:
 //  "MMM d, y" matches: January 01, 2000
 //                      Dec 1, 1900
@@ -171,7 +173,7 @@ SC.mixin(Date,{
   // Returns true if date string matches format of format string and
   // is a valid date. Else returns false.
   // It is recommended that you trim whitespace around the value before
-  // passing it to this function, as whitespace is NOT ignored!
+  // passing it to this function, as whitespace is falseT ignored!
   // ------------------------------------------------------------------
   isDate: function(val,format) {
   	var date = Date.getDateFromFormat(val,format);

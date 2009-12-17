@@ -5,11 +5,9 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import core";
-"import mixins/tree_item_content";
-"import mixins/collection_content";
-"export package";
+var SC = require('core');
+require('mixins/tree_item_content');
+require('mixins/collection_content');
 
 
 /** 
@@ -127,7 +125,7 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
       for(idx=0;idx<len;idx++) {
         if (!(item = children.objectAt(idx))) continue ;
         if (!this._computeChildren(item, pitem, idx)) continue; // no chil'en
-        if (this._computeDisclosureState(item, pitem, idx) !== SC.LEAF_NODE) {
+        if (this._computeDisclosureState(item, pitem, idx) !== SC.LEAF_falseDE) {
           ret.add(idx);
         }
       }
@@ -137,8 +135,8 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
   }.property('children').cacheable(),
   
   /**
-    Returns YES if the item itself should be shown, NO if only its children
-    should be shown.  Normally returns YES unless the parentObject is null.
+    Returns true if the item itself should be shown, false if only its children
+    should be shown.  Normally returns true unless the parentObject is null.
   */
   isHeaderVisible: function() {
     return !!this.get('parentObserver');
@@ -324,7 +322,7 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
     this.invalidateBranchObserversAt(start);
     this._objectAtCache = this._outlineLevelCache = null;
     this._disclosureStateCache = null;
-    this._contentGroupIndexes = NO;
+    this._contentGroupIndexes = false;
     this.notifyPropertyChange('branchIndexes');
     
     var oldlen = this.get('length'),
@@ -384,7 +382,7 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
   // SC.COLLECTION CONTENT SUPPORT
   // 
 
-  _contentGroupIndexes: NO,
+  _contentGroupIndexes: false,
   
   /**
     Called by the collection view to return any group indexes.  The default 
@@ -395,7 +393,7 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
     if (content !== this) return null; // only care about receiver
 
     var ret = this._contentGroupIndexes;
-    if (ret !== NO) return ret ;
+    if (ret !== false) return ret ;
     
     // if this is not the root item, never do grouping
     if (this.get('parentObserver')) return null;
@@ -434,7 +432,7 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
   
   contentIndexIsGroup: function(view, content, idx) {
     var indexes = this.contentGroupIndexes(view, content);
-    return indexes ? indexes.contains(idx) : NO ;
+    return indexes ? indexes.contains(idx) : false ;
   },
   
   /**
@@ -501,7 +499,7 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
         ret   = null,
         indexes, children, observer;
     
-    if (index >= len) return SC.LEAF_NODE;
+    if (index >= len) return SC.LEAF_falseDE;
      
     if (this.get('isHeaderVisible')) {
       if (index === 0) return cache[0] = this.get('disclosureState');
@@ -528,7 +526,7 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
       },this);
     }
     
-    if (cur>=0) ret = SC.LEAF_NODE; // otherwise its a leaf node
+    if (cur>=0) ret = SC.LEAF_falseDE; // otherwise its a leaf node
     cache[index] = ret ; // save in cache 
     return ret ;
   },
@@ -619,7 +617,7 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
   },
   
   // ..........................................................
-  // BRANCH NODES
+  // BRANCH falseDES
   //   
 
   /**
@@ -690,7 +688,7 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
     
     item.addObserver('*', this, this._itemPropertyDidChange);
     this._itemPropertyDidChange(item, '*');
-    this._notifyParent = YES ; // avoid infinite loops
+    this._notifyParent = true ; // avoid infinite loops
   },
   
   /**
@@ -781,7 +779,7 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
     var key, del;
 
     // no item - assume leaf node
-    if (!item || !this._computeChildren(item)) return SC.LEAF_NODE;
+    if (!item || !this._computeChildren(item)) return SC.LEAF_falseDE;
     
     // item implement TreeItemContent - call directly
     else if (item.isTreeItemContent) {
@@ -825,7 +823,7 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
         key = del ? del.get('treeItemIsExpandedKey') : 'treeItemIsExpanded';
         this._treeItemIsExpandedKey = key ;
       }
-      item.setIfChanged(key, NO);
+      item.setIfChanged(key, false);
     }
     
     return this ;
@@ -855,7 +853,7 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
         key = del ? del.get('treeItemIsExpandedKey') : 'treeItemIsExpanded';
         this._treeItemIsExpandedKey = key ;
       }
-      item.setIfChanged(key, YES);
+      item.setIfChanged(key, true);
     }
     
     return this ;

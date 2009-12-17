@@ -4,12 +4,10 @@
 // Portions copyright ©2008 Apple Inc.  All rights reserved.
 // ========================================================================
 
-"import package sproutcore/runtime";
-"import core";
-"import controllers/object";
-"import mixins/selection_support";
-"import private/tree_item_observer";
-"export package";
+var SC = require('core');
+require('controllers/object');
+require('mixins/selection_support');
+require('private/tree_item_observer');
 
 /**
   @class
@@ -34,12 +32,12 @@ SC.TreeController = SC.ObjectController.extend(SC.SelectionSupport,
   // 
   
   /**
-    Set to YES if you want the top-level items in the tree to be displayed as
+    Set to true if you want the top-level items in the tree to be displayed as
     group items in the collection view.
     
     @property {Boolean}
   */
-  treeItemIsGrouped: NO,
+  treeItemIsGrouped: false,
   
   /**
     If your content support expanding and collapsing of content, then set this

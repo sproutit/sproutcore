@@ -5,6 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+var SC = require('core');
+
 /** @class
 
   The Builder class makes it easy to create new chained-builder API's such as
@@ -101,7 +103,7 @@ SC.Builder.create = function create(props) {
   
   // generate new constructor and hook in the fn
   var construct = function() {
-    var ret = SC.beget(fn); // NOTE: using closure here...
+    var ret = SC.beget(fn); // falseTE: using closure here...
     
     // the defaultClass is usually this for this constructor. 
     // e.g. SC.View.build() -> this = SC.View

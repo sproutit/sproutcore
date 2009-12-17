@@ -5,9 +5,10 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('views/view') ;
-sc_require('mixins/control') ;
-sc_require('mixins/validatable') ;
+var SC = require('core');
+require('views/view');
+require('mixins/control');
+require('mixins/validatable');
 
 /** @class
 
@@ -29,13 +30,13 @@ SC.FieldView = SC.View.extend(SC.Control, SC.Validatable,
 /** @scope SC.FieldView.prototype */ {
   
   /**
-     If YES then we use textarea instead of input. 
+     If true then we use textarea instead of input. 
      WARNING: Use only with textField** Juan
   */
-  isTextArea: NO,
+  isTextArea: false,
 
 
-  _field_isMouseDown: NO,
+  _field_isMouseDown: false,
   
   /**
     The raw value of the field itself.  This is computed from the 'value'
@@ -104,7 +105,7 @@ SC.FieldView = SC.View.extend(SC.Control, SC.Validatable,
   
   _field_fieldValueDidChange: function(evt) {
     SC.RunLoop.begin();
-    this.fieldValueDidChange(NO);
+    this.fieldValueDidChange(false);
     SC.RunLoop.end();  
   },
   
@@ -114,12 +115,12 @@ SC.FieldView = SC.View.extend(SC.Control, SC.Validatable,
     the value property of the view accordingly.
     
     If this is a partial change (i.e. the user is still editing the field and
-    you expect the value to change further), then be sure to pass YES for the
+    you expect the value to change further), then be sure to pass true for the
     partialChange parameter.  This will change the kind of validation done on
     the value.  Otherwise, the validator may mark the field as having an error
     when the user is still in mid-edit.
   
-    @param partialChange (optional) YES if this is a partial change.
+    @param partialChange (optional) true if this is a partial change.
     @returns {Boolean|SC.Error} result of validation.
   */
   fieldValueDidChange: function(partialChange) {
@@ -134,8 +135,8 @@ SC.FieldView = SC.View.extend(SC.Control, SC.Validatable,
     // 
     // // get the field value and set it.
     // // if ret is an error, use that instead of the field value.
-    // var ret = this.performValidate ? this.performValidate(partialChange) : YES;
-    // if (ret === SC.VALIDATE_NO_CHANGE) return ret ;
+    // var ret = this.performValidate ? this.performValidate(partialChange) : true;
+    // if (ret === SC.VALIDATE_false_CHANGE) return ret ;
     // 
     // this.propertyWillChange('fieldValue');
     // 
@@ -216,7 +217,7 @@ SC.FieldView = SC.View.extend(SC.Control, SC.Validatable,
     validators.
   */  
   // validateSubmit: function() {
-  //   var ret = this.performValidateSubmit ? this.performValidateSubmit() : YES;
+  //   var ret = this.performValidateSubmit ? this.performValidateSubmit() : true;
   //   // save the value if needed
   //   var value = SC.$ok(ret) ? this._field_getFieldValue() : ret ;
   //   if (value != this.get('value')) this.set('value', value) ;
@@ -228,21 +229,21 @@ SC.FieldView = SC.View.extend(SC.Control, SC.Validatable,
   
   /**
     Allow the browser to do its normal event handling for the mouse down
-    event.  But first, set isActive to YES.
+    event.  But first, set isActive to true.
   */
   mouseDown: function(evt) {  
-    this._field_isMouseDown = YES;
+    this._field_isMouseDown = true;
     evt.allowDefault(); 
-    return YES; 
+    return true; 
   },
   
   /** @private
     Remove the active class on mouseOut if mouse is down.
   */  
   mouseOut: function(evt) {
-    if (this._field_isMouseDown) this.set('isActive', NO);
+    if (this._field_isMouseDown) this.set('isActive', false);
     evt.allowDefault();
-    return YES;
+    return true;
   },
   
   /** @private
@@ -251,7 +252,7 @@ SC.FieldView = SC.View.extend(SC.Control, SC.Validatable,
   mouseOver: function(evt) {
     this.set('isActive', this._field_isMouseDown);
     evt.allowDefault();
-    return YES;
+    return true;
   },
   
   /** @private
@@ -260,10 +261,10 @@ SC.FieldView = SC.View.extend(SC.Control, SC.Validatable,
   */  
   mouseUp: function(evt) {
     // track independently in case isEnabled has changed
-    if (this._field_isMouseDown) this.set('isActive', NO); 
-    this._field_isMouseDown = NO;
+    if (this._field_isMouseDown) this.set('isActive', false); 
+    this._field_isMouseDown = false;
     evt.allowDefault();
-    return YES ;
+    return true ;
   },
   
   /** @private
@@ -275,32 +276,33 @@ SC.FieldView = SC.View.extend(SC.Control, SC.Validatable,
     // handle tab key
     if (evt.which === 9) {
       var view = evt.shiftKey ? this.get('previousValidKeyView') : this.get('nextValidKeyView');
-      if(view) view.becomeFirstResponder();
-      else evt.allowDefault();
-      return YES ; // handled
+      view.becomeFirstResponder();
+      return true ; // handled
     }
     
     // validate keyDown...
     if (this.performValidateKeyDown(evt)) {
-      this._isKeyDown = YES ;
+      this._isKeyDown = true ;
       evt.allowDefault(); 
     } else {
       evt.stop();
     }
     
-    return YES; 
+    return true; 
   },
   
   /** tied to the isEnabled state */
   acceptsFirstResponder: function() {
-    if(!SC.SAFARI_FOCUS_BEHAVIOR) return this.get('isEnabled');
-    else return NO;
+    if(!this.get('followSafariTabFocusBehavior')){
+      return this.get('isEnabled');
+    }
+    return false;
   }.property('isEnabled'),
   
   willBecomeKeyResponderFrom: function(keyView) {
     // focus the text field.
     if (!this._isFocused) {
-      this._isFocused = YES ;
+      this._isFocused = true ;
       this.becomeFirstResponder();
       if (this.get('isVisibleInWindow')) {
         this.$input()[0].focus();
@@ -309,7 +311,7 @@ SC.FieldView = SC.View.extend(SC.Control, SC.Validatable,
   },
   
   willLoseKeyResponderTo: function(responder) {
-    if (this._isFocused) this._isFocused = NO ;
+    if (this._isFocused) this._isFocused = false ;
   },
   
   

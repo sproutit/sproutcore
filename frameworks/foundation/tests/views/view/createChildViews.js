@@ -16,7 +16,7 @@ test("calls createChildView() for each class or string in childViews array", fun
   var v = SC.View.create({
     childViews: [
       SC.View.extend({ key: 0 }), // class - should be called
-      SC.View.create({ key: 1 }), // NOT class - should NOT be called
+      SC.View.create({ key: 1 }), // falseT class - should falseT be called
       'customClassName'           // string - should be called 
     ],
 
@@ -46,7 +46,7 @@ test("should not error when there is a dud view name in childViews list.", funct
   var called = [];
   var v = SC.View.create({
     childViews: [
-      "nonExistantClassNme",       // string - should NOT be called
+      "nonExistantClassNme",       // string - should falseT be called
         'customClassName'          // string - should be called
     ],
     // this shuld be used for the 'customClassName' item above
@@ -93,7 +93,7 @@ var view, myViewClass ;
 module("SC.View#createChildView", {
   setup: function() {
     view = SC.View.create({ page: SC.Object.create() }); 
-    myViewClass = SC.View.extend({ isMyView: YES, foo: 'bar' });
+    myViewClass = SC.View.extend({ isMyView: true, foo: 'bar' });
   }
 });
 

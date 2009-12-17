@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('views/view') ;
+var SC = require('core');
+require('views/view');
 
 /** 
   @class

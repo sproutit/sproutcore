@@ -5,9 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import sproutcore/runtime";
-"import core";
-"export package";
+var SC = require('core');
 
 // Create anonymous subclass of SC.RunLoop to add support for processing 
 // view queues and Timers.
@@ -88,16 +86,16 @@ SC.RunLoop = SC.RunLoop.extend(
     Usually you will not call this method directly, but it will be invoked 
     automatically at the end of the run loop.
     
-    @returns {Boolean} YES if timers were fired, NO otherwise
+    @returns {Boolean} true if timers were fired, false otherwise
   */
   fireExpiredTimers: function() {
-    if (!this._timerQueue || this._firing) return NO; // nothing to do
+    if (!this._timerQueue || this._firing) return false; // nothing to do
 
     // max time we are allowed to run timers
     var now = this.get('startTime') ;
     
     // avoid recursive calls
-    this._firing = YES;
+    this._firing = true;
     
     // collect timers to fire.  we do this one time up front to avoid infinite 
     // loops where firing a timer causes it to schedule itself again, causing 
@@ -112,7 +110,7 @@ SC.RunLoop = SC.RunLoop.extend(
     // cleanup
     var didFire = timers.length > 0 ;
     timers.length = 0 ; // reset for later use...
-    this._firing = NO ;
+    this._firing = false ;
     return didFire; 
   },
   
@@ -122,12 +120,12 @@ SC.RunLoop = SC.RunLoop.extend(
     usually call this method yourself.  It is invoked automatically at the
     end of a run loop.
     
-    @returns {Boolean} YES if a timeout was scheduled
+    @returns {Boolean} true if a timeout was scheduled
   */
   scheduleNextTimeout: function() {
     var timer = this._timerQueue ;
     
-    var ret = NO ;
+    var ret = false ;
     // if no timer, and there is an existing timeout, cancel it
     if (!timer) {
       if (this._timeout) clearTimeout(this._timeout);
@@ -142,7 +140,7 @@ SC.RunLoop = SC.RunLoop.extend(
         this._timeout = setTimeout(this._timeoutDidFire, delay);
         this._timeoutAt = nextTimeoutAt ;
       }
-      ret = YES ;
+      ret = true ;
     }
     
     return ret ;

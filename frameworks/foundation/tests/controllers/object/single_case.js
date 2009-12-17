@@ -68,7 +68,7 @@ test("changing the content from one to another", function() {
   callCount = 0;
   content.set("foo", "BAR");
   equals(controller.get("foo"), "EDIT", "controller.get(foo) after edit of non-content object should not change value");
-  equals(callCount, 0, 'observer on controller should NOT have fired');
+  equals(callCount, 0, 'observer on controller should falseT have fired');
 });
 
 test("changing the content from one single to null and back", function() {
@@ -85,7 +85,7 @@ test("changing the content from one single to null and back", function() {
   callCount = 0;
   content.set("foo", "BAR");
   equals(controller.get("foo"), undefined, "controller.get(foo) after edit of non-content object should not change value");
-  equals(callCount, 0, 'observer on controller should NOT have fired');
+  equals(callCount, 0, 'observer on controller should falseT have fired');
 
   callCount = 0 ;
   controller.set("content", content);
@@ -99,27 +99,27 @@ test("changing the content from one single to null and back", function() {
 });
 
 test("hasContent", function() {
-  equals(controller.get("hasContent"), YES, 'should have content');
+  equals(controller.get("hasContent"), true, 'should have content');
   
   var callCount = 0;
   controller.addObserver("hasContent", function() { callCount++; });
   
   controller.set("content", null);
-  equals(controller.get("hasContent"), NO, "hasContent should == NO after setting to null");
+  equals(controller.get("hasContent"), false, "hasContent should == false after setting to null");
   ok(callCount > 0, 'hasContent observer should fire when setting to null');
   
   callCount = 0;
   controller.set("content", content);
-  equals(controller.get("hasContent"), YES, "hasContent should == YES after setting back to content");
+  equals(controller.get("hasContent"), true, "hasContent should == true after setting back to content");
   ok(callCount > 0, "hasContent observer should fire");
 });
 
 
 // ..........................................................
-// SINGLE NON-OBSERVABLE OBJECT
+// SINGLE falseN-OBSERVABLE OBJECT
 // 
 
-module("SC.ObjectController - single_case - NON-OBSERVABLE OBJECT", {
+module("SC.ObjectController - single_case - falseN-OBSERVABLE OBJECT", {
   setup: function() {
     content = { foo: "foo1", bar: "bar1" };
     controller = SC.ObjectController.create({ content: content });
@@ -176,18 +176,18 @@ test("changing the content from one to another", function() {
 });
 
 test("hasContent", function() {
-  equals(controller.get("hasContent"), YES, 'should have content');
+  equals(controller.get("hasContent"), true, 'should have content');
   
   var callCount = 0;
   controller.addObserver("hasContent", function() { callCount++; });
   
   controller.set("content", null);
-  equals(controller.get("hasContent"), NO, "hasContent should == NO after setting to null");
+  equals(controller.get("hasContent"), false, "hasContent should == false after setting to null");
   ok(callCount > 0, 'hasContent observer should fire when setting to null');
   
   callCount = 0;
   controller.set("content", content);
-  equals(controller.get("hasContent"), YES, "hasContent should == YES after setting back to content");
+  equals(controller.get("hasContent"), true, "hasContent should == true after setting back to content");
   ok(callCount > 0, "hasContent observer should fire");
 });
 

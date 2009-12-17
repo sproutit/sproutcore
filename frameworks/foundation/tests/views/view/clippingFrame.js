@@ -123,7 +123,7 @@ test("does not notify child views of clippingFrame changes if child view hasStat
   function observer() { callCount++; }
   a.addObserver('clippingFrame', observer);
   aa.addObserver('clippingFrame', observer);
-  aa.hasStaticLayout = YES ; // fake it till u make it
+  aa.hasStaticLayout = true ; // fake it till u make it
   
   // now, adjust layout of child so that clipping frame will change...
   a.adjust('top', -50);

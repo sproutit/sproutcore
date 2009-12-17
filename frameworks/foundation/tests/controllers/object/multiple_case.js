@@ -8,17 +8,17 @@
 var src, src2, content, controller;
 
 // ..........................................................
-// NO MULTIPLE CONTENT
+// false MULTIPLE CONTENT
 // 
 
-module("SC.ObjectController - multiple_case - ALLOWSMULTIPLE = NO", {
+module("SC.ObjectController - multiple_case - ALLOWSMULTIPLE = false", {
   setup: function() {
     src        = SC.Object.create({ foo: "foo1", bar: "bar1" });
     src2       = SC.Object.create({ foo: "foo2", bar: "bar1" });
     content    = [src, src2];
     controller = SC.ObjectController.create({ 
       content: content,
-      allowsMultipleContent: NO 
+      allowsMultipleContent: false 
     });
   },
   
@@ -28,7 +28,7 @@ module("SC.ObjectController - multiple_case - ALLOWSMULTIPLE = NO", {
 });
 
 test("hasContent", function() {
-  equals(controller.get("hasContent"), NO, 'hasContent should be NO');
+  equals(controller.get("hasContent"), false, 'hasContent should be false');
 });
 
 test("getting any value should return undefined", function() {
@@ -47,14 +47,14 @@ test("setting any unknown value should have no effect", function() {
 // MULTIPLE CONTENT
 // 
 
-module("SC.ObjectController - multiple_case - ALLOWSMULTIPLE = YES", {
+module("SC.ObjectController - multiple_case - ALLOWSMULTIPLE = true", {
   setup: function() {
     src        = SC.Object.create({ foo: "foo1", bar: "bar1" });
     src2       = SC.Object.create({ foo: "foo2", bar: "bar1" });
     content    = [src, src2];
     controller = SC.ObjectController.create({ 
       content: content,
-      allowsMultipleContent: YES 
+      allowsMultipleContent: true 
     });
   },
   
@@ -94,18 +94,18 @@ test("changing a property on a content object", function() {
 });
 
 test("hasContent", function() {
-  equals(controller.get("hasContent"), YES, 'should have content');
+  equals(controller.get("hasContent"), true, 'should have content');
   
   var callCount = 0;
   controller.addObserver("hasContent", function() { callCount++; });
   
   controller.set("content", null);
-  equals(controller.get("hasContent"), NO, "hasContent should == NO after setting to null");
+  equals(controller.get("hasContent"), false, "hasContent should == false after setting to null");
   ok(callCount > 0, 'hasContent observer should fire when setting to null');
   
   callCount = 0;
   controller.set("content", content);
-  equals(controller.get("hasContent"), YES, "hasContent should == YES after setting back to content");
+  equals(controller.get("hasContent"), true, "hasContent should == true after setting back to content");
   ok(callCount > 0, "hasContent observer should fire");
 });
 

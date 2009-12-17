@@ -5,9 +5,10 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('views/field') ;
-sc_require('system/text_selection') ;
-sc_require('mixins/static_layout') ;
+var SC = require('core');
+require('views/field');
+require('system/text_selection');
+require('mixins/static_layout');
 
 /**
   @class
@@ -29,19 +30,19 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
   // PROPERTIES
   //
 
-  applyImmediately: YES,
+  applyImmediately: true,
 
   /**
-    If YES, the field will hide its text from display. The default value is NO.
+    If true, the field will hide its text from display. The default value is false.
   */
-  isPassword: NO,
+  isPassword: false,
 
   /**
-    If YES then allow multi-line input.  This will also change the default
+    If true then allow multi-line input.  This will also change the default
     tag type from "input" to "textarea".  Otherwise, pressing return will
     trigger the default insertion handler.
   */
-  isTextArea: NO,
+  isTextArea: false,
 
   /**
     The hint to display while the field is not active.  Can be a loc key.
@@ -49,9 +50,9 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
   hint: null,
 
   /**
-    If YES then the text field is currently editing.
+    If true then the text field is currently editing.
   */
-  isEditing: NO,
+  isEditing: false,
 
   /**
     An optional view instance, or view class reference, which will be visible
@@ -98,7 +99,7 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
   */
   rightAccessoryView: null,
   
-  _isFocused: NO,
+  _isFocused: false,
 
 
   /** isEditable maps to isEnabled with a TextField. */
@@ -191,11 +192,11 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
         // properties at certain times can cause exceptions.
         if ('selectionStart' in element) {
          element.selectionStart = value.get('start') ;
-         setStart = YES ;
+         setStart = true ;
         }
         if ('selectionEnd' in element) {
          element.selectionEnd = value.get('end') ;
-         setEnd = YES ;
+         setEnd = true ;
         }
 
         // Support Internet Explorer.
@@ -357,10 +358,10 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
     force the field render to render like the firsttime to avoid writing extra
     code. This can be useful also 
   */
-  _forceRenderFirstTime: NO,
+  _forceRenderFirstTime: false,
     
   _renderFieldLikeFirstTime: function(){
-    this.set('_forceRenderFirstTime', YES);
+    this.set('_forceRenderFirstTime', true);
   }.observes('isTextArea'),
   
   _renderField: function(context, firstTime, value, leftAdjustment, rightAdjustment) {
@@ -371,7 +372,7 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
         hintElements, element, paddingElementStyle;
     
     if (firstTime || this._forceRenderFirstTime) {
-      this._forceRenderFirstTime = NO;
+      this._forceRenderFirstTime = false;
       disabled = this.get('isEnabled') ? '' : 'disabled="disabled"' ;
       name = this.get('layerId');
       
@@ -610,7 +611,7 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
   },
   
   willLoseKeyResponderTo: function(responder) {
-    //if (this._isFocused) this._isFocused = NO ;
+    //if (this._isFocused) this._isFocused = false ;
   },
 
   // In IE, you can't modify functions on DOM elements so we need to wrap the
@@ -643,26 +644,26 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
     // responder chain.
     // If the event is triggered by a return while entering IME input,
     // don't got through this path.
-    if ((evt.which === 13 && !evt.isIMEInput) && !this.get('isTextArea')) return NO ;
-    if (evt.which === 27) return NO ;
+    if ((evt.which === 13 && !evt.isIMEInput) && !this.get('isTextArea')) return false ;
+    if (evt.which === 27) return false ;
 
     // handle tab key
     if (evt.which === 9) {
       var view = evt.shiftKey ? this.get('previousValidKeyView') : this.get('nextValidKeyView');
       if(view) view.becomeFirstResponder();
       else evt.allowDefault();
-      return YES ; // handled
+      return true ; // handled
     }
 
     // validate keyDown...
     if (this.performValidateKeyDown(evt)) {
-      this._isKeyDown = YES ;
+      this._isKeyDown = true ;
       evt.allowDefault();
     } else {
       evt.stop();
     }
 
-    return YES;
+    return true;
   },
 
   keyUp: function(evt) {
@@ -672,22 +673,22 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
     this.notifyPropertyChange('selection');
 
     if (this._isKeyDown && this.get('applyImmediately')) {
-      this.invokeLater(this.fieldValueDidChange, 1, YES); // notify change
+      this.invokeLater(this.fieldValueDidChange, 1, true); // notify change
     }
-    this._isKeyDown = NO;
+    this._isKeyDown = false;
     evt.allowDefault();
 
-    return YES;
+    return true;
   },
 
   mouseDown: function(evt) {
-    this._txtFieldMouseDown=YES;
+    this._txtFieldMouseDown=true;
     if (!this.get('isEnabled')) {
       evt.stop();
-      return YES;
+      return true;
     } else if((this.value && this.value.length===0) || !this.value) {
       this.$input()[0].focus();
-      return YES;
+      return true;
     } else {
       // This fixes the double click issue in firefox
       if(!SC.browser.safari) this.$input()[0].focus();
@@ -696,7 +697,7 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
   },
 
   mouseUp: function(evt) {
-    this._txtFieldMouseDown=NO;
+    this._txtFieldMouseDown=false;
     // The caret/selection could have moved.  In some browsers, though, the
     // element's values won't be updated until after this event is finished
     // processing.
@@ -704,14 +705,14 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
 
     if (!this.get('isEnabled')) {
       evt.stop();
-      return YES;
+      return true;
     } else if((this.value && this.value.length===0) || !this.value) {
       if(SC.browser.msie<8){
         this.invokeLater(this.focusIE7, 1);
       }else{
         this.$input()[0].focus();
       }
-      return YES;
+      return true;
     } else return sc_super();
   },
 
@@ -720,6 +721,6 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
   },
 
   selectStart: function(evt) {
-    return YES;
+    return true;
   }
 }) ;

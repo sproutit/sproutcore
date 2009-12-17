@@ -5,12 +5,13 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global main */
+/*global main tiki */
 
-sc_require('system/event') ;
+var SC = require('core');
+require('system/event');
 
 SC.mixin({
-  _isReadyBound: NO,
+  _isReadyBound: false,
   
   /** @private configures the ready event handler if needed */
   _bindReady: function() {
@@ -88,7 +89,7 @@ SC.mixin({
   
   _afterReadyQueue: [],
 
-  isReady: NO,
+  isReady: false,
   
   /** @private invoked when the document becomes ready. */
   _didBecomeReady: function() {
@@ -130,13 +131,13 @@ SC.mixin({
     } while (SC._readyQueue.length > 0) ;
 
     // okay, now we're ready (any SC.ready() calls will now be called immediately)
-    SC.isReady = YES ;
+    SC.isReady = true ;
     
     // clear the queue
     SC._readyQueue = null ;
     
     // trigger any bound ready events
-    SC.Event.trigger("ready", null, document, NO) ;
+    SC.Event.trigger("ready", null, document, false) ;
     
     // Remove any loading div
     if (SC.removeLoading) SC.$('#loading').remove();
@@ -191,7 +192,7 @@ SC.mixin({
 }) ;
 
 SC._bindReady() ;
-SC.removeLoading = YES;
+SC.removeLoading = true;
 
 // default to app mode.  When loading unit tests, this will run in test mode
 SC.APP_MODE = "APP_MODE";

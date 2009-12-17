@@ -5,9 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import core";
-"export package";
+var SC = require('core');
 
 /**
   Standard error thrown by SC.Scanner when it runs out of bounds
@@ -124,11 +122,11 @@ SC.Scanner = SC.Object.extend(
     
     @param {String} str the string to skip
     @throws {SC.SCANNER_SKIP_ERROR} if the given string could not be scanned
-    @returns {Boolean} YES if the given string was successfully scanned
+    @returns {Boolean} true if the given string was successfully scanned
   */
   skipString: function(str) {
     if (this.scan(str.length) !== str) throw SC.SCANNER_SKIP_ERROR;
-    return YES;
+    return true;
   },
   
   /**
@@ -214,7 +212,7 @@ SC.DateTime = SC.Object.extend(SC.Freezable, SC.Copyable,
     @property
     @type {Boolean}
   */
-  isFrozen: YES,
+  isFrozen: true,
   
   /**
     Returns a new DateTime object where one or more of the elements have been
@@ -356,7 +354,7 @@ SC.DateTime = SC.Object.extend(SC.Freezable, SC.Copyable,
   },
   
   /**
-    Returns YES if the passed DateTime is equal to the receiver, ie: if their
+    Returns true if the passed DateTime is equal to the receiver, ie: if their
     number of milliseconds since January, 1st 1970 00:00:00.0 UTC are equal.
     This is the preferred method for testing equality.
   
@@ -766,7 +764,7 @@ SC.DateTime.mixin(SC.Comparable,
     
     // the time options (hour, minute, sec, millisecond)
     // reset cascadingly (see documentation)
-    if (resetCascadingly === undefined || resetCascadingly === YES) {
+    if (resetCascadingly === undefined || resetCascadingly === true) {
       if ( !SC.none(opts.hour) && SC.none(opts.minute)) {
         opts.minute = 0;
       }

@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('validators/validator') ;
+var SC = require('core');
+require('validators/validator');
 
 /**
   Requires some content in field, but does not check the specific content.

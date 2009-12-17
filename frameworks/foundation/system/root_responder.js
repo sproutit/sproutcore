@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-sc_require('system/ready');
+var SC = require('core');
+require('system/ready');
 
 /** @class
 
@@ -240,7 +241,7 @@ SC.RootResponder = SC.Object.extend({
     @param {Object} sender The sender of the action
     @param {SC.Pane} pane optional pane to start search with
     @param {Object} context optional. only passed to ResponderContexts
-    @returns {Boolean} YES if action was performed, NO otherwise
+    @returns {Boolean} true if action was performed, false otherwise
     @test in targetForAction
   */
   sendAction: function( action, target, sender, pane, context) {
