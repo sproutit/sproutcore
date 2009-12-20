@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var context = null;
 
@@ -70,5 +71,7 @@ test("should escape passed HTML before pushing", function() {
   context.text("<b>test me!</b>");
   equals(context.get(1),'&lt;b&gt;test me!&lt;/b&gt;', 'escaped');
 });
+
+plan.run();
 
 

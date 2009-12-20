@@ -1,7 +1,11 @@
-// ========================================================================
-// SC.json Base Tests
-// ========================================================================
-/*globals module test ok isObj equals expects */
+// ==========================================================================
+// Project:   SproutCore - JavaScript Application Framework
+// Copyright: ©2006-2009 Apple Inc. and contributors.
+// License:   Licened under MIT license (see license.js)
+// ==========================================================================
+
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 module("Json Module");
 test("Encoding and decoding object graphs",function(){
@@ -12,3 +16,5 @@ test("Encoding and decoding object graphs",function(){
 });
 
 
+
+plan.run();

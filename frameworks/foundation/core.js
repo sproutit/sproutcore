@@ -6,6 +6,10 @@
 // ==========================================================================
 
 var SC = require('index', 'sproutcore/runtime');
+
+// same as sproutcore/runtime.  do this BEFORE requiring any other module
+exports = module.exports = SC;
+
 require('mixins/string');
 
 /**
@@ -152,4 +156,3 @@ SC.mixin(Function.prototype, /** @scope Function.prototype */ {
 
 });
 
-exports = module.exports = SC; // same as sproutcore/runtime

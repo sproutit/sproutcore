@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same same */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var context = null;
 
@@ -48,3 +49,5 @@ test("should assign all attrs if a hash is passed", function() {
 });
  
 
+
+plan.run();

@@ -1,6 +1,11 @@
-// ========================================================================
-// CoreQuery Tests
-// ========================================================================
+// ==========================================================================
+// Project:   SproutCore - JavaScript Application Framework
+// Copyright: ©2006-2009 Apple Inc. and contributors.
+// License:   Licened under MIT license (see license.js)
+// ==========================================================================
+
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 module("CoreQuery.setClass()");
 
@@ -47,3 +52,5 @@ test("setClass(mixed, true) should work across multiple", function() {
   cq.setClass("mixed", true);
   equals(cq.hasClass("mixed"), true, "now all should have mixed class") ;
 }) ;
+
+plan.run();

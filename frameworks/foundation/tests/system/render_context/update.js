@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var context = null, elem = null;
 
@@ -203,3 +204,5 @@ test("set styles override style attr", function() {
   equals(style.toLowerCase(), "color: black;", "attribute");
 });
 
+
+plan.run();

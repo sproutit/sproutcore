@@ -4,7 +4,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var view ;
 module("SC.Control#displayProperties", {
@@ -85,5 +86,7 @@ test("should gain active class if isActive", function() {
 test("should get controlSize class on init", function() {
   ok(view.$().hasClass(SC.REGULAR_CONTROL_SIZE), 'should have regular control size class');
 });
+
+plan.run();
 
 

@@ -1,10 +1,12 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2009 Apple Inc. and contributors.
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var parent, child;
 module("SC.View#replaceChild", {
@@ -27,3 +29,5 @@ test("swaps the old child with the new child", function() {
   equals(parent.childViews[1], child, 'parent view has new child at loc 1');
   equals(parent.childViews.length, 3, 'parent has same number of children');
 });
+
+plan.run();

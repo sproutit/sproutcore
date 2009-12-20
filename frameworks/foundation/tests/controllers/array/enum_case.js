@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*globals throws should_throw*/
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var content, controller, extra;
 
@@ -73,7 +74,7 @@ test("basic array WRITE operations", function() {
   var callCount = 0;
   controller.addObserver('[]', function() { callCount++; });
 
-  should_throw(function() {
+  raises(function() {
     controller.replace(0,1,[extra]);
   }, Error, "calling replace on an enumerable should throw");
 });
@@ -178,7 +179,7 @@ test("basic array WRITE operations", function() {
   var callCount = 0;
   controller.addObserver('[]', function() { callCount++; });
 
-  should_throw(function() {
+  raises(function() {
     controller.replace(0,1,[extra]);
   }, Error, "calling replace on an enumerable should throw");
 });
@@ -203,4 +204,6 @@ test("modifying orderBy should build order", function() {
 // ..........................................................
 // ADD SPECIAL CASES HERE
 // 
+
+plan.run();
 

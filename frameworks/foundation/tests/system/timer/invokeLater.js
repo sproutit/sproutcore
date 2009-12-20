@@ -1,7 +1,12 @@
-// ========================================================================
-// SC.Object.invokeLater Tests
-// ========================================================================
-/*globals module test ok isObj equals expects */
+// ==========================================================================
+// Project:   SproutCore - JavaScript Application Framework
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
+// ==========================================================================
+
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 module("SC.Object.invokeLater") ;
 
@@ -199,3 +204,5 @@ test("should automatically bind with arguments if passed", function() {
   stop() ; // stops the test runner
   setTimeout(f, 300) ;
 });
+
+plan.run();

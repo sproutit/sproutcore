@@ -5,6 +5,9 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
+
 var content, controller;
 
 // ..........................................................

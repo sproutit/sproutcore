@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same same */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var context = null;
 
@@ -97,4 +98,6 @@ test("should assign all styles if a hash is passed", function() {
 test("css() should be an alias for addStyle()", function() {
   equals(SC.RenderContext.fn.css, SC.RenderContext.fn.addStyle, 'methods');
 });
+
+plan.run();
 

@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var context = null;
 
@@ -26,3 +27,5 @@ test("it should return joined lines with no separator string by default", functi
 test("it should return joined lines with separator string if passed", function() {
   equals(context.join(","), "<div>,line1,line2,</div>") ;
 });
+
+plan.run();

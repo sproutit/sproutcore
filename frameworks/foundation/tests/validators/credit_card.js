@@ -1,6 +1,12 @@
-// ========================================================================
-// SC.Validator.CreditCard  Tests
-// ========================================================================
+// ==========================================================================
+// Project:   SproutCore - JavaScript Application Framework
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
+// ==========================================================================
+
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 module("credit_card validation - fieldValueForObject()");
 test("Expects a string of 16 digits.  Will split into groups of 4 for display.",function(){
@@ -33,3 +39,5 @@ test("Checks all valid card numbers or dashes to make a single string",function(
 //	string = "123424";
 //	equals(obj.validateKeyDown('','',string),true);
 //});
+
+plan.run();

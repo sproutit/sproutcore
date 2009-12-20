@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*globals should_throw */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var content, controller, extra;
 
@@ -41,7 +42,7 @@ test("state properties", function() {
 
 // addObject should append to end of array + notify observers on Array itself
 test("addObject", function() {
-  should_throw(function() {
+  raises(function() {
     controller.addObject(extra);
   }, Error, "controller.addObject should throw exception");
 });
@@ -72,7 +73,7 @@ test("basic array READ operations", function() {
 });
 
 test("basic array WRITE operations", function() {
-  should_throw(function() {
+  raises(function() {
     controller.replace(0,1,[extra]);
   }, Error, "calling replace on an enumerable should throw");
 });
@@ -108,13 +109,13 @@ test("state properties", function() {
 
 // addObject should append to end of array + notify observers on Array itself
 test("addObject", function() {
-  should_throw(function() {
+  raises(function() {
     controller.addObject(extra);
   }, Error, "controller.addObject should throw exception");
 });
 
 test("removeObject", function() {
-  should_throw(function() {
+  raises(function() {
     controller.removeObject(extra);
   }, Error, "controller.removeObject should throw exception");
 });
@@ -125,7 +126,7 @@ test("basic array READ operations", function() {
 });
 
 test("basic array WRITE operations", function() {
-  should_throw(function() {
+  raises(function() {
     controller.replace(0,1,[extra]);
   }, Error, "calling replace on an enumerable should throw");
 });
@@ -133,4 +134,6 @@ test("basic array WRITE operations", function() {
 test("arrangedObjects", function() {
   equals(controller.get("arrangedObjects"), controller, 'c.arrangedObjects should return receiver');
 });
+
+plan.run();
 

@@ -3,6 +3,11 @@
 // ========================================================================
 /*globals module test ok isObj equals expects */
 
+"import package core_test";
+
+var SC = require('index'),
+    Ct = require('core_test');
+
 var obj; //global variables
 
 // Test cases for pushStack and end functions
@@ -40,3 +45,5 @@ test("instantiate the builder, any passed args will be forwarded onto an interna
 	equals(objA.age,obj.fn.age);
 	equals(objA.sex,obj.fn.sex);
 });
+
+plan.run();

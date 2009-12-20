@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var context = null;
 
@@ -26,3 +27,5 @@ test("id(bar) alters the current id", function() {
   equals(context.id("bar"), context, "Returns receiver");
   equals(context.id(), 'bar', 'changed to bar');
 });
+
+plan.run();

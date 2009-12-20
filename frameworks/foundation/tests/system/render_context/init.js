@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var context = null;
 
@@ -53,3 +54,5 @@ test("offset should should use offset + length of parent for self", function() {
   equals(newContext.offset, 5, 'has proper offset');
 });
 
+
+plan.run();

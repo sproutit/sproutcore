@@ -1,6 +1,25 @@
-// ========================================================================
-// CoreQuery Tests
-// ========================================================================
+// ==========================================================================
+// Project:   SproutCore - JavaScript Application Framework
+// Copyright: ©2006-2009 Apple Inc. and contributors.
+// License:   Licened under MIT license (see license.js)
+// ==========================================================================
+
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
+
+// stolen from Qunit
+/**
+ * Returns an array of elements with the given IDs, eg.
+ * @example q("main", "foo", "bar")
+ * @result [<div id="main">, <span id="foo">, <input id="bar">]
+ */
+function q() {
+  var r = [];
+  for ( var i = 0; i < arguments.length; i++ ) {
+    r.push( document.getElementById( arguments[i] ) );
+  }
+  return r;
+}
 
 /*
   This test file incorporates most of the changes that come bundled with the
@@ -1332,3 +1351,5 @@ test("should exclude null values", function() {
   same(result.length, 2, "number of results") ;
   same(result, [1,3], "return values of result") ;
 });
+
+plan.run();

@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var context = null;
 
@@ -116,4 +117,6 @@ test("it should work when nested more than one level deep", function() {
   ok(str.match(/id="foo"/), 'has foo');
   ok(str.match(/id="bar"/), 'has bar');
 });
+
+plan.run();
 

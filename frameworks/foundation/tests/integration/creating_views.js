@@ -4,7 +4,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same htmlbody */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 module("Create a pane with some custom views and adding it to the window");
 
@@ -111,3 +112,5 @@ test("layer creation and management", function() {
   ok(layer.innerHTML.toString().match(/View foo/), 'does not have new label!');
   
 });
+
+plan.run();

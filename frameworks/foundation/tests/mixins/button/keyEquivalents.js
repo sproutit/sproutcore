@@ -3,8 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License: Licened under MIT license (see license.js)
 // ==========================================================================
- 
-/*global module test equals context ok same */
+
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
  
 // ..........................................................
 // performKeyEquivalent() - verify that return value is correct.
@@ -54,3 +55,5 @@ test("triggers on escape if isCancel is set and no keyEquivalent is set", functi
   view.set('keyEquivalent', 'a');
   ok(!view.performKeyEquivalent('escape'), 'should falseT be handled');
 });
+
+plan.run();

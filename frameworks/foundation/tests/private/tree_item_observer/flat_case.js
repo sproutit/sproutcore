@@ -5,6 +5,9 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
+
 // The TreeItemObserver is tested based on the common use cases.
 
 var root, content, flattened, delegate, obs, length, extra;
@@ -323,3 +326,4 @@ test("contentIndexDisclosureState", function() {
   }
 });
 
+plan.run();

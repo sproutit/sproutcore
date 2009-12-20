@@ -1,11 +1,11 @@
+// ==========================================================================
+// Project:   SproutCore - JavaScript Application Framework
+// Copyright: ©2006-2009 Apple Inc. and contributors.
+// License:   Licened under MIT license (see license.js)
+// ==========================================================================
 
-
-
-// ========================================================================
-// View Layout Unit Tests
-// ========================================================================
-
-/*globals module test ok same equals */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 /* These unit tests verify:  layout(), frame(), styleLayout() and clippingFrame(). */
 
@@ -123,4 +123,5 @@ test("Test that an exception is thrown when calling adjust and setting to auto",
    
 });
 
+plan.run();
 

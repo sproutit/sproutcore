@@ -5,7 +5,9 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*globals throws */
+"import package core_test"; 
+
+var SC = require('index'); // load sproutcore/foundation
 
 var root, content, controller, extra, flattened;
 
@@ -106,3 +108,5 @@ test("arrangedObjects", function() {
     equals(ao.objectAt(idx), flattened[idx], 'arrangedObjects.objectAt(%@) should be expected object in flattened[%@]'.fmt(idx,idx));
   }
 });
+
+plan.run();

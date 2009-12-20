@@ -1,6 +1,11 @@
-// ========================================================================
-// CoreQuery Tests
-// ========================================================================
+// ==========================================================================
+// Project:   SproutCore - JavaScript Application Framework
+// Copyright: ©2006-2009 Apple Inc. and contributors.
+// License:   Licened under MIT license (see license.js)
+// ==========================================================================
+
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 // This file tests additions to CoreQuery.  These should function even if you use 
 // jQuery
@@ -63,4 +68,6 @@ test("should return true if matching self", function() {
   var cq = SC.$('<div></div>');
   equals(cq.within(cq), true, "should not match");
 });
+
+plan.run();
 

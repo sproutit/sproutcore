@@ -5,8 +5,10 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
+
 // The TreeItemObserver is tested based on the common use cases.
-/*globals throws should_throw*/
 
 var content, delegate, flattened, obs, extra, extrachild, root;
 
@@ -503,7 +505,7 @@ test("removing partial group", function() {
   var expected = content.slice();
 
   // note: select entire group here...
-  should_throw(function() {
+  raises(function() {
     obs.removeAt(3,6);
   }, Error, "should throw error when trying to remove uneven boundaries");
 
@@ -520,7 +522,7 @@ test("removing group header and some of the children", function() {
   var expected = content.slice();
 
   // note: select entire group here...
-  should_throw(function() {
+  raises(function() {
     obs.removeAt(6, 3);
   }, Error, "should throw error when trying to remove uneven boundaries");
 
@@ -716,3 +718,5 @@ test("contentIndexDisclosureState", function() {
     equals(obs.contentIndexDisclosureState(null, obs, idx), expected, 'obs.contentIndexDisclosureState(null, obs, %@) should eql %@'.fmt(idx,str));
   }
 });
+
+plan.run();

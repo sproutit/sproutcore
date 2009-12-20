@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var context = null;
 
@@ -44,3 +45,5 @@ test("should falseT emit self closing tag if no tag is passed", function() {
   equals(SC.RenderContext.escapeHTML(context.get(1)), SC.RenderContext.escapeHTML('<div>'));
   equals(SC.RenderContext.escapeHTML(context.get(2)), SC.RenderContext.escapeHTML('<'+'/div>'));
 });
+
+plan.run();

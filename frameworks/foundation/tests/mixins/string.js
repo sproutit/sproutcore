@@ -3,7 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*global module test equals context ok same */
+
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 module('String.prototype.w()');
 
@@ -30,3 +32,5 @@ test("Trim ' spaces on both sides ' on right only", function() {
 test("Regular expression escaping a string", function() {
   same('\.+*?[^]$(){}=!<>|:'.escapeForRegExp(), '\\.\\+\\*\\?\\[\\^\\]\\$\\(\\)\\{\\}\\=\\!\\<\\>\\|\\:', "should be escaped");
 });
+
+plan.run();

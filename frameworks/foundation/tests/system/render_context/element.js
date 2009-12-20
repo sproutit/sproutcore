@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var context = null;
 
@@ -42,3 +43,5 @@ test("returns first element if context renders multiple element", function() {
   equals(elem.tagName.toString().toLowerCase(), 'div', 'is div');
   elem = null;
 });
+
+plan.run();

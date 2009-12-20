@@ -4,7 +4,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 // ..........................................................
 // contentPropertyDidChange()
@@ -166,3 +167,5 @@ test("if contentValueKey is not set & displayDelegate not set, does nothing", fu
   equals(content.get('bar'), 'bar', 'should not change');
   equals(content.get('foo'), 'foo', 'should not change');
 });
+
+plan.run();

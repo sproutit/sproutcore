@@ -5,6 +5,9 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
+
 // The TreeItemObserver is tested based on the common use cases.
 
 var content, delegate, obs, flattened, extra, extrachild, extranested, root;
@@ -482,3 +485,4 @@ test("moving nested item from one parent to another", function() {
   verifyObjectAt(obs, flattened, change, "after moving");
 });
 
+plan.run();

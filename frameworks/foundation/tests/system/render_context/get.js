@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var context = null;
 
@@ -49,3 +50,6 @@ test("it should return the value based on an index from the context offset of th
   childContext.push("NEXT");
   equals(childContext.get(1), "NEXT", 'gets child line');
 }) ;
+
+plan.run();
+

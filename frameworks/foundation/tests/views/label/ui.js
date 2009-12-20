@@ -1,11 +1,12 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
-//            portions copyright @2009 Apple Inc.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test htmlbody ok equals same */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 htmlbody('<style> .sc-static-layout { border: 1px red dotted; } </style>');
 
@@ -146,3 +147,5 @@ test("Check that the title is set or not and if it is in the appropriate element
 });
 
 })();
+
+plan.run();

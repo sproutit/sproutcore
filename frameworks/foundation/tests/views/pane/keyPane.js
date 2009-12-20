@@ -1,13 +1,15 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2009 Apple Inc. and contributors.
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same Q$ CommonSetup */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var pane, r, view ;
-CommonSetup = {
+var CommonSetup = {
   setup: function() {
     pane = SC.Pane.create({
       childViews: [SC.View]
@@ -130,4 +132,6 @@ test("should invoke callbacks and update isKeyResponder state on firstResponder"
   equals(callCount, 2, 'should invoke both callbacks');
   equals(view.get('isKeyResponder'), false, 'should be keyResponder');
 });
+
+plan.run();
 

@@ -1,10 +1,13 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2009 Apple Inc. and contributors.
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same Q$ htmlbody */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
+
 var pane, fooView, barView, defaultResponder, evt, callCount ;
 module("SC.Pane#sendEvent", {
   setup: function() {
@@ -163,3 +166,5 @@ test("when invoked with target = null", function() {
   equals(handler, null, 'should return no responder');
   
 });
+
+plan.run();

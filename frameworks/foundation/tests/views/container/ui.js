@@ -1,11 +1,12 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
-//            portions copyright @2009 Apple Inc.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test htmlbody ok equals same stop start */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 // htmlbody('<style> .sc-control-test-pane .wrapper { overflow: none; } </style>');
 
@@ -81,3 +82,5 @@
   //   });
 
 })();
+
+plan.run();

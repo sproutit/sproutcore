@@ -7,7 +7,7 @@
 
 var SC = require('core');
 require('views/view');
-require('mixins/contrl');
+require('mixins/control');
 
 SC.ALIGN_LEFT = 'left';
 SC.ALIGN_RIGHT = 'right';

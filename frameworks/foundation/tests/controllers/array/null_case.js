@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*globals throws should_throw*/
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var content, controller, extra;
 
@@ -39,13 +40,13 @@ test("state properties", function() {
 });
 
 test("addObject", function() {
-  should_throw(function() {
+  raises(function() {
     controller.addObject(extra);
   }, Error, "controller.addObject should throw exception");
 });
 
 test("removeObject", function() {
-  should_throw(function() {
+  raises(function() {
     controller.removeObject(extra);
   }, Error, "controller.addObject should throw exception");
 });
@@ -54,7 +55,7 @@ test("basic array operations", function() {
   equals(controller.get("length"), 0, 'length should be empty');
   equals(controller.objectAt(0), undefined, "objectAt() should return undefined");
   
-  should_throw(function() {
+  raises(function() {
     controller.replace(0,1,[extra]);
   }, Error, 'replace() should throw an error since it is not editable');
 });
@@ -62,3 +63,5 @@ test("basic array operations", function() {
 test("arrangedObjects", function() {
   equals(controller.get("arrangedObjects"), controller, 'c.arrangedObjects should return receiver');
 });
+
+plan.run();

@@ -5,6 +5,9 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test htmlbody ok equals same stop start */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 module("TODO: Test SC.ControlTestPane Methods");
+
+plan.run();

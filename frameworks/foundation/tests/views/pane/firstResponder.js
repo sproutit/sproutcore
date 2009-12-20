@@ -1,10 +1,12 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2009 Apple Inc. and contributors.
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same Q$ CommonSetup */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var pane, r, view0, view1 ;
 CommonSetup = {
@@ -146,3 +148,5 @@ test("makeFirstResponder(view) when view is already first responder", function()
   ok(view0.get('isKeyResponder'), 'should keep view.isKeyResponder');
   
 });
+
+plan.run();

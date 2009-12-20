@@ -4,7 +4,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 // ..........................................................
 // contentPropertyDidChange()
@@ -98,7 +99,7 @@ test("should return the title localized or not", function() {
 });
 
 test("should return the button view context with the title set", function() {
-  context = SC.RenderContext();
+  var context = SC.RenderContext();
   ok((view.renderTitle(context, true).length>0), 'title string were added to the context');
 });
 
@@ -191,5 +192,7 @@ test("if contentValueKey is not set & displayDelegate not set, does nothing", fu
   view.set('value', 'baz');
   equals(content.get('foo'), 'foo', 'should not change');
 });
+
+plan.run();
 
 

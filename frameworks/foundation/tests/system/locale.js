@@ -1,3 +1,11 @@
+// ==========================================================================
+// Project:   SproutCore - JavaScript Application Framework
+// Copyright: ©2006-2009 Apple Inc. and contributors.
+// License:   Licened under MIT license (see license.js)
+// ==========================================================================
+
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var LocaleObject;
 module("object.SC.Locale()", {	
@@ -127,3 +135,5 @@ test("Locale.extend() : Should make sure important properties of Locale object a
 	//Result should be true as the new lacales added to the list of default locales
 	equals(SC.Locale.locales.mn.options().strings.test,'te') ;
 });
+
+plan.run();

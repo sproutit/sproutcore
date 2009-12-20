@@ -5,6 +5,9 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
+
 var src, content, controller;
 
 // ..........................................................
@@ -262,4 +265,6 @@ test("hasContent", function() {
   equals(controller.get("hasContent"), YES, "hasContent should == YES after setting back to content");
   ok(callCount > 0, "hasContent observer should fire");
 });
+
+plan.run();
 

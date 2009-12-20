@@ -1,10 +1,12 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2009 Apple Inc. and contributors.
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same Q$ htmlbody */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 htmlbody('<style> .sc-view { border: 1px blue solid; position: absolute; }</style>');
 
@@ -243,4 +245,6 @@ test("convert nested child <- child of sibling", function() {
   f.x += (B_LEFT+B_LEFT) - A_LEFT*3; f.y += (B_TOP+B_TOP) - A_TOP*3 ;
   same(result, f, 'should convert frame');
 });
+
+plan.run();
 

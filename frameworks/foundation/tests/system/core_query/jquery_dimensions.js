@@ -1,6 +1,11 @@
-// ========================================================================
-// CoreQuery Tests
-// ========================================================================
+// ==========================================================================
+// Project:   SproutCore - JavaScript Application Framework
+// Copyright: ©2006-2009 Apple Inc. and contributors.
+// License:   Licened under MIT license (see license.js)
+// ==========================================================================
+
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 /*
   This test file incorporates most of the changes that come bundled with the
@@ -385,3 +390,5 @@ test("outerHeight()", function() {
 	// reset styles
 	$div.css({ display: "", border: "", padding: "", width: "", height: "" });
 });
+
+plan.run();

@@ -1,10 +1,12 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2009 Apple Inc. and contributors.
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 // .......................................................
 //  render() 
@@ -81,3 +83,5 @@ test("creates a context and then invokes prepareContext on each childView", func
 	equals(runCount, 3, 'prepareContext() invoked for each child view');
 
 });
+
+plan.run();

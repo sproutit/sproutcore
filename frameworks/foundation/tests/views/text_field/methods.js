@@ -1,11 +1,13 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
-//            portions copyright @2009 Apple Inc.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test htmlbody ok equals same stop start Q$ */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
+var Q$ = require('browser/jquery', 'core_test');
 
 
 // note: need to test interaction with Validators here
@@ -85,3 +87,5 @@ test("isEnabled and isEditable mapping", function() {
   obj.set('isEnabled',true);
   equals(obj.get('isEditable'),true);
 });
+
+plan.run();

@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var context = null;
 
@@ -177,3 +178,5 @@ test("should add/remove all classes if a hash of class names is passed", functio
   ok(context.hasClass("bar"), "now has bar");
   ok(!context.hasClass("foo"), "should not have foo ");
 });
+
+plan.run();

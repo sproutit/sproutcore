@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*globals throws */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var content, controller, extra;
 
@@ -216,3 +217,5 @@ test("verify rangeObserver fires when content is deleted", function() {
 //     return SC.ArrayController.create({ content: amt });
 //   }
 // });
+
+plan.run();

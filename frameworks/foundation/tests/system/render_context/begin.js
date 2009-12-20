@@ -5,7 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok */
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var context = null;
 
@@ -45,3 +46,5 @@ test("should assign passed tag name to new context", function() {
   var c2 = context.begin('foo');
   equals(c2.tagName(), 'foo', 'tag name');
 });
+
+plan.run();
