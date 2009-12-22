@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 var storeKey1, storeKey2, storeKey3, storeKey4, storeKey5, storeKey6;
 var store, storeKey, json;
@@ -20,7 +18,7 @@ module("SC.Store#pushChanges", {
     json = {
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     
     storeKey1 = SC.Store.generateStoreKey();

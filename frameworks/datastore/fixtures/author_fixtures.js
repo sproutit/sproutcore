@@ -1,6 +1,6 @@
 // 500 records.
 
-var AuthorFixtures = [{"type": "Author",
+exports.FIXTURES = [{"type": "Author",
  "guid": "4995bc373454a",
 "fullName": "Gerry Woolery 4",
  "bookTitle": "The Madness of the Meddler",

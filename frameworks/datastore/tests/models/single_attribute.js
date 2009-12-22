@@ -3,14 +3,13 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 // test core array-mapping methods for RecordArray with RecordAttribute
 var storeKeys, rec, rec2, bar, bar2 ;
+var MyApp;
 
 module("SC.RecordAttribute core methods", {
   setup: function() {
@@ -18,6 +17,7 @@ module("SC.RecordAttribute core methods", {
     MyApp = SC.Object.create({
       store: SC.Store.create()
     });
+    SC.global('MyApp', MyApp);
     
     MyApp.Foo = SC.Record.extend({
       
@@ -38,7 +38,7 @@ module("SC.RecordAttribute core methods", {
     });
     
     MyApp.Bar = SC.Record.extend({
-      foo: SC.Record.toOne('MyApp.Foo', { inverse: 'bar', isMaster: NO })
+      foo: SC.Record.toOne('MyApp.Foo', { inverse: 'bar', isMaster: false })
     });
     
     SC.RunLoop.begin();
@@ -97,6 +97,10 @@ module("SC.RecordAttribute core methods", {
     
     equals(rec.storeKey, storeKeys[0], 'should find record');
     
+  },
+  
+  teardown: function() {
+    SC.global('MyApp', null);
   }
 });
 

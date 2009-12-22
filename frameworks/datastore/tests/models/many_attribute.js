@@ -3,15 +3,14 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 // test core array-mapping methods for ManyArray with ManyAttribute
 var storeKeys, rec, rec2, rec3, rec4;
 var foo1, foo2, foo3, bar1, bar2, bar3;
+var MyApp;
 
 module("SC.ManyAttribute core methods", {
   setup: function() {
@@ -19,6 +18,7 @@ module("SC.ManyAttribute core methods", {
     MyApp = SC.Object.create({
       store: SC.Store.create()
     });
+    SC.global('MyApp', MyApp);
     
     MyApp.Foo = SC.Record.extend({
       
@@ -46,12 +46,12 @@ module("SC.ManyAttribute core methods", {
 
       // test many-to-many relationships with inverse
       barToMany: SC.Record.toMany('MyApp.Bar', {
-        inverse: 'fooToMany', isMaster: YES, orderBy: 'name'
+        inverse: 'fooToMany', isMaster: true, orderBy: 'name'
       }),
       
       // test many-to-one relationships with inverse
       barToOne: SC.Record.toMany('MyApp.Bar', {
-        inverse: 'fooToOne', isMaster: NO
+        inverse: 'fooToOne', isMaster: false
       })
       
     });
@@ -60,12 +60,12 @@ module("SC.ManyAttribute core methods", {
       
       // test many-to-many
       fooToMany: SC.Record.toMany('MyApp.Foo', {
-        inverse: 'barToMany', isMaster: NO
+        inverse: 'barToMany', isMaster: false
       }),
       
       // test many-to-one
       fooToOne: SC.Record.toOne('MyApp.Foo', {
-        inverse: 'barToOne', isMaster: YES
+        inverse: 'barToOne', isMaster: true
       })
     });
     
@@ -119,6 +119,7 @@ module("SC.ManyAttribute core methods", {
   },
   
   teardown: function() {
+    SC.global('MyApp', null);
     MyApp = rec = rec2 = rec3 = 
     foo1 = foo2 = foo3 = bar1 = bar2 = null;
   }
@@ -170,7 +171,7 @@ test("reading toMany in chained store", function() {
 
 test("reading a null relation", function() {
   
-  // note: rec1 hash has NO array
+  // note: rec1 hash has false array
   equals(rec.readAttribute('fooMany'), undefined, 'rec1.fooMany attr should be undefined');
   
   var ret = rec.get('fooMany');

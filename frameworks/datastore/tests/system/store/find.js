@@ -3,11 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
+
+var MyApp;
 
 // test querying through find() on the store
 module("SC.Query querying find() on a store", {
@@ -15,6 +15,7 @@ module("SC.Query querying find() on a store", {
     SC.RunLoop.begin();
     // setup dummy app and store
     MyApp = SC.Object.create({});
+    SC.global('MyApp', MyApp);
     
     // setup a dummy model
     MyApp.Foo = SC.Record.extend();
@@ -35,7 +36,7 @@ module("SC.Query querying find() on a store", {
           }
         }
         
-        return YES ;
+        return true ;
       },
       
       reset: function() {
@@ -56,7 +57,7 @@ module("SC.Query querying find() on a store", {
       
       destroyRecord: function(store, storeKey){
         store.dataSourceDidDestroy(storeKey);
-        return YES;
+        return true;
       }
       
     });
@@ -85,6 +86,7 @@ module("SC.Query querying find() on a store", {
   teardown: function() {
     MyApp = null ;
     SC.Record.subclasses.clear(); //reset
+    SC.global('MyApp', null);
   }
   
 });
@@ -158,7 +160,7 @@ test("data source must get the right calls", function() {
 
 test("should find records based on boolean", function() {
   SC.RunLoop.begin();
-  var q = SC.Query.local(MyApp.Foo, "married=YES");
+  var q = SC.Query.local(MyApp.Foo, "married=true");
   var records = MyApp.store.find(q);
   equals(records.get('length'), 4, 'record length should be 4');
   SC.RunLoop.end();

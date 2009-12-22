@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 // NOTE: The test below are based on the Data Hashes state chart.  This models
 // the "remove" event in the NestedStore portion of the diagram.
@@ -20,7 +18,7 @@ module("SC.NestedStore#removeDataHash", {
     json = {
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     
     storeKey = SC.Store.generateStoreKey();
@@ -48,7 +46,7 @@ function testRemoveDataHash() {
   // verify
   equals(store.storeKeyEditState(storeKey), SC.Store.LOCKED, 'new edit state should be locked');
   
-  equals(store.readDataHash(storeKey), null, 'should have NO json data');
+  equals(store.readDataHash(storeKey), null, 'should have false json data');
   equals(store.readStatus(storeKey), SC.Record.DESTROYED_CLEAN, 'should have new status');
 
   equals(store.revisions[storeKey], oldrev, 'should not change revision');

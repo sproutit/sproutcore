@@ -5,10 +5,9 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import models/record";
-"import models/record_attribute";
-"export package";
+var SC = require('core');
+require('models/record');
+require('models/record_attribute');
 
 /** @class
   
@@ -20,9 +19,9 @@
   {{{
     group: SC.Record.toOne('MyApp.Group', { 
       inverse: 'contacts', // set the key used to represent the inverse 
-      isMaster: YES|NO, // indicate whether changing this should dirty
+      isMaster: true|false, // indicate whether changing this should dirty
       transform: function(), // transforms value <=> storeKey,
-      isEditable: YES|NO, make editable or not
+      isEditable: true|false, make editable or not
     });
   }}}
   
@@ -47,7 +46,7 @@ SC.SingleAttribute = SC.RecordAttribute.extend(
     
     @property {Boolean}
   */
-  isMaster: YES,
+  isMaster: true,
   
   
   /**

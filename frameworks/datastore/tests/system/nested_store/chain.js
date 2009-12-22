@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 // This file tests the initial state of the store when it is first created
 // either independently or as a chained store.
@@ -16,14 +14,14 @@ var Rec = SC.Record.extend({
   
   title: SC.Record.attr(String),
   
-  fired: NO,
+  fired: false,
   
   reset: function() { 
-    this.fired = NO;
+    this.fired = false;
   },
   
   titleDidChange: function() {
-    this.fired = YES;
+    this.fired = true;
   }.observes('title')
     
 });
@@ -119,8 +117,8 @@ test("chained store changes should propagate reliably", function() {
   
   equals(rec2.get('title'), 'bar', 'chained rec.title should changed');
   equals(rec.get('title'), 'foo', 'original rec.title should NOT change');
-  equals(store.get('hasChanges'), YES, 'chained store.hasChanges');
-  equals(rec.fired, NO, 'original rec.title should not have notified');
+  equals(store.get('hasChanges'), true, 'chained store.hasChanges');
+  equals(rec.fired, false, 'original rec.title should not have notified');
   
   SC.RunLoop.begin();
   rec.reset();
@@ -129,7 +127,7 @@ test("chained store changes should propagate reliably", function() {
   SC.RunLoop.end();
 
   equals(rec.get('title'), 'bar', 'original rec.title should change');
-  equals(rec.fired, YES, 'original rec.title should have notified');  
+  equals(rec.fired, true, 'original rec.title should have notified');  
 
 
   // trial 2
@@ -144,8 +142,8 @@ test("chained store changes should propagate reliably", function() {
   
   equals(rec2.get('title'), 'baz', 'chained rec.title should changed');
   equals(rec.get('title'), 'bar', 'original rec.title should NOT change');
-  equals(store.get('hasChanges'), YES, 'chained store.hasChanges');
-  equals(rec.fired, NO, 'original rec.title should not have notified');
+  equals(store.get('hasChanges'), true, 'chained store.hasChanges');
+  equals(rec.fired, false, 'original rec.title should not have notified');
   
   SC.RunLoop.begin();
   rec.reset();
@@ -154,7 +152,7 @@ test("chained store changes should propagate reliably", function() {
   SC.RunLoop.end();
 
   equals(rec.get('title'), 'baz', 'original rec.title should change');
-  equals(rec.fired, YES, 'original rec.title should have notified');  
+  equals(rec.fired, true, 'original rec.title should have notified');  
   
 
   // trial 1
@@ -169,8 +167,8 @@ test("chained store changes should propagate reliably", function() {
   
   equals(rec2.get('title'), 'FOO2', 'chained rec.title should changed');
   equals(rec.get('title'), 'baz', 'original rec.title should NOT change');
-  equals(store.get('hasChanges'), YES, 'chained store.hasChanges');
-  equals(rec.fired, NO, 'original rec.title should not have notified');
+  equals(store.get('hasChanges'), true, 'chained store.hasChanges');
+  equals(rec.fired, false, 'original rec.title should not have notified');
   
   SC.RunLoop.begin();
   rec.reset();
@@ -179,7 +177,7 @@ test("chained store changes should propagate reliably", function() {
   SC.RunLoop.end();
 
   equals(rec.get('title'), 'FOO2', 'original rec.title should change');
-  equals(rec.fired, YES, 'original rec.title should have notified');  
+  equals(rec.fired, true, 'original rec.title should have notified');  
   
 });
 

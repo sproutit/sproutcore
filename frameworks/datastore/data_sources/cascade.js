@@ -5,14 +5,13 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import data_sources/data_source";
-"export package";
+var SC = require('core');
+require('data_sources/data_source');
 
 /** @class
 
   A cascading data source will actually forward requests onto an array of 
-  additional data sources, stopping when one of the data sources returns YES,
+  additional data sources, stopping when one of the data sources returns true,
   indicating that it handled the request.  
   
   You can use a cascading data source to tie together multiple data sources,
@@ -91,12 +90,12 @@ SC.CascadeDataSource = SC.DataSource.extend(
   fetch: function(store, query) {
     var sources = this.get('dataSources'), 
         len     = sources ? sources.length : 0,
-        ret     = NO,
+        ret     = false,
         cur, source, idx;
     
-    for(idx=0; (ret !== YES) && idx<len; idx++) {
+    for(idx=0; (ret !== true) && idx<len; idx++) {
       source = sources.objectAt(idx);
-      cur = source.fetch ? source.fetch.call(source, store, query) : NO;
+      cur = source.fetch ? source.fetch.call(source, store, query) : false;
       ret = this._handleResponse(ret, cur);
     }
     
@@ -108,10 +107,10 @@ SC.CascadeDataSource = SC.DataSource.extend(
   retrieveRecords: function(store, storeKeys) {
     var sources = this.get('dataSources'), 
         len     = sources ? sources.length : 0,
-        ret     = NO,
+        ret     = false,
         cur, source, idx;
     
-    for(idx=0; (ret !== YES) && idx<len; idx++) {
+    for(idx=0; (ret !== true) && idx<len; idx++) {
       source = sources.objectAt(idx);
       cur = source.retrieveRecords.call(source, store, storeKeys);
       ret = this._handleResponse(ret, cur);
@@ -124,10 +123,10 @@ SC.CascadeDataSource = SC.DataSource.extend(
   commitRecords: function(store, createStoreKeys, updateStoreKeys, destroyStoreKeys) {
     var sources = this.get('dataSources'), 
         len     = sources ? sources.length : 0,
-        ret     = NO,
+        ret     = false,
         cur, source, idx;
     
-    for(idx=0; (ret !== YES) && idx<len; idx++) {
+    for(idx=0; (ret !== true) && idx<len; idx++) {
       source = sources.objectAt(idx);
       cur = source.commitRecords.call(source, store, createStoreKeys, updateStoreKeys, destroyStoreKeys);
       ret = this._handleResponse(ret, cur);
@@ -140,10 +139,10 @@ SC.CascadeDataSource = SC.DataSource.extend(
   cancel: function(store, storeKeys) {
     var sources = this.get('dataSources'), 
         len     = sources ? sources.length : 0,
-        ret     = NO,
+        ret     = false,
         cur, source, idx;
     
-    for(idx=0; (ret !== YES) && idx<len; idx++) {
+    for(idx=0; (ret !== true) && idx<len; idx++) {
       source = sources.objectAt(idx);
       cur = source.cancel.call(source, store, storeKeys);
       ret = this._handleResponse(ret, cur);
@@ -174,8 +173,8 @@ SC.CascadeDataSource = SC.DataSource.extend(
 
   /** @private - Determine the proper return value. */
   _handleResponse: function(current, response) {
-    if (response === YES) return YES ;
-    else if (current === NO) return (response === NO) ? NO : SC.MIXED_STATE ;
+    if (response === true) return true ;
+    else if (current === false) return (response === false) ? false : SC.MIXED_STATE ;
     else return SC.MIXED_STATE ;
   }
     

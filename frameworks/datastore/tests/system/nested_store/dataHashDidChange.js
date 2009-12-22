@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 // NOTE: The test below are based on the Data Hashes state chart.  This models
 // the "did_change" event in the NestedStore portion of the diagram.
@@ -20,7 +18,7 @@ module("SC.NestedStore#dataHashDidChange", {
     json = {
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     
     storeKey = SC.Store.generateStoreKey();
@@ -44,7 +42,7 @@ module("SC.NestedStore#dataHashDidChange", {
 function testStateTransition(fromState, toState) {
 
   // verify preconditions
-  equals(store.get('hasChanges'), NO, 'should not have changes');
+  equals(store.get('hasChanges'), false, 'should not have changes');
   equals(store.storeKeyEditState(storeKey), fromState, 'precond - storeKey edit state');
   if (store.chainedChanges) {
     ok(!store.chainedChanges.contains(storeKey), 'changedChanges should NOT include storeKey');
@@ -62,10 +60,10 @@ function testStateTransition(fromState, toState) {
   ok(oldrev !== store.revisions[storeKey], 'revisions should change. was: %@ - now: %@'.fmt(oldrev, store.revisions[storeKey]));
   ok(store.chainedChanges.contains(storeKey), 'changedChanges should now include storeKey');
   
-  equals(store.get('hasChanges'), YES, 'should have changes');
+  equals(store.get('hasChanges'), true, 'should have changes');
 } 
 
-test("edit state = INHERITED, parent editable = NO", function() {
+test("edit state = INHERITED, parent editable = false", function() {
 
   // verify preconditions
   equals(parent.storeKeyEditState(storeKey), SC.Store.LOCKED, 'precond - parent store edit state is not EDITABLE');
@@ -73,7 +71,7 @@ test("edit state = INHERITED, parent editable = NO", function() {
   testStateTransition(SC.Store.INHERITED, SC.Store.LOCKED);
 }) ;
 
-test("edit state = INHERITED, parent editable = YES", function() {
+test("edit state = INHERITED, parent editable = true", function() {
 
   // verify preconditions
   parent.readEditableDataHash(storeKey);

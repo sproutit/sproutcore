@@ -3,12 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
+var MyApp;
 var MyFoo = null, callInfo ;
 module("SC.Record#destroy", {
   setup: function() {
@@ -16,12 +15,13 @@ module("SC.Record#destroy", {
     MyApp = SC.Object.create({
       store: SC.Store.create()
     })  ;
+    SC.global('MyApp', MyApp);
   
     MyApp.Foo = SC.Record.extend();
     MyApp.json = { 
       foo: "bar", 
       number: 123,
-      bool: YES,
+      bool: true,
       array: [1,2,3] 
     };
     
@@ -36,6 +36,10 @@ module("SC.Record#destroy", {
       MyApp.store.__orig.apply(MyApp.store, arguments); 
     };
     SC.RunLoop.end();
+  },
+  
+  teardown: function() {
+    SC.global('MyApp', null);
   }
 });
 
@@ -53,7 +57,7 @@ test("calling destroy on existing record should call destroyRecord() on store", 
 
   // Fake it till you make it...
   MyApp.store.writeStatus(MyApp.foo.storeKey, SC.Record.READY_CLEAN)
-    .dataHashDidChange(MyApp.foo.storeKey, null, YES);
+    .dataHashDidChange(MyApp.foo.storeKey, null, true);
     
   equals(MyApp.foo.get('status'), SC.Record.READY_CLEAN, 'precond - status is READY CLEAN');
   

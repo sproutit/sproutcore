@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
  
 // test parsing of query string
 module("SC.Query#copy");
@@ -26,7 +24,7 @@ test("basic copy", function() {
   var keys = 'conditions orderBy recordType recordTypes parameters location scope'.w();
   var copy = q.copy();
   
-  equals(copy.isFrozen, NO, 'copy should not be frozen');
+  equals(copy.isFrozen, false, 'copy should not be frozen');
   keys.forEach(function(key) {
     equals(copy.get(key), q.get(key), 'copy.%@ should = original.%@'.fmt(key, key));
   }, this);

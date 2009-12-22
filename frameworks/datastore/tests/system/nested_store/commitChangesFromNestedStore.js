@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 var parent, store, child, storeKey, json;
 module("SC.NestedStore#commitChangesFromNestedStore", {
@@ -17,7 +15,7 @@ module("SC.NestedStore#commitChangesFromNestedStore", {
     json = {
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     
     storeKey = SC.Store.generateStoreKey();
@@ -42,7 +40,7 @@ test("copies changed data hashes, statuses, and revisions", function() {
   ok(child.chainedChanges.contains(storeKey), 'precond - child changes should include storeKey');
   
   // perform action
-  equals(store.commitChangesFromNestedStore(child, child.chainedChanges, NO), store, 'should return receiver');
+  equals(store.commitChangesFromNestedStore(child, child.chainedChanges, false), store, 'should return receiver');
   SC.RunLoop.end();
   
   // verify new status
@@ -73,7 +71,7 @@ test("adds lock on any items not already locked", function() {
   ok(changes.contains(storeKey2), 'precond - child.chainedChanges should contain storeKey2');
   
   // now commit back to parent
-  equals(store.commitChangesFromNestedStore(child, changes, NO), store, 'should return reciever');
+  equals(store.commitChangesFromNestedStore(child, changes, false), store, 'should return reciever');
   SC.RunLoop.end();
   
   // and verify that both have locks
@@ -92,7 +90,7 @@ test("adds items in chainedChanges to reciever chainedChanges", function() {
   
   ok(child.chainedChanges.contains(storeKey), 'precond - child.chainedChanges should contain store key');
   
-  equals(store.commitChangesFromNestedStore(child, child.chainedChanges, NO), store, 'should return receiver');
+  equals(store.commitChangesFromNestedStore(child, child.chainedChanges, false), store, 'should return receiver');
   SC.RunLoop.end();
 
   // changelog should merge nested store & existing
@@ -100,19 +98,19 @@ test("adds items in chainedChanges to reciever chainedChanges", function() {
   ok(store.chainedChanges.contains(storeKey), 'chainedChanges should also contain storeKey');
 });
 
-test("should set hasChanges to YES if has changes", function() {
+test("should set hasChanges to true if has changes", function() {
   
   SC.RunLoop.begin();
   
   var changes = child.chainedChanges;
   ok(changes.length>0, 'precond - should have some changes in child');
-  equals(store.get('hasChanges'), NO, 'precond - store should not have changes');
+  equals(store.get('hasChanges'), false, 'precond - store should not have changes');
   
-  store.commitChangesFromNestedStore(child, changes, NO);
-  equals(store.get('hasChanges'), YES, 'store should now have changes');
+  store.commitChangesFromNestedStore(child, changes, false);
+  equals(store.get('hasChanges'), true, 'store should now have changes');
 });
 
-test("should set hasChanges to NO if no changes", function() {
+test("should set hasChanges to false if no changes", function() {
   
   SC.RunLoop.begin();
   
@@ -120,12 +118,12 @@ test("should set hasChanges to NO if no changes", function() {
   
   var changes = child.chainedChanges || SC.Set.create();
   ok(!changes || !changes.length, 'precond - should have not have changes in child');
-  equals(store.get('hasChanges'), NO, 'precond - store should not have changes');
+  equals(store.get('hasChanges'), false, 'precond - store should not have changes');
   
-  store.commitChangesFromNestedStore(child, changes, NO);
+  store.commitChangesFromNestedStore(child, changes, false);
   SC.RunLoop.end();
   
-  equals(store.get('hasChanges'), NO, 'store should NOT now have changes');
+  equals(store.get('hasChanges'), false, 'store should NOT now have changes');
 });
 
 // ..........................................................
@@ -144,11 +142,11 @@ test("committing changes should chain back each step", function() {
   // do commits
   child.commitChanges();
 
-  equals(store.get('hasChanges'), YES, 'store should now have changes');
+  equals(store.get('hasChanges'), true, 'store should now have changes');
   equals(store.readDataHash(storeKey), json, 'store should now have json');
   
   store.commitChanges();
-  equals(store.get('hasChanges'), NO, 'store should no longer have changes');
+  equals(store.get('hasChanges'), false, 'store should no longer have changes');
   equals(parent.readDataHash(storeKey), json, 'parent should now have json');
   SC.RunLoop.end();
   

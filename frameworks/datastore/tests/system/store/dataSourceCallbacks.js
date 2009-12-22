@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 var json1, json2, json3, json4, json5, json6, json7, json8, json9, json10,
     json11, json12, json13, json14, json15, json16;
@@ -27,97 +25,97 @@ module("SC.Store#dataSourceCallbacks", {
       guid: "commitGUID1",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json2 = {
       guid: "commitGUID2",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json3 = {
       guid: "commitGUID3",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json4 = {
       guid: "commitGUID4",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json5 = {
       guid: "commitGUID5",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json6 = {
       guid: "commitGUID6",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json7 = {
       guid: "commitGUID7",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json8 = {
       guid: "commitGUID8",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json9 = {
       guid: "commitGUID9",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json10 = {
       guid: "commitGUID10",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json11 = {
       guid: "commitGUID11",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json12 = {
       guid: "commitGUID12",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json13 = {
       guid: "commitGUID13",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json14 = {
       guid: "commitGUID14",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json15 = {
       guid: "commitGUID15",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json16 = {
       guid: "commitGUID16",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     storeKey1 = SC.Store.generateStoreKey();
     store.writeDataHash(storeKey1, json1, SC.Record.READY_CLEAN);

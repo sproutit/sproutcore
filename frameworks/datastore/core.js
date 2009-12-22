@@ -5,4 +5,6 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-// Place any global constants here
+// import the sproutcore/runtime namespace and make it our own
+var SC = require('sproutcore/runtime');
+exports = module.exports = SC;

@@ -5,7 +5,7 @@
 // ==========================================================================
 
 // 50 JSON records.
-var json0_9 = [
+exports.json0_9 = [
   {"type": "Author", "guid": "4995bc653acad","fullName": "Trecia Williamson 4", "bookTitle": "The Death Doors", "address":" UC Santa Cruz, 35 First St, Wichita, KS"},
   {"type": "Author", "guid": "4995bc653acfe","fullName": "Jarrod Schreckengost 1", "bookTitle": "The Fear of the Thieves", "address":" Michigan State University, 285 Lazaneo St, Ann Arbor, MI"},
   {"type": "Author", "guid": "4995bc653ad23","fullName": "Colbert Ward 3", "bookTitle": "The Menace Myth", "address":" College University, 351 Van Ness Blvd, London, UK"},
@@ -18,7 +18,7 @@ var json0_9 = [
   {"type": "Author", "guid": "4995bc653adc4","fullName": "Martina Read 4", "bookTitle": "The Fear of the Spiders", "address":" London University, 142 Castro St, London, UK"}
 ];
 
-var json10_19 = [
+exports.json10_19 = [
   {"type": "Author", "guid": "4995bc653ade7","fullName": "Gallagher Burch 1", "bookTitle": "The Day of Time", "address":" CalTech, 92 Main St, San Francisco, CA"},
   {"type": "Author", "guid": "4995bc653ae03","fullName": "Sorrel Dugmore 3", "bookTitle": "The Madness of the History", "address":" MIT, 120 Dana St, Los Angeles, CA"},
   {"type": "Author", "guid": "4995bc653ae17","fullName": "Pamila Blois 3", "bookTitle": "The Ultimate Resurrection", "address":" Michigan State University, 262 Fifth Ave, Cupertino, CA"},
@@ -31,7 +31,7 @@ var json10_19 = [
   {"type": "Author", "guid": "4995bc653aeba","fullName": "Lesley Sanforth 4", "bookTitle": "The Underworld", "address":" New York University, 43 Fifth Ave, Southampton, UK"}
 ];
   
-var json20_29 = [
+exports.json20_29 = [
   {"type": "Author", "guid": "4995bc653aecc","fullName": "Alton Saline 4", "bookTitle": "The Horror Secret", "address":" Santa Clara University, 431 Main St, Seattle, WA"},
   {"type": "Author", "guid": "4995bc653aee2","fullName": "Homer Sandys 2", "bookTitle": "The Day Seeds", "address":" Stanford University, 75 First St, Wichita, KS"},
   {"type": "Author", "guid": "4995bc653aef6","fullName": "Katherine Hozier 3", "bookTitle": "The Dominators", "address":" Stanford University, 348 Broadway Blvd, Seattle, WA"},
@@ -44,7 +44,7 @@ var json20_29 = [
   {"type": "Author", "guid": "4995bc653af9a","fullName": "Lyssa Ashbaugh 1", "bookTitle": "The Angels", "address":" Harvard, 42 First St, Palo Alto, CA"}
 ];
 
-var json30_39 = [
+exports.json30_39 = [
   {"type": "Author", "guid": "4995bc653afb5","fullName": "Rolph Burris 3", "bookTitle": "Dreams of Menace", "address":" Springfield University, 256 Fifth Ave, Southampton, UK"},
   {"type": "Author", "guid": "4995bc653afcb","fullName": "Sheree Kiefer 1", "bookTitle": "The Doom of the Night", "address":" Michigan State University, 432 Dana St, Palo Alto, CA"},
   {"type": "Author", "guid": "4995bc653afde","fullName": "Shaun Drabble 2", "bookTitle": "The Future Creatures", "address":" Springfield University, 388 Fifth Ave, Los Angeles, CA"},
@@ -57,7 +57,7 @@ var json30_39 = [
   {"type": "Author", "guid": "4995bc653b08a","fullName": "Lyric Richards 3", "bookTitle": "The Horror Dead", "address":" Michigan State University, 391 Van Ness Blvd, London, UK"}
 ];
 
-var json40_49 = [
+exports.json40_49 = [
   {"type": "Author", "guid": "4995bc653b09f","fullName": "Marci Caesar 1", "bookTitle": "The Seventh Child", "address":" College University, 469 Dana St, London, UK"},
   {"type": "Author", "guid": "4995bc653b0b7","fullName": "Jade Sloan 4", "bookTitle": "The Menace of the Seas", "address":" UC Santa Cruz, 295 Van Ness Blvd, Cambridge, MA"},
   {"type": "Author", "guid": "4995bc653b0cf","fullName": "Leyton Jyllian 2", "bookTitle": "The Foe", "address":" Stanford University, 419 University Loop, St. Louis, MO"},

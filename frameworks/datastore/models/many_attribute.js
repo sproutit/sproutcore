@@ -5,11 +5,10 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import models/record";
-"import models/record_attribute";
-"import system/many_array";
-"export package";
+var SC = require('core');
+require('models/record');
+require('models/record_attribute');
+require('system/many_array');
 
 /** @class
   
@@ -24,9 +23,9 @@
   {{{
     contacts: SC.Record.toMany('MyApp.Contact', { 
       inverse: 'group', // set the key used to represent the inverse 
-      isMaster: YES|NO, // indicate whether changing this should dirty
+      isMaster: true|false, // indicate whether changing this should dirty
       transform: function(), // transforms value <=> storeKey,
-      isEditable: YES|NO, make editable or not,
+      isEditable: true|false, make editable or not,
       through: 'taggings' // set a relationship this goes through
     });
   }}}
@@ -48,15 +47,15 @@ SC.ManyAttribute = SC.RecordAttribute.extend(
   inverse: null,
   
   /**
-    If YES then modifying this relationships will mark the owner record 
-    dirty.    If set ot NO, then modifying this relationship will not alter
+    If true then modifying this relationships will mark the owner record 
+    dirty.    If set ot false, then modifying this relationship will not alter
     this record.  You should use this property only if you have an inverse 
     property also set.  Only one of the inverse relationships should be marked
     as master so you can control which record should be committed.
     
     @property {Boolean}
   */
-  isMaster: YES,
+  isMaster: true,
   
   /**
     If set and you have an inverse relationship, will be used to determine the

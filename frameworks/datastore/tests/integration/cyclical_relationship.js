@@ -4,19 +4,19 @@
 //            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module test ok equals same AB plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
+var AB ;
 
 module("Cyclical relationships", { 
   setup: function() {
 
     // define the application space
-    window.AB = SC.Object.create({
+    AB = SC.Object.create({
       store: SC.Store.create().from(SC.Record.fixtures)
     }); 
+    SC.global('AB', AB);
 
     // ..........................................................
     // MODEL
@@ -42,7 +42,7 @@ module("Cyclical relationships", {
       
       // discover favorite contacts only
       favoriteContacts: function() {
-        return this.get('contacts').filterProperty('isFavorite', YES);
+        return this.get('contacts').filterProperty('isFavorite', true);
       }.property('contacts').cacheable(),
       
       // we need to reset favoriteContacts whenever the contacts themselves
@@ -62,27 +62,27 @@ module("Cyclical relationships", {
       { guid: 1,
         name: "G1-Fav1",
         group: 100,
-        isFavorite: YES },
+        isFavorite: true },
 
       { guid: 2,
         name: "G1-Fav2",
         group: 100,
-        isFavorite: YES },
+        isFavorite: true },
 
       { guid: 3,
         name: "G1-Norm1",
         group: 100,
-        isFavorite: NO },
+        isFavorite: false },
 
       { guid: 4,
         name: "G2-Fav1",
         group: 101,
-        isFavorite: YES },
+        isFavorite: true },
 
       { guid: 5,
         name: "G1-Norm1",
         group: 101,
-        isFavorite: NO }
+        isFavorite: false }
     ];
     
     
@@ -93,6 +93,7 @@ module("Cyclical relationships", {
   teardown: function() {
     SC.RunLoop.end(); 
     AB = null;
+    SC.global('AB', null);
   }
 });
 
@@ -106,7 +107,7 @@ test("finding favoriteContacts", function() {
   var group  = AB.store.find(AB.Group, 100);
   var expected = AB.store.find(AB.Contact)
     .filterProperty('group', group)
-    .filterProperty('isFavorite', YES);
+    .filterProperty('isFavorite', true);
     
   same(group.get('favoriteContacts'), expected, 'contacts');
   

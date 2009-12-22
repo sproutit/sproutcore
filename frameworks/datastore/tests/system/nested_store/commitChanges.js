@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 // NOTE: The test below are based on the Data Hashes state chart.  This models
 // the "commit" event in the NestedStore portion of the diagram.
@@ -21,7 +19,7 @@ module("SC.NestedStore#commitChanges", {
     json = {
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     args = [];
     
@@ -58,7 +56,7 @@ function testStateTransition(shouldIncludeStoreKey, shouldCallParent) {
   // verify result
   equals(store.storeKeyEditState(storeKey), SC.Store.INHERITED, 'data edit state');
 
-  if (shouldCallParent === NO) {
+  if (shouldCallParent === false) {
     ok(!args || args.length===0, 'should not call commitChangesFromNestedStore');    
   } else {
     equals(args.length, 1, 'should have called commitChangesFromNestedStore');
@@ -76,7 +74,7 @@ function testStateTransition(shouldIncludeStoreKey, shouldCallParent) {
     }
   }
   
-  equals(store.get('hasChanges'), NO, 'hasChanges should be cleared');
+  equals(store.get('hasChanges'), false, 'hasChanges should be cleared');
   ok(!store.chainedChanges || store.chainedChanges.length===0, 'should have empty chainedChanges set');
 }
 
@@ -88,7 +86,7 @@ test("state = INHERITED", function() {
   // check preconditions
   equals(store.storeKeyEditState(storeKey), SC.Store.INHERITED, 'precond - data edit state');
 
-  testStateTransition(NO, NO);
+  testStateTransition(false, false);
 });
 
 
@@ -103,7 +101,7 @@ test("state = LOCKED", function() {
   equals(store.storeKeyEditState(storeKey), SC.Store.LOCKED, 'precond - data edit state');
   ok(!store.chainedChanges || !store.chainedChanges.contains(storeKey), 'locked record should not be in chainedChanges set');
 
-  testStateTransition(NO, NO);
+  testStateTransition(false, false);
 });
 
 test("state = EDITABLE", function() {
@@ -116,7 +114,7 @@ test("state = EDITABLE", function() {
   equals(store.storeKeyEditState(storeKey), SC.Store.EDITABLE, 'precond - data edit state');
   ok(store.chainedChanges  && store.chainedChanges.contains(storeKey), 'editable record should be in chainedChanges set');
 
-  testStateTransition(YES, YES);
+  testStateTransition(true, true);
 });
 
 

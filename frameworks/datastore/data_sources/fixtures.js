@@ -5,11 +5,11 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import data_sources/data_source";
-"import models/record";
-"import system/store";
-"export package";
+var SC = require('core');
+
+require('data_sources/data_source');
+require('models/record');
+require('system/store');
 
 /** @class
 
@@ -22,22 +22,22 @@ SC.FixturesDataSource = SC.DataSource.extend(
   /** @scope SC.FixturesDataSource.prototype */ {
 
   /**
-    If YES then the data source will asyncronously respond to data requests
+    If true then the data source will asyncronously respond to data requests
     from the server.  If you plan to replace the fixture data source with a 
     data source that talks to a real remote server (using Ajax for example),
-    you should leave this property set to YES so that Fixtures source will
+    you should leave this property set to true so that Fixtures source will
     more accurately simulate your remote data source.
 
     If you plan to replace this data source with something that works with 
-    local storage, for example, then you should set this property to NO to 
+    local storage, for example, then you should set this property to false to 
     accurately simulate the behavior of your actual data source.
     
     @property {Boolean}
   */
-  simulateRemoteResponse: NO,
+  simulateRemoteResponse: false,
   
   /**
-    If you set simulateRemoteResponse to YES, then the fixtures soure will
+    If you set simulateRemoteResponse to true, then the fixtures soure will
     assume a response latency from your server equal to the msec specified
     here.  You should tune this to simulate latency based on the expected 
     performance of your server network.  Here are some good guidelines:
@@ -57,7 +57,7 @@ SC.FixturesDataSource = SC.DataSource.extend(
   
   /** @private */
   cancel: function(store, storeKeys) {
-    return NO;
+    return false;
   },
   
   
@@ -178,7 +178,7 @@ SC.FixturesDataSource = SC.DataSource.extend(
       this.invokeLater(this._createRecords, latency, store, storeKeys);
     } else this._createRecords(store, storeKeys);
     
-    return YES ;
+    return true ;
   },
 
   _createRecords: function(store, storeKeys) {
@@ -337,33 +337,33 @@ SC.FixturesDataSource = SC.DataSource.extend(
   },
   
   /**
-    Returns YES if fixtures for a given recordType have already been loaded
+    Returns true if fixtures for a given recordType have already been loaded
     
     @param {SC.Record} recordType
     @returns {Boolean} storeKeys
   */
   fixturesLoadedFor: function(recordType) {
-    if (!this._fixtures) return NO;
+    if (!this._fixtures) return false;
     var ret = [], fixtures = this._fixtures[SC.guidFor(recordType)];
-    return fixtures ? YES: NO;
+    return fixtures ? true: false;
   },
   
   /**
-    Returns YES or SC.MIXED_STATE if one or more of the storeKeys can be 
+    Returns true or SC.MIXED_STATE if one or more of the storeKeys can be 
     handled by the fixture data source.
     
     @param {Array} storeKeys the store keys
-    @returns {Boolean} YES if all handled, MIXED_STATE if some handled
+    @returns {Boolean} true if all handled, MIXED_STATE if some handled
   */
   hasFixturesFor: function(storeKeys) {
-    var ret = NO ;
+    var ret = false ;
     storeKeys.forEach(function(storeKey) {
       if (ret !== SC.MIXED_STATE) {
         var recordType = SC.Store.recordTypeFor(storeKey),
             fixtures   = recordType ? recordType.FIXTURES : null ;
         if (fixtures && fixtures.length && fixtures.length>0) {
-          if (ret === NO) ret = YES ;
-        } else if (ret === YES) ret = SC.MIXED_STATE ;
+          if (ret === false) ret = true ;
+        } else if (ret === true) ret = SC.MIXED_STATE ;
       }
     }, this);
     

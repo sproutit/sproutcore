@@ -5,9 +5,8 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import models/record";
-"export package";
+var SC = require('core');
+require('models/record');
 
 /**
   @class
@@ -126,7 +125,7 @@ SC.ManyArray = SC.Object.extend(SC.Enumerable, SC.Array,
   isEditable: function() {
     // NOTE: can't use get() b/c manyAttribute looks like a computed prop
     var attr = this.manyAttribute;
-    return attr ? attr.get('isEditable') : NO;
+    return attr ? attr.get('isEditable') : false;
   }.property('manyAttribute').cacheable(),
   
   /**

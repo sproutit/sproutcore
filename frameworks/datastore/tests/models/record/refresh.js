@@ -3,12 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
+var MyApp;
 var MyFoo = null, callInfo ;
 module("SC.Record#refresh", {
   setup: function() {
@@ -16,12 +15,13 @@ module("SC.Record#refresh", {
     MyApp = SC.Object.create({
       store: SC.Store.create()
     })  ;
+    SC.global("MyApp", MyApp);
   
     MyApp.Foo = SC.Record.extend();
     MyApp.json = { 
       foo: "bar", 
       number: 123,
-      bool: YES,
+      bool: true,
       array: [1,2,3] 
     };
     
@@ -37,6 +37,7 @@ module("SC.Record#refresh", {
   
   teardown: function() {
     SC.RunLoop.end();
+    SC.global('MyApp', null);
   }
   
 });

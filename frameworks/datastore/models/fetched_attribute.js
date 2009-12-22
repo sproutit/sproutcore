@@ -5,10 +5,9 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import models/record";
-"import models/record_attribute";
-"export package";
+var SC = require('core');
+require('models/record');
+require('models/record_attribute');
 
 /** @class
 
@@ -67,7 +66,7 @@ SC.FetchedAttribute = SC.RecordAttribute.extend(
     
     @property {Boolean}
   */
-  isEditable: NO,  
+  isEditable: false,  
   
   // ..........................................................
   // LOW-LEVEL METHODS

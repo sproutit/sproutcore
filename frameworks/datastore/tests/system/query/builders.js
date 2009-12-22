@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 // This file tests the initial state of the store when it is first created
 // either independently or as a chained store.
@@ -26,7 +24,7 @@ function queryEquals(q, location, recordType, conditions, extra, desc) {
   if (!desc) desc = '';
   
   ok(!!q, desc + ': should have a query');
-  equals(q.get('isFrozen'), YES, desc + ": should be frozen");
+  equals(q.get('isFrozen'), true, desc + ": should be frozen");
   
   if (q) {
     if (location) {

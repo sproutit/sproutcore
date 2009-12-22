@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 // NOTE: The test below are based on the Data Hashes state chart.  This models
 // the "did_change" event in the Store portion of the diagram.
@@ -22,7 +20,7 @@ module("SC.Store#dataHashDidChange", {
     json = {
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     
     storeKey = SC.Store.generateStoreKey();
@@ -101,7 +99,7 @@ test("calling with array of storeKeys will edit all store keys", function() {
   SC.RunLoop.end();
 });
 
-test("calling dataHashDidChange twice with different statusOnly values before flush is called should trigger a non-statusOnly flush if any of the statusOnly values were NO", function() {
+test("calling dataHashDidChange twice with different statusOnly values before flush is called should trigger a non-statusOnly flush if any of the statusOnly values were false", function() {
   SC.RunLoop.begin();
 
   // Create a phony record because that's the only way the 'hasDataChanges'
@@ -109,8 +107,8 @@ test("calling dataHashDidChange twice with different statusOnly values before fl
   var record = SC.Record.create({ id: 514 }) ;
   var storeKey = SC.Record.storeKeyFor(514) ;
   record = store.materializeRecord(storeKey) ;
-  store.dataHashDidChange(storeKey, null, NO) ;
-  store.dataHashDidChange(storeKey, null, YES) ;
+  store.dataHashDidChange(storeKey, null, false) ;
+  store.dataHashDidChange(storeKey, null, true) ;
   
   ok(store.recordPropertyChanges.hasDataChanges.contains(storeKey), 'recordPropertyChanges.hasDataChanges should contain the storeKey %@'.fmt(storeKey)) ;
 
@@ -133,7 +131,7 @@ test("calling _notifyRecordPropertyChange twice, once with a key and once withou
   // that if we notify about a change to one property and later also change all
   // properties, all properties get changed.  (Even if we notify about yet
   // another individual property change after that, but still before the flush.)
-  mainStore._notifyRecordPropertyChange(storeKey, NO, 'prop2');
+  mainStore._notifyRecordPropertyChange(storeKey, false, 'prop2');
   
   var nestedStore  = mainStore.chain();
   var nestedRecord = nestedStore.materializeRecord(storeKey);
@@ -149,7 +147,7 @@ test("calling _notifyRecordPropertyChange twice, once with a key and once withou
   // Now, we'll do one more innocuous "prop3 changed" notification to ensure
   // that the eventual flush does indeed invalidate *all* property caches, and
   // not just prop2 and prop3.
-  mainStore._notifyRecordPropertyChange(storeKey, NO, 'prop3');
+  mainStore._notifyRecordPropertyChange(storeKey, false, 'prop3');
 
   // Let the flush happen.
   SC.RunLoop.end();

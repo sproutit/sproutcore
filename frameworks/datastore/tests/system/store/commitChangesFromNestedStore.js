@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 var store, child, storeKey, json;
 module("SC.Store#commitChangesFromNestedStore", {
@@ -17,7 +15,7 @@ module("SC.Store#commitChangesFromNestedStore", {
     json = {
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     
     storeKey = SC.Store.generateStoreKey();
@@ -44,7 +42,7 @@ test("copies changed data hashes, statuses, and revisions", function() {
   ok(child.chainedChanges.contains(storeKey), 'precond - child changes should include storeKey');
   
   // perform action
-  equals(store.commitChangesFromNestedStore(child, child.chainedChanges, NO), store, 'should return receiver');
+  equals(store.commitChangesFromNestedStore(child, child.chainedChanges, false), store, 'should return receiver');
   
   // verify new status
   equals(store.readDataHash(storeKey), json, 'now should have json');
@@ -65,7 +63,7 @@ test("adds items in changelog to reciever changelog", function() {
   
   ok(child.changelog.contains(storeKey), 'precond - child.changelog should contain store key');
   
-  equals(store.commitChangesFromNestedStore(child, child.chainedChanges, NO), store, 'should return receiver');
+  equals(store.commitChangesFromNestedStore(child, child.chainedChanges, false), store, 'should return receiver');
 
   // changelog should merge nested store & existing
   ok(store.changelog.contains(key1), 'changelog should still contain key1');
@@ -80,7 +78,7 @@ test("ignores changed data hashes not passed in changes set", function() {
   equals(store.readDataHash(storeKey), undefined, 'precond - should not have data yet');
 
   // perform action
-  equals(store.commitChangesFromNestedStore(child, SC.Set.create(), NO), store, 'should return receiver');
+  equals(store.commitChangesFromNestedStore(child, SC.Set.create(), false), store, 'should return receiver');
 
   // verify results
   equals(store.readDataHash(storeKey), undefined, 'should not copy data hash for storeKey');
@@ -129,12 +127,12 @@ function createConflict(force) {
 }
 
 test("throws exception if any record fails optimistic locking test", function() {
-  var errorCount = createConflict(NO);
+  var errorCount = createConflict(false);
   equals(errorCount, 1, 'should have raised error');
 });
 
 test("does not throw exception if optimistic locking fails but force option is passed", function() {
-  var errorCount = createConflict(YES);
+  var errorCount = createConflict(true);
   equals(errorCount, 0, 'should not raise error');
 });
 

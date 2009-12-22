@@ -5,9 +5,8 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import models/record";
-"export package";
+var SC = require('core');
+require('models/record');
 
 /**
   @class
@@ -168,7 +167,7 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
     
     @property {Boolean}
   */
-  isQuery: YES,
+  isQuery: true,
   
   /**
     Unparsed query conditions.  If you are handling a query yourself, then 
@@ -291,7 +290,7 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
   
   
   /**
-    Returns YES if query location is Remote.  This is sometimes more 
+    Returns true if query location is Remote.  This is sometimes more 
     convenient than checking the location.
     
     @property {Boolean}
@@ -301,7 +300,7 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
   }.property('location').cacheable(),
 
   /**
-    Returns YES if query location is Local.  This is sometimes more 
+    Returns true if query location is Local.  This is sometimes more 
     convenient than checking the location.
     
     @property {Boolean}
@@ -311,43 +310,43 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
   }.property('location').cacheable(),
   
   /**
-    Indicates whether a record is editable or not.  Defaults to NO.  Local
+    Indicates whether a record is editable or not.  Defaults to false.  Local
     queries should never be made editable.  Remote queries may be editable or
     not depending on the data source.
   */
-  isEditable: NO,
+  isEditable: false,
   
   // ..........................................................
   // PRIMITIVE METHODS
   // 
   
   /** 
-    Returns YES if record is matched by the query, NO otherwise.  This is 
+    Returns true if record is matched by the query, false otherwise.  This is 
     used when computing a query locally.  
  
     @param {SC.Record} record the record to check
     @param {Hash} parameters optional override parameters
-    @returns {Boolean} YES if record belongs, NO otherwise
+    @returns {Boolean} true if record belongs, false otherwise
   */ 
   contains: function(record, parameters) {
 
     // check the recordType if specified
-    var rtype, ret = YES ;    
+    var rtype, ret = true ;    
     if (rtype = this.get('recordTypes')) { // plural form
       ret = rtype.find(function(t) { return SC.kindOf(record, t); });
     } else if (rtype = this.get('recordType')) { // singular
       ret = SC.kindOf(record, rtype);
     }
     
-    if (!ret) return NO ; // if either did not pass, does not contain
+    if (!ret) return false ; // if either did not pass, does not contain
 
     // if we have a scope - check for that as well
     var scope = this.get('scope');
-    if (scope && !scope.contains(record)) return NO ;
+    if (scope && !scope.contains(record)) return false ;
     
     // now try parsing
     if (!this._isReady) this.parse(); // prepare the query if needed
-    if (!this._isReady) return NO ;
+    if (!this._isReady) return false ;
     if (parameters === undefined) parameters = this.parameters || this;
     
     // if parsing worked we check if record is contained
@@ -356,11 +355,11 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
   },
   
   /**
-    Returns YES if the query matches one or more of the record types in the
+    Returns true if the query matches one or more of the record types in the
     passed set.
     
     @param {SC.Set} types set of record types
-    @returns {Boolean} YES if record types match
+    @returns {Boolean} true if record types match
   */
   containsRecordTypes: function(types) {
     var rtype = this.get('recordType');
@@ -372,7 +371,7 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
         return !!types.find(function(t2) { return SC.kindOf(t2,t); });
       });
       
-    } else return YES; // allow anything through
+    } else return true; // allow anything through
   },
   
   /**
@@ -440,9 +439,9 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
   },
 
   /** @private 
-      Becomes YES once the query has been successfully parsed 
+      Becomes true once the query has been successfully parsed 
   */
-  _isReady:     NO,
+  _isReady:     false,
   
   /**
     This method has to be called before the query object can be used.
@@ -854,7 +853,7 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
       evaluate:         function (r,w) { return true; }
     },
     
-    'YES': {
+    'true': {
       reservedWord:     true,
       evalType:         'PRIMITIVE',
 
@@ -862,7 +861,7 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
       evaluate:         function (r,w) { return true; }
     },
     
-    'NO': {
+    'false': {
       reservedWord:     true,
       evalType:         'PRIMITIVE',
 
@@ -1416,10 +1415,10 @@ SC.Query.mixin( /** @scope SC.Query */ {
     The following will match a particular type of condition:
     
     {{{
-      var married = SC.Query.local(Ab.Person, "isMarried=YES");
-      var married = SC.Query.local(Ab.Person, "isMarried=%@", [YES]);
+      var married = SC.Query.local(Ab.Person, "isMarried=true");
+      var married = SC.Query.local(Ab.Person, "isMarried=%@", [true]);
       var married = SC.Query.local(Ab.Person, "isMarried={married}", {
-        married: YES
+        married: true
       });
     }}}
     

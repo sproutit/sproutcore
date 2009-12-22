@@ -5,9 +5,8 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import models/record";
-"export package";
+var SC = require('core');
+require('models/record');
 
 /**
   @class
@@ -95,7 +94,7 @@ SC.RecordArray = SC.Object.extend(SC.Enumerable, SC.Array,
   */
   isEditable: function() {
     var query = this.get('query');
-    return query ? query.get('isEditable') : NO;
+    return query ? query.get('isEditable') : false;
   }.property('query').cacheable(),
   
   // ..........................................................
@@ -207,7 +206,7 @@ SC.RecordArray = SC.Object.extend(SC.Enumerable, SC.Array,
   },
   
   /**
-    Returns YES if the passed can be found in the record array.  This is 
+    Returns true if the passed can be found in the record array.  This is 
     provided for compatibility with SC.Set.
     
     @param {SC.Record} record the record
@@ -225,7 +224,7 @@ SC.RecordArray = SC.Object.extend(SC.Enumerable, SC.Array,
     @returns {Number} index
   */
   indexOf: function(record, startAt) {
-    if (!SC.kindOf(record, SC.Record)) return NO ; // only takes records
+    if (!SC.kindOf(record, SC.Record)) return false ; // only takes records
     
     this.flush();
     
@@ -243,7 +242,7 @@ SC.RecordArray = SC.Object.extend(SC.Enumerable, SC.Array,
     @returns {Number} index
   */
   lastIndexOf: function(record, startAt) {
-    if (!SC.kindOf(record, SC.Record)) return NO ; // only takes records
+    if (!SC.kindOf(record, SC.Record)) return false ; // only takes records
 
     this.flush();
     
@@ -316,7 +315,7 @@ SC.RecordArray = SC.Object.extend(SC.Enumerable, SC.Array,
     @returns {SC.RecordArray} receiver
   */
   reload: function() {
-    this.flush(YES);
+    this.flush(true);
     return this;
   },
   
@@ -420,7 +419,7 @@ SC.RecordArray = SC.Object.extend(SC.Enumerable, SC.Array,
     if (!changed) changed = this._scq_changedStoreKeys = SC.IndexSet.create();
     changed.addEach(storeKeys);
     
-    this.set('needsFlush', YES);
+    this.set('needsFlush', true);
     this.enumerableContentDidChange();
 
     return this;
@@ -445,12 +444,12 @@ SC.RecordArray = SC.Object.extend(SC.Enumerable, SC.Array,
     // never-ending recursive flush calls.  Instead, we'll simply mark
     // ourselves as needing a flush again when we're done.
     if (this._insideFlush) {
-      this.set('needsFlush', YES);
+      this.set('needsFlush', true);
       return this;
     }
     
     if (!this.get('needsFlush') && !_flush) return this; // nothing to do
-    this.set('needsFlush', NO); // avoid running again.
+    this.set('needsFlush', false); // avoid running again.
     
     // fast exit
     var query = this.get('query'),
@@ -459,12 +458,12 @@ SC.RecordArray = SC.Object.extend(SC.Enumerable, SC.Array,
       return this;
     }
     
-    this._insideFlush = YES;
+    this._insideFlush = true;
     
     // OK, actually generate some results
     var storeKeys = this.get('storeKeys'),
         changed   = this._scq_changedStoreKeys,
-        didChange = NO,
+        didChange = false,
         K         = SC.Record,
         rec, status, recordType, sourceKeys, scope, included;
 
@@ -478,7 +477,7 @@ SC.RecordArray = SC.Object.extend(SC.Enumerable, SC.Array,
           if (!(status & K.EMPTY) && !((status & K.DESTROYED) || (status === K.BUSY_DESTROYING))) {
             rec = store.materializeRecord(storeKey);
             included = !!(rec && query.contains(rec));
-          } else included = NO ;
+          } else included = false ;
           
           // if storeKey should be in set but isn't -- add it.
           if (included) {
@@ -495,7 +494,7 @@ SC.RecordArray = SC.Object.extend(SC.Enumerable, SC.Array,
           } // if (included)
         }, this);
         // make sure resort happens
-        didChange = YES ;
+        didChange = true ;
       } // if (changed)
     
     // if no storeKeys, then we have to go through all of the storeKeys 
@@ -525,7 +524,7 @@ SC.RecordArray = SC.Object.extend(SC.Enumerable, SC.Array,
         }
       });
       
-      didChange = YES ;
+      didChange = true ;
     }
 
     // clear set of changed store keys
@@ -545,25 +544,25 @@ SC.RecordArray = SC.Object.extend(SC.Enumerable, SC.Array,
       }
     }
 
-    this._insideFlush = NO;
+    this._insideFlush = false;
     return this;
   },
 
   /**
-    Set to YES when the query is dirty and needs to update its storeKeys 
+    Set to true when the query is dirty and needs to update its storeKeys 
     before returning any results.  RecordArrays always start dirty and become
     clean the first time you try to access their contents.
     
     @property {Boolean}
   */
-  needsFlush: YES,
+  needsFlush: true,
 
   // ..........................................................
   // EMULATE SC.ERROR API
   // 
   
   /**
-    Returns YES whenever the status is SC.Record.ERROR.  This will allow you 
+    Returns true whenever the status is SC.Record.ERROR.  This will allow you 
     to put the UI into an error state.
     
     @property {Boolean}

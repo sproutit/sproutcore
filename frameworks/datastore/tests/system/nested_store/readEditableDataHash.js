@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 // NOTE: The test below are based on the Data Hashes state chart.  This models
 // the "read_editable" event in the NestedStore portion of the diagram.
@@ -20,7 +18,7 @@ module("SC.NestedStore#readEditableDataHash", {
     json = {
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     
     storeKey = SC.Store.generateStoreKey();
@@ -32,7 +30,7 @@ module("SC.NestedStore#readEditableDataHash", {
   }
 });
 
-test("data state=INHERITED, parent editable = NO", function() {
+test("data state=INHERITED, parent editable = false", function() {
   
   // test preconditions
   equals(parent.storeKeyEditState(storeKey), SC.Store.LOCKED, 'precond - parent edit state should be LOCKED');
@@ -55,7 +53,7 @@ test("data state=INHERITED, parent editable = NO", function() {
   }
 });
 
-test("data state=INHERITED, parent editable = YES", function() {
+test("data state=INHERITED, parent editable = true", function() {
   
   // test preconditions
   parent.readEditableDataHash(storeKey);

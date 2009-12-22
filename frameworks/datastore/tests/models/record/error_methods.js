@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 var store, Application;
 module("SC.Record Error Methods", {
@@ -49,8 +47,8 @@ test("Verify error methods behave correctly", function() {
   store.dataSourceDidError(storeKey, SC.Record.GENERIC_ERROR);
   SC.RunLoop.end();
 
-  ok(thing1.get('isError'), "isError on thing1 should be YES");
-  ok(!thing2.get('isError'), "isError on thing2 should be NO");
+  ok(thing1.get('isError'), "isError on thing1 should be true");
+  ok(!thing2.get('isError'), "isError on thing2 should be false");
 
   equals(thing1.get('errorObject'), SC.Record.GENERIC_ERROR,
     "get('errorObject') on thing1 should return the correct error object");

@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 // test core array-mapping methods for RecordArray
 var store, storeKey, json, rec, storeKeys, recs, query;
@@ -74,17 +72,17 @@ test("calling storeDidChangeStoreKeys() with a matching recordType", function() 
   json     = {  guid: "bar", foo: "bar" };
   store.writeDataHash(storeKey, json, SC.Record.READY_CLEAN);
   
-  equals(recs.get('needsFlush'), NO, 'PRECOND - should not need flush');
+  equals(recs.get('needsFlush'), false, 'PRECOND - should not need flush');
   
   recs.storeDidChangeStoreKeys([storeKey], SC.Set.create().add(SC.Record));
   
-  equals(recs.get('needsFlush'), YES, 'needs flush now');
+  equals(recs.get('needsFlush'), true, 'needs flush now');
   same(recs.get('storeKeys'), orig, 'storeKeys should not have changed yet');
   
   recs.flush();
   
   orig.unshift(storeKey); // update - must be first b/c id.bar < id.foo
-  equals(recs.get('needsFlush'), NO, 'should not need flush anymore');
+  equals(recs.get('needsFlush'), false, 'should not need flush anymore');
   same(recs.get('storeKeys'), orig, 'storeKeys should now be updated - rec1[%@]{%@} = %@, rec2[%@]{%@} = %@'.fmt(
     rec.get('id'), rec.get('storeKey'), rec, 
     
@@ -115,7 +113,7 @@ test("calling storeDidChangeStoreKeys() with a non-mathcing recordType", functio
   store.writeDataHash(storeKey, json, SC.Record.READY_CLEAN);
   
   recs.storeDidChangeStoreKeys([storeKey], SC.Set.create().add(Bar));
-  equals(recs.get('needsFlush'), NO, 'should not have indicated it needed a flush');
+  equals(recs.get('needsFlush'), false, 'should not have indicated it needed a flush');
 
 });
 
@@ -126,7 +124,7 @@ test("calling storeDidChangeStoreKeys() to remove a record", function() {
   store.writeStatus(storeKey, SC.Record.DESTROYED_CLEAN);
   recs.storeDidChangeStoreKeys([storeKey], SC.Set.create().add(SC.Record));
   
-  equals(recs.get('needsFlush'), YES, 'should need flush after change');
+  equals(recs.get('needsFlush'), true, 'should need flush after change');
   equals(recs.get('storeKeys').length, 1, 'should still have storeKey');
   
   equals(recs.get('length'), 0, 'should remove storeKey on flush()');

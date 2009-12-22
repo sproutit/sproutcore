@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp Sample plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 var store, Application, dataSource;
 
@@ -15,10 +13,10 @@ module("SC.Store Core Methods", {
   setup: function() {
     dataSource = SC.DataSource.create({ 
       
-      gotParams: NO,
+      gotParams: false,
       
       updateRecord: function(store, storeKey, params) {
-        this.gotParams = params && params['param1'] ? YES: NO;
+        this.gotParams = params && params['param1'] ? true: false;
       }
     });
     
@@ -129,7 +127,7 @@ test("Passing params through commitRecords()", function() {
   
   store.commitRecords(null, null, null, { param1: 'value1' });
   
-  equals(dataSource.gotParams, YES, 'params should have travelled through to dataSource updateRecord() call');
+  equals(dataSource.gotParams, true, 'params should have travelled through to dataSource updateRecord() call');
   
 });
 

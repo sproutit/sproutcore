@@ -3,23 +3,21 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 var MyApp, dataSource;
 module("SC.Record core methods", {
   setup: function() {
     dataSource = SC.DataSource.create({ 
       
-      gotParams: NO,
-      wasCommitted: NO,
+      gotParams: false,
+      wasCommitted: false,
       
       createRecord: function(store, storeKey, params) {
-        this.wasCommitted = YES;
-        this.gotParams = params && params['param1'] ? YES: NO;
+        this.wasCommitted = true;
+        this.gotParams = params && params['param1'] ? true: false;
       }});
     
     MyApp = SC.Object.create({
@@ -30,7 +28,7 @@ module("SC.Record core methods", {
     MyApp.json = { 
       foo: "bar", 
       number: 123,
-      bool: YES,
+      bool: true,
       array: [1,2,3],
       guid: 1
     };
@@ -53,8 +51,8 @@ test("Can commitRecord() specific SC.Record instance", function() {
   // commit the new record
   MyApp.foo.commitRecord({ param1: 'value1' });
   
-  equals(dataSource.wasCommitted, YES, 'Record was committed');
-  equals(dataSource.gotParams, YES, 'Params were properly passed through commitRecord');
+  equals(dataSource.wasCommitted, true, 'Record was committed');
+  equals(dataSource.gotParams, true, 'Params were properly passed through commitRecord');
   
 });
 

@@ -3,12 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
+var MyApp;
 var MyFoo = null ;
 module("SC.Record#unknownProperty", {
   setup: function() {
@@ -16,12 +15,13 @@ module("SC.Record#unknownProperty", {
     MyApp = SC.Object.create({
       store: SC.Store.create()
     })  ;
-  
+    SC.global('MyApp', MyApp);
+    
     MyApp.Foo = SC.Record.extend();
     MyApp.json = { 
       foo: "bar", 
       number: 123,
-      bool: YES,
+      bool: true,
       array: [1,2,3] 
     };
     
@@ -30,7 +30,7 @@ module("SC.Record#unknownProperty", {
     MyApp.FooStrict = SC.Record.extend();
     
     SC.mixin(MyApp.FooStrict, {
-      ignoreUnknownProperties: YES
+      ignoreUnknownProperties: true
     });
     
     MyApp.fooStrict = MyApp.store.createRecord(MyApp.FooStrict, MyApp.json);
@@ -39,6 +39,7 @@ module("SC.Record#unknownProperty", {
   
   teardown: function() {
     SC.RunLoop.end();
+    SC.global('MyApp', null);
   }
 });
 
@@ -62,7 +63,7 @@ test("set() should replace existing property", function() {
   equals(MyApp.store.dataHashes[MyApp.foo.storeKey].foo, 'baz', 'should update foo attribute');
 });
 
-test("set() on unknown property if model ignoreUnknownProperties=YES should not write it to data hash", function() {
+test("set() on unknown property if model ignoreUnknownProperties=true should not write it to data hash", function() {
   MyApp.fooStrict.set('foo', 'baz');
   equals(MyApp.store.dataHashes[MyApp.fooStrict.storeKey].foo, 'bar', 'should not have written new value to dataHash');
 });

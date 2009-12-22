@@ -3,12 +3,11 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
+var PrimaryKeyId;
 var store, Foo, json, foo ;
 module("SC.Record#writeAttribute", {
   setup: function() {
@@ -18,7 +17,7 @@ module("SC.Record#writeAttribute", {
     json = { 
       foo: "bar", 
       number: 123,
-      bool: YES,
+      bool: true,
       array: [1,2,3],
       guid: 1
     };

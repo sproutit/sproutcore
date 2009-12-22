@@ -5,10 +5,9 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import models/record";
-"import models/record_array";
-"export package";
+var SC = require('core');
+require('models/record');
+require('system/record_array');
 
 /**
   @class
@@ -61,14 +60,14 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     
     @property {Boolean}
   */
-  isNested: NO,
+  isNested: false,
   
   /**
     This type of store is not nested.
     
     @property {Boolean}
   */
-  commitRecordsAutomatically: NO,
+  commitRecordsAutomatically: false,
   
   // ..........................................................
   // DATA SOURCE SUPPORT
@@ -177,7 +176,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     receiver.
     
     @param {SC.Store} store store instance
-    @returns {Boolean} YES if belongs
+    @returns {Boolean} true if belongs
   */
   hasNestedStore: function(store) {
     while(store && (store !== this)) store = store.get('parentStore');
@@ -357,7 +356,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     if (!editables[propertyName]) {
       ret = hash[propertyName];
       if (ret && ret.isCopyable) ret = hash[propertyName] = ret.copy();
-      editables[propertyName] = YES ;
+      editables[propertyName] = true ;
     }
     
     return ret ;
@@ -475,7 +474,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     
     @param {Number|Array} storeKeys one or more store keys that changed
     @param {Number} rev optional new revision number. normally leave null
-    @param {Boolean} statusOnly (optional) YES if only status changed
+    @param {Boolean} statusOnly (optional) true if only status changed
     @param {String} key that changed (optional)
     @returns {SC.Store} receiver
   */
@@ -602,7 +601,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     
     storeKeys.forEach(function(storeKey) {
       if (records.contains(storeKey)) {
-        statusOnly = hasDataChanges.contains(storeKey) ? NO : YES;
+        statusOnly = hasDataChanges.contains(storeKey) ? false : true;
         rec = this.records[storeKey];
         keys = propertyForStoreKeys ? propertyForStoreKeys[storeKey] : null;
         
@@ -656,11 +655,11 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     if (records) {
       for(storeKey in records) {
         if (!records.hasOwnProperty(storeKey)) continue ;
-        this._notifyRecordPropertyChange(parseInt(storeKey, 10), NO);
+        this._notifyRecordPropertyChange(parseInt(storeKey, 10), false);
       }
     }
     
-    this.set('hasChanges', NO);
+    this.set('hasChanges', false);
   },
   
   /** @private
@@ -710,7 +709,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
       
       myEditables[storeKey] = 0 ; // always make dataHash no longer editable
       
-      this._notifyRecordPropertyChange(storeKey, NO);
+      this._notifyRecordPropertyChange(storeKey, false);
     }
     
     // add any records to the changelog for commit handling
@@ -836,7 +835,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
       if (!recordType.isQuery) {
         recordType = SC.Query.local(recordType);
       }
-      return this._findQuery(recordType, YES, YES);
+      return this._findQuery(recordType, true, true);
       
     // handle finding a single record
     } else {
@@ -863,7 +862,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
       recordType = SC.Query.local(recordType, conditions, params);
     }
     
-    return this._findQuery(recordType, YES, YES);
+    return this._findQuery(recordType, true, true);
   },
   
   
@@ -1455,15 +1454,15 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
       // K.EMPTY, K.ERROR, K.DESTROYED_CLEAN - initial retrieval
       if ((status == K.EMPTY) || (status == K.ERROR) || (status == K.DESTROYED_CLEAN)) {
         this.writeStatus(storeKey, K.BUSY_LOADING);
-        this.dataHashDidChange(storeKey, rev, YES);
+        this.dataHashDidChange(storeKey, rev, true);
         ret.push(storeKey);
 
-      // otherwise, ignore record unless isRefresh is YES.
+      // otherwise, ignore record unless isRefresh is true.
       } else if (isRefresh) {
         // K.READY_CLEAN, K.READY_DIRTY, ignore K.READY_NEW
         if (status & K.READY) {
           this.writeStatus(storeKey, K.BUSY_REFRESH | (status & 0x03)) ;
-          this.dataHashDidChange(storeKey, rev, YES);
+          this.dataHashDidChange(storeKey, rev, true);
           ret.push(storeKey);
 
         // K.BUSY_DESTROYING, K.BUSY_COMMITTING, K.BUSY_CREATING
@@ -1481,7 +1480,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     
     // now retrieve storekeys from dataSource.  if there is no dataSource,
     // then act as if we couldn't retrieve.
-    ok = NO;
+    ok = false;
     if (source) ok = source.retrieveRecords.call(source, this, ret, ids);
 
     // if the data source could not retrieve or if there is no source, then
@@ -1495,11 +1494,11 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
         status   = this.readStatus(storeKey);
         if (status === K.BUSY_LOADING) {
           this.writeStatus(storeKey, K.ERROR);
-          this.dataHashDidChange(storeKey, rev, YES);
+          this.dataHashDidChange(storeKey, rev, true);
           
         } else if (status & K.BUSY_REFRESH) {
           this.writeStatus(storeKey, K.READY | (status & 0x03));
-          this.dataHashDidChange(storeKey, rev, YES);
+          this.dataHashDidChange(storeKey, rev, true);
         }
       }
       ret.length = 0 ; // truncate to indicate that none could refresh
@@ -1552,10 +1551,10 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     @param {String} id to id of the record to load
     @param {SC.Record} recordType the expected record type
     @param {Number} storeKey (optional) optional store key
-    @returns {Boolean} YES if the retrieval was a success.
+    @returns {Boolean} true if the retrieval was a success.
   */
   refreshRecord: function(recordType, id, storeKey) {
-    return !!this.retrieveRecord(recordType, id, storeKey, YES);
+    return !!this.retrieveRecord(recordType, id, storeKey, true);
   },
 
   /**
@@ -1566,10 +1565,10 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     @param {SC.Record|Array} recordTypes class or array of classes
     @param {Array} ids ids to destroy
     @param {Array} storeKeys (optional) store keys to destroy
-    @returns {Boolean} YES if the retrieval was a success.
+    @returns {Boolean} true if the retrieval was a success.
   */
   refreshRecords: function(recordTypes, ids, storeKeys) {
-    var ret = this.retrieveRecords(recordTypes, ids, storeKeys, YES);
+    var ret = this.retrieveRecords(recordTypes, ids, storeKeys, true);
     return ret && ret.length>0;
   },
     
@@ -1627,18 +1626,18 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
       else {
         if(status==K.READY_NEW) {
           this.writeStatus(storeKey, K.BUSY_CREATING);
-          this.dataHashDidChange(storeKey, rev, YES);
+          this.dataHashDidChange(storeKey, rev, true);
           retCreate.push(storeKey);
         } else if (status==K.READY_DIRTY) {
           this.writeStatus(storeKey, K.BUSY_COMMITTING);
-          this.dataHashDidChange(storeKey, rev, YES);
+          this.dataHashDidChange(storeKey, rev, true);
           retUpdate.push(storeKey);
         } else if (status==K.DESTROYED_DIRTY) {
           this.writeStatus(storeKey, K.BUSY_DESTROYING);
-          this.dataHashDidChange(storeKey, rev, YES);
+          this.dataHashDidChange(storeKey, rev, true);
           retDestroy.push(storeKey);
         } else if (status==K.DESTROYED_CLEAN) {
-          this.dataHashDidChange(storeKey, rev, YES);
+          this.dataHashDidChange(storeKey, rev, true);
         }
         // ignore K.READY_CLEAN, K.BUSY_LOADING, K.BUSY_CREATING, K.BUSY_COMMITTING, 
         // K.BUSY_REFRESH_CLEAN, K_BUSY_REFRESH_DIRTY, KBUSY_DESTROYING
@@ -1663,7 +1662,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     on the store key.
     
     You have to pass either the id or the storeKey otherwise it will return 
-    NO.
+    false.
     
     @param {SC.Record} recordType the expected record type
     @param {String} id the id of the record to commit
@@ -1675,7 +1674,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
   commitRecord: function(recordType, id, storeKey, params) {
     var array = this._TMP_RETRIEVE_ARRAY,
         ret ;
-    if (id === undefined && storeKey === undefined ) return NO;
+    if (id === undefined && storeKey === undefined ) return false;
     if (storeKey !== undefined) {
       array[0] = storeKey;
       storeKey = array;
@@ -1939,7 +1938,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
         throw K.BAD_STATE_ERROR ;
     } 
     this.writeStatus(storeKey, status) ;
-    this.dataHashDidChange(storeKey, null, YES);
+    this.dataHashDidChange(storeKey, null, true);
     
     return this ;
   },
@@ -1972,7 +1971,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     if (dataHash) this.writeDataHash(storeKey, dataHash, status) ;
     if (newId) SC.Store.replaceIdFor(storeKey, newId);
     
-    statusOnly = dataHash || newId ? NO : YES;
+    statusOnly = dataHash || newId ? false : true;
     this.dataHashDidChange(storeKey, null, statusOnly);
     
     return this ;
@@ -2027,7 +2026,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     }
 
     this.writeStatus(storeKey, status) ;
-    this.dataHashDidChange(storeKey, null, YES);
+    this.dataHashDidChange(storeKey, null, true);
 
     return this ;
   },
@@ -2062,7 +2061,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
       return storeKey;
     }
     //conflicted (ready)
-    return NO;
+    return false;
   },
   
   /**
@@ -2088,7 +2087,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
       return storeKey;
     }
     //conflicted (destroy)
-    return NO;
+    return false;
   },
 
   /**
@@ -2117,11 +2116,11 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
       }
       
       this.writeStatus(storeKey, status) ;
-      this.dataHashDidChange(storeKey, null, YES);
+      this.dataHashDidChange(storeKey, null, true);
       return storeKey;
     }
     //conflicted (error)
-    return NO;
+    return false;
   },
   
   // ..........................................................
@@ -2155,7 +2154,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
       throw new Error("Cannot load query results for a local query");
     }
 
-    var recArray = this._findQuery(query, YES, NO);
+    var recArray = this._findQuery(query, true, false);
     if (recArray) recArray.set('storeKeys', storeKeys);
     this.dataSourceDidFetchQuery(query);
     
@@ -2175,11 +2174,11 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     @returns {SC.Store} receiver
   */
   dataSourceDidFetchQuery: function(query) {
-    return this._scstore_dataSourceDidFetchQuery(query, YES);
+    return this._scstore_dataSourceDidFetchQuery(query, true);
   },
   
   _scstore_dataSourceDidFetchQuery: function(query, createIfNeeded) {
-    var recArray     = this._findQuery(query, createIfNeeded, NO),
+    var recArray     = this._findQuery(query, createIfNeeded, false),
         nestedStores = this.get('nestedStores'),
         loc          = nestedStores ? nestedStores.get('length') : 0;
     
@@ -2188,7 +2187,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     
     // notify nested stores
     while(--loc >= 0) {
-      nestedStores[loc]._scstore_dataSourceDidFetchQuery(query, NO);
+      nestedStores[loc]._scstore_dataSourceDidFetchQuery(query, false);
     }
     
     return this ;
@@ -2203,11 +2202,11 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     @returns {SC.Store} receiver
   */
   dataSourceDidCancelQuery: function(query) {
-    return this._scstore_dataSourceDidCancelQuery(query, YES);
+    return this._scstore_dataSourceDidCancelQuery(query, true);
   },
   
   _scstore_dataSourceDidCancelQuery: function(query, createIfNeeded) {
-    var recArray     = this._findQuery(query, createIfNeeded, NO),
+    var recArray     = this._findQuery(query, createIfNeeded, false),
         nestedStores = this.get('nestedStores'),
         loc          = nestedStores ? nestedStores.get('length') : 0;
     
@@ -2216,7 +2215,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     
     // notify nested stores
     while(--loc >= 0) {
-      nestedStores[loc]._scstore_dataSourceDidCancelQuery(query, NO);
+      nestedStores[loc]._scstore_dataSourceDidCancelQuery(query, false);
     }
     
     return this ;
@@ -2240,11 +2239,11 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
       errors[SC.guidFor(query)] = error;
     }
 
-    return this._scstore_dataSourceDidErrorQuery(query, YES);
+    return this._scstore_dataSourceDidErrorQuery(query, true);
   },
 
   _scstore_dataSourceDidErrorQuery: function(query, createIfNeeded) {
-    var recArray     = this._findQuery(query, createIfNeeded, NO),
+    var recArray     = this._findQuery(query, createIfNeeded, false),
         nestedStores = this.get('nestedStores'),
         loc          = nestedStores ? nestedStores.get('length') : 0;
 
@@ -2253,7 +2252,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
 
     // notify nested stores
     while(--loc >= 0) {
-      nestedStores[loc]._scstore_dataSourceDidErrorQuery(query, NO);
+      nestedStores[loc]._scstore_dataSourceDidErrorQuery(query, false);
     }
 
     return this ;

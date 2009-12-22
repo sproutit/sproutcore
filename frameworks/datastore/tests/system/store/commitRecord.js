@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 var store, storeKey1, storeKey2, storeKey3, storeKey4, storeKey5, storeKey6;
 var storeKey7, json, json1, json2, json3, json4, json5, json6, json7;
@@ -63,43 +61,43 @@ module("SC.Store#commitRecord", {
       guid: "commitGUID1",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json2 = {
       guid: "commitGUID2",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json3 = {
       guid: "commitGUID3",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json4 = {
       guid: "commitGUID4",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json5 = {
       guid: "commitGUID5",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json6 = {
       guid: "commitGUID6",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     json7 = {
       guid: "commitGUID7",
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     
     SC.RunLoop.begin();

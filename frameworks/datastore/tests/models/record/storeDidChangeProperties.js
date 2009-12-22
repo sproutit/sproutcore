@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 var store, child, Foo, json, foo ;
 module("SC.Record#storeDidChangeProperties", {
@@ -34,7 +32,7 @@ module("SC.Record#storeDidChangeProperties", {
     json = { 
       foo: "bar", 
       number: 123,
-      bool: YES,
+      bool: true,
       array: [1,2,3] 
     };
     
@@ -59,16 +57,16 @@ function expect(fooObject, expectedStatusCnt, expectedFooCnt) {
 // BASIC BEHAVIORS
 // 
 
-test("should change status only if statusOnly=YES", function() {
+test("should change status only if statusOnly=true", function() {
   checkPreconditions();
-  foo.storeDidChangeProperties(YES);
+  foo.storeDidChangeProperties(true);
   expect(foo,1,0);
 });
 
 
-test("should change attrs  & status if statusOnly=NO", function() {
+test("should change attrs  & status if statusOnly=false", function() {
   checkPreconditions();
-  foo.storeDidChangeProperties(NO);
+  foo.storeDidChangeProperties(false);
   expect(foo,1,1);
 });
 

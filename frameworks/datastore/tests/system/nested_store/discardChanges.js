@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 // NOTE: The test below are based on the Data Hashes state chart.  This models
 // the "discard" event in the NestedStore portion of the diagram.
@@ -20,7 +18,7 @@ module("SC.NestedStore#discardChanges", {
     json = {
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     args = null;
     
@@ -60,7 +58,7 @@ function testStateTransition() {
   
   // verify result
   equals(store.storeKeyEditState(storeKey), SC.Store.INHERITED, 'data edit state');
-  equals(store.get('hasChanges'), NO, 'hasChanges should be NO');
+  equals(store.get('hasChanges'), false, 'hasChanges should be false');
   equals(store.readDataHash(storeKey), json, 'data hash should return parent hash again');
   equals(store.readStatus(storeKey), parent.readStatus(storeKey), 'should return record status from parent');
   ok(!store.chainedChanges || !store.chainedChanges.length, 'should have no chainedChanges queued');

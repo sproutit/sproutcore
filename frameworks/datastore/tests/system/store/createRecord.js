@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 var store, storeKey, json, hash, hash2, MyRecordType;
 
@@ -17,7 +15,7 @@ module("SC.Store#createRecord", {
     MyRecordType = SC.Record.extend({
       string: SC.Record.attr(String, { defaultValue: "Untitled" }),
       number: SC.Record.attr(Number, { defaultValue: 5 }),
-      bool: SC.Record.attr(Boolean, { defaultValue: YES })
+      bool: SC.Record.attr(Boolean, { defaultValue: true })
     });
     
     store = SC.Store.create();
@@ -25,7 +23,7 @@ module("SC.Store#createRecord", {
     json = {
       string: "string",
       number: 23,
-      bool:   YES
+      bool:   true
     };
     
     storeKey = SC.Store.generateStoreKey();
@@ -41,12 +39,12 @@ test("create a record", function() {
     guid: "1234abcd",
     string: "abcd",
     number: 1,
-    bool:   NO
+    bool:   false
     };
   hash2 = {
     string: "abcd",
     number: 1,
-    bool:   NO
+    bool:   false
   };
 
   rec = store.createRecord(SC.Record, hash);
