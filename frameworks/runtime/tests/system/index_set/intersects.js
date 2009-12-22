@@ -1,14 +1,12 @@
 // ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2009 Apple Inc. and contributors.
-// License:   Licensed under MIT license (see license.js)
+// Project:   SproutCore Runtime - Property Observing Library
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same notest plan */
-
 "import package core_test";
-"import package sproutcore/runtime";
-
+var SC = require('index'); // load sproutcore/foundation
 
 var set ;
 module("SC.IndexSet#intersects", {
@@ -46,7 +44,7 @@ test("handle range inside set", function() {
 });
 
 test("handle range outside of set", function() {
-  equals(set.intersects(100,4), false, '100..1003 should falseT be in set');
+  equals(set.intersects(100,4), false, '100..1003 should NOT be in set');
 });
 
 test("handle range partially inside set", function() {

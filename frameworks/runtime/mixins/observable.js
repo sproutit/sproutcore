@@ -886,7 +886,7 @@ SC.Observable = {
   },
   
   // ..........................................
-  // falseTIFICATION
+  // NOTIFICATION
   // 
 
   /**
@@ -949,7 +949,7 @@ SC.Observable = {
       // Now go through the set and add all dependent keys...
       if (dependents = this._kvo_dependents) {
 
-        // falseTE: each time we loop, we check the changes length, this
+        // NOTE: each time we loop, we check the changes length, this
         // way any dependent keys added to the set will also be evaluated...
         for(idx=0;idx<changes.length;idx++) {
           key = changes[idx] ;

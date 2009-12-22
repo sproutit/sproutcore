@@ -1,13 +1,12 @@
 // ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2009 Apple Inc. and contributors.
-// License:   Licensed under MIT license (see license.js)
+// Project:   SproutCore Runtime - Property Observing Library
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same notest */
-
 "import package core_test";
-"import package sproutcore/runtime";
+var SC = require('index'); // load sproutcore/foundation
 
 var source, indexes, observer, obj ; // base array to work with
 module("SC.RangeObserver#destroy", {
@@ -45,7 +44,7 @@ test("returns receiver", function() {
 // OBSERVING
 // 
 
-// falseTE: Since we are lazy about observing changes, we want to test both what
+// NOTE: Since we are lazy about observing changes, we want to test both what
 // happens if you destroy the observer before any changes have happend and 
 // after changes have happened.
 

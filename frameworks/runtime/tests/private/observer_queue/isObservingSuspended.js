@@ -1,14 +1,12 @@
 // ==========================================================================
-// Project:   SproutCore Costello - Property Observing Library
+// Project:   SproutCore Runtime - Property Observing Library
 // Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
 //            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
 "import package core_test";
-"import core"; 
-"import private/observer_queue";
-"import system/object";
+var SC = require('index'); // load sproutcore/foundation
 
 var callCount, obj;
 

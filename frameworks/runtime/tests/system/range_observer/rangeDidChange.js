@@ -1,13 +1,12 @@
 // ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2009 Apple Inc. and contributors.
-// License:   Licensed under MIT license (see license.js)
+// Project:   SproutCore Runtime - Property Observing Library
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same notest */
-
 "import package core_test";
-"import package sproutcore/runtime";
+var SC = require('index'); // load sproutcore/foundation
 
 var source, indexes, observer, obj ; // base array to work with
 module("SC.RangeObserver#rangeDidChange", {
@@ -74,9 +73,9 @@ test("invokes callback if changes set is passed and it intersects with observed 
   equals(observer.callCount, 1, 'should invoke callback');
 });
 
-test("does falseT invoke callback if changes set is passed and it intersects with observed range", function() {
+test("does NOT invoke callback if changes set is passed and it intersects with observed range", function() {
   obj.rangeDidChange(SC.IndexSet.create(4));
-  equals(observer.callCount, 0, 'should falseT invoke callback');
+  equals(observer.callCount, 0, 'should NOT invoke callback');
 });
 
 // ..........................................................

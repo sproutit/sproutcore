@@ -1,12 +1,12 @@
 // ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2009 Apple Inc. and contributors.
-// License:   Licensed under MIT license (see license.js)
+// Project:   SproutCore Runtime - Property Observing Library
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*global module test equals context ok same raises plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
+var SC = require('index'); // load sproutcore/foundation
 
 var set ;
 module("SC.IndexSet#add", {
@@ -122,7 +122,7 @@ test("add range matching existing range", function() {
 });
 
 // ..........................................................
-// falseRMALIZED PARAMETER CASES
+// NORMALIZED PARAMETER CASES
 // 
 
 test("add with no params should do nothing", function() {

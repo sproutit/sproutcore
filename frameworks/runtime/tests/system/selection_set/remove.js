@@ -1,12 +1,12 @@
 // ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2009 Apple Inc. and contributors.
-// License:   Licensed under MIT license (see license.js)
+// Project:   SproutCore Runtime - Property Observing Library
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
+var SC = require('index'); // load sproutcore/foundation
 
 var set, array, array2, expected, expected2 ;
 module("SC.SelectionSet#remove", {
@@ -108,7 +108,7 @@ test("removing index set should also remove individually added objects", functio
   
   SC.stopIt = false ;
   
-  ok(!set.contains(objToRemove), 'set should falseT contain objToRemove');
+  ok(!set.contains(objToRemove), 'set should NOT contain objToRemove');
   ok(set.contains(objToNotRemove), 'set should contain objToNotRemove');
   equals(set.get('length'), 2, 'set.length should == 1 object + index.length');
 });

@@ -1,31 +1,12 @@
 // ==========================================================================
-// SC.Cookie Unit Test
+// Project:   SproutCore Runtime - Property Observing Library
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module test equals */
 
 "import package core_test";
-"import core";
-"import system/cookie";
-"import system/object";
-"import system/logger";
-
-var setCookies = ['cookie', 'cookie2', 'cookie-hashincreate', 'cookie-usingset', 'cookie-2-1', 'cookie-2-2', 'cookie-2-3', 'cookie-expires', 'cookie-destroy', 'cookie-find'];
-eraseCookies();
-setCookies = [];
-
-if (document.cookie != "") {
-  SC.Logger.warn("document.cookie not empty -- test results may be contaminated -- %@".fmt(document.cookie));
-}
-
-module("SC.Cookie", {
-  setup: function() {
-    setCookies = [];
-  },
-  teardown: function() {
-    eraseCookies();
-  }
-});
-
+var SC = require('index'); // load sproutcore/foundation
 
 // functions borrowed from http://www.quirksmode.org/js/cookies.html
 // should be good to test against
@@ -41,13 +22,15 @@ function createCookie(name,value,days) {
 	document.cookie = name+"="+value+expires+"; path=/";
 }
 
+var setCookies = ['cookie', 'cookie2', 'cookie-hashincreate', 'cookie-usingset', 'cookie-2-1', 'cookie-2-2', 'cookie-2-3', 'cookie-expires', 'cookie-destroy', 'cookie-find'];
+
 function readCookie(name) {
 	var nameEQ = name + "=";
 	var ca = document.cookie.split(';');
 	for(var i=0;i < ca.length;i++) {
 		var c = ca[i];
 		while (c.charAt(0)==' ') c = c.substring(1,c.length);
-		if (c.indexOf(nameEQ) == 0) return decodeURIComponent(c.substring(nameEQ.length,c.length));
+		if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length,c.length));
 	}
 	return null;
 }
@@ -57,6 +40,22 @@ function eraseCookies() {
     createCookie(cookie, "", -1);
   });
 }
+
+eraseCookies();
+setCookies = [];
+
+if (document.cookie !== "") {
+  SC.Logger.warn("document.cookie not empty -- test results may be contaminated -- %@".fmt(document.cookie));
+}
+
+module("SC.Cookie", {
+  setup: function() {
+    setCookies = [];
+  },
+  teardown: function() {
+    eraseCookies();
+  }
+});
 
 
 test("Setting a cookie - hash in create", function() {

@@ -1,14 +1,12 @@
 // ==========================================================================
-// Project:   SproutCore Costello - Property Observing Library
+// Project:   SproutCore Runtime - Property Observing Library
 // Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
 //            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
 "import package core_test";
-"import core";
-"import system/object";
-"import mixins/comparable";
+var SC = require('index'); // load sproutcore/foundation
 
 /*globals module test ok isObj equals expects */
 

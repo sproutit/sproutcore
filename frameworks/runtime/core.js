@@ -398,7 +398,7 @@ SC.mixin(/** @scope SC */ {
     code to cause two separate instances of the same object to be treated as
     if they were equal for comparisons and other functions.
 
-    IMPORTANT:  If you implement a hash() method, it MUST falseT return a 
+    IMPORTANT:  If you implement a hash() method, it MUST NOT return a 
     number or a string that contains only a number.  Typically hash codes 
     are strings that begin with a "%".
 

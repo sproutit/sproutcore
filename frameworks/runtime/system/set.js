@@ -11,7 +11,7 @@ require('mixins/copyable');
 require('mixins/freezable');
 require('mixins/observable');
 
-// IMPORTANT falseTE:  This file actually defines two classes: 
+// IMPORTANT NOTE:  This file actually defines two classes: 
 // SC.Set is a fully observable set class documented below. 
 // SC._CoreSet is just like SC.Set but is not observable.  This is required
 // because SC.Observable is built on using sets and requires sets without 

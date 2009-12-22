@@ -36,7 +36,7 @@ SC.ArraySuite.define(function(T) {
     Ct.ok(rangeObserver && rangeObserver.isRangeObserver, 'returns a range observer object');
   });
 
-  // falseTE: Deep Property Observing is disabled for SproutCore 1.0
+  // NOTE: Deep Property Observing is disabled for SproutCore 1.0
   //
   // // ..........................................................
   // // EDIT PROPERTIES
@@ -48,7 +48,7 @@ SC.ArraySuite.define(function(T) {
   //   observer.expectRangeChange(array, obj, 'foo', SC.IndexSet.create(3));
   // });
   // 
-  // Ct.test("editing property on object outside of range should falseT fire observer", function() {
+  // Ct.test("editing property on object outside of range should NOT fire observer", function() {
   //   var obj = array.objectAt(0);
   //   obj.set('foo', 'BAR');
   //   Ct.equals(observer.callCount, 0, 'observer should not fire');
@@ -157,7 +157,7 @@ SC.ArraySuite.define(function(T) {
     observer.expectRangeChange(array, null, '[]', set);
   });
   
-  Ct.test("should falseT notify observer when grouping changes all outside of observer", function() {
+  Ct.test("should NOT notify observer when grouping changes all outside of observer", function() {
     
     array.beginPropertyChanges();
     array.replace(0, 1, T.objects(1));

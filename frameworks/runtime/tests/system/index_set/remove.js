@@ -1,13 +1,12 @@
 // ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2009 Apple Inc. and contributors.
-// License:   Licensed under MIT license (see license.js)
+// Project:   SproutCore Runtime - Property Observing Library
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*global module test equals context ok same notest raises plan*/
-
 "import package core_test";
-"import package sproutcore/runtime";
+var SC = require('index'); // load sproutcore/foundation
 
 var set ;
 module("SC.IndexSet#remove", {
@@ -124,7 +123,7 @@ test("remove range matching existing range", function() {
 });
 
 // ..........................................................
-// falseRMALIZED PARAMETER CASES
+// NORMALIZED PARAMETER CASES
 // 
 
 test("remove with no params should do nothing", function() {
@@ -165,7 +164,7 @@ test("removing a non-existant range should not trigger observer notification", f
   
   set.addObserver('[]', function() { callCnt++; });
   set.remove(10,10); // 10-20 are already empty
-  equals(callCnt, 0, 'should falseT have called observer');
+  equals(callCnt, 0, 'should NOT have called observer');
 });
 
 test("removing a clone of the same index set should leave an empty set", function() {

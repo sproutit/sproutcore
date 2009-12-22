@@ -1,10 +1,12 @@
-// ========================================================================
-// SC.Set Tests
-// ========================================================================
-/*globals module test ok isObj equals expects plan */
+// ==========================================================================
+// Project:   SproutCore Runtime - Property Observing Library
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
+// ==========================================================================
 
 "import package core_test";
-"import package sproutcore/runtime";
+var SC = require('index'); // load sproutcore/foundation
 
 var a, b, c ; // global variables
 
@@ -122,13 +124,13 @@ test("should add a function", function() {
   equals(oldLength+1, set.length, "new set length") ;
 });
 
-test("should falseT add a null", function() {
+test("should NOT add a null", function() {
   set.add(null) ;
   equals(set.length, 0) ;
   equals(set.contains(null), false) ;
 });
 
-test("should falseT add an undefined", function() {
+test("should NOT add an undefined", function() {
   set.add(undefined) ;
   equals(set.length, 0) ;
   equals(set.contains(undefined), false) ;
@@ -232,13 +234,13 @@ test("should remove a function and reduce length", function() {
   equals(oldLength-1, set.length, "should be 1 shorter") ;
 });
 
-test("should falseT remove a null", function() {
+test("should NOT remove a null", function() {
   var oldLength = set.length ;
   set.remove(null) ;
   equals(oldLength, set.length) ;
 });
 
-test("should falseT remove an undefined", function() {
+test("should NOT remove an undefined", function() {
   var oldLength = set.length ;
   set.remove(undefined) ;
   equals(oldLength, set.length) ;

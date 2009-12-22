@@ -1,16 +1,13 @@
 // ==========================================================================
-// Project:   SproutCore Costello - Property Observing Library
+// Project:   SproutCore Runtime - Property Observing Library
 // Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
 //            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-// Unit test some standard SC.Array implementations.
 "import package core_test";
-"import core";
-"import debug/test_suites/array";
-"import system/object";
-"import mixins/array";
+var SC = require('index'); // load sproutcore/foundation
+require('debug/test_suites/array');
 
 // ..........................................................
 // BUILT-IN ARRAY
