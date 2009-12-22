@@ -118,7 +118,7 @@ SC.ArraySuite = Ct.Suite.create("Verify SC.Array compliance: %@#%@", {
     return SC.Object.create({
 
       // ..........................................................
-      // falseRMAL OBSERVER TESTING
+      // NORMAL OBSERVER TESTING
       // 
       
       observer: function(target, key, value) {

@@ -1,15 +1,12 @@
 // ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
+// Project:   SproutCore Runtime - Property Observing Library
 // Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
-//            portions copyright @2009 Apple Inc.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*globals module test ok equals same plan */
-
 "import package core_test";
-"import core";
-"import system/object";
+var SC = require('index'); // load sproutcore/foundation
 
 var ObjectA;
 module("object.propertyChanges()", {	

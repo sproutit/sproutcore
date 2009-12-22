@@ -1,17 +1,15 @@
-// ========================================================================
-// SC.Observable Tests
-// ========================================================================
-/*globals module test ok isObj equals expects Namespace */
+// ==========================================================================
+// Project:   SproutCore Runtime - Property Observing Library
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
+// ==========================================================================
 
 "import package core_test";
-"import core";
-"import system/object";
-"import mixins/observable";
-
-// used in testing method
-"import mixins/enumerable mixins/array system/run_loop system/binding";
+var SC = require('index'); // load sproutcore/foundation
 
 var object, ObjectC, ObjectD, objectA, objectB ;
+var Namespace ;
 
 // ..........................................................
 // GET()
@@ -202,7 +200,7 @@ test("should call computed properties passing value and return this", function()
 
 test("should replace the function for a non-computed property and return this", function() {
   var ret = object.set("method", "changed") ;
-  equals(object._method, "method") ; // make sure this was falseT run
+  equals(object._method, "method") ; // make sure this was NOT run
   ok(SC.typeOf(object.method) !== SC.T_FUNCTION) ;
   equals(ret, object) ;
 });
@@ -631,6 +629,11 @@ module("Bind function ", {
       objectA: objectA,
       objectB: objectB  
     } ;
+    SC.global('Namespace', Namespace);
+  },
+  
+  teardown: function() {
+    SC.global('Namespace', null);
   }
 });
 

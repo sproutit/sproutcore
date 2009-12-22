@@ -1,14 +1,13 @@
-// ========================================================================
-// SC.Binding Tests
-// ========================================================================
-/*globals module test ok isObj equals expects TestNamespace system plan */
+// ==========================================================================
+// Project:   SproutCore Runtime - Property Observing Library
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
+// ==========================================================================
 
 "import package core_test";
-"import core";
-"import system/binding";
-"import system/object";
-"import system/run_loop";
-"import package default:system as system";
+var SC = require('index'); // load sproutcore/foundation
+var system = require('system' ,'default');
 
 var fromObject, toObject, binding, Bon1, bon2 ; // global variables
 
@@ -130,7 +129,7 @@ test("changing toObject should not make binding dirty", function() {
   equals(binding._changePending, false) ;
 });
 
-test("toObject change should falseT propogate", function() {
+test("toObject change should NOT propogate", function() {
   toObject.set("value", "change") ;
   equals(fromObject.get("value"), "start") ;
   SC.Binding.flushPendingChanges() ;
@@ -180,6 +179,8 @@ test("changing first output should propograte to third after flush", function() 
   equals("change", third.get("input"), "third.input") ;
 });
 
+var TestNamespace ;
+
 module("Custom Binding", {
   
   setup: function() {
@@ -199,10 +200,12 @@ module("Custom Binding", {
       bon2: bon2,
       Bon1: Bon1
     } ;
+  SC.global('TestNamespace', TestNamespace);
   },
   
   teardown: function() { 
     Bon1 = bon2 = null ;
+    SC.global('TestNamespace', null);
   }
 });
 

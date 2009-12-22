@@ -1,11 +1,13 @@
 // ==========================================================================
-// SC.Logger Unit Test
+// Project:   SproutCore Runtime - Property Observing Library
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-/*globals module test equals */
-
 "import package core_test";
-"import package sproutcore/runtime";
+var SC = require('index'); // load sproutcore/foundation
+
 
 // Test console needed because testing for null functions,
 // ie. setting the actual console.log = null means setting up

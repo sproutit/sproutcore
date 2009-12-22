@@ -1,11 +1,13 @@
-// ========================================================================
-// SC.SparseArray Tests
-// ========================================================================
-/*globals module test ok isObj equals expects plan */
+// ==========================================================================
+// Project:   SproutCore Runtime - Property Observing Library
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
+// ==========================================================================
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import debug/test_suites/array";
+var SC = require('index'); // load sproutcore/foundation
+require('debug/test_suites/array');
 
 var objectA = 23, objectB = 12, objectC = 31, numbers, new_numbers;
 module("SC.SparseArray") ;
@@ -14,7 +16,7 @@ test("new SparseArray has expected length", function() {
   var ary = SC.SparseArray.array(10000) ;
   equals(10000, ary.get('length'), "length") ;
 });
-
+ 
 test("fetching the object at index", function() {
 	var ary = SC.SparseArray.create(10);
 	var arr = ["I'll","be","there","4u"];
@@ -105,7 +107,7 @@ test("modifying a range should not require the rest of the array to refetch", fu
   
   ary.removeAt(5); // delete an item before 10
   equals(ary.objectAt(9), 'foo', 'should provide foo at index after delete');
-  equals(del.cnt, 0, 'should falseT invoke sparseArrayRequestIndex() since it was provided already');
+  equals(del.cnt, 0, 'should NOT invoke sparseArrayRequestIndex() since it was provided already');
 });
 
 test("Check that requestIndex works with a rangeWindowSize larger than 1", function() {

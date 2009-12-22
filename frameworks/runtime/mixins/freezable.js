@@ -96,7 +96,7 @@ SC.Freezable = {
     @returns {Object} reciever
   */
   freeze: function() {
-    // falseTE: Once someone actually implements Object.freeze() in the browser,
+    // NOTE: Once someone actually implements Object.freeze() in the browser,
     // add a call to that here also.
     
     if (this.set) this.set('isFrozen', true);
