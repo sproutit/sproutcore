@@ -23,7 +23,7 @@ SC.LOG_BINDINGS = false ;
   
   @property {Boolean}
 */
-SC.BENCHMARK_BINDING_falseTIFICATIONS = false ;
+SC.BENCHMARK_BINDING_NOTIFICATIONS = false ;
 
 /**
   Performance parameter.  This will benchmark the time spend configuring each

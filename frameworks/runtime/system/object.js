@@ -552,7 +552,7 @@ SC.Object.prototype = {
     {{{
       SC.Object.create({
         
-        // DOES falseT WORK IN SAFARI 2 OR EARLIER
+        // DOES NOT WORK IN SAFARI 2 OR EARLIER
         method1: function() {
           this.superclass();
         },

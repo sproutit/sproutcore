@@ -1,9 +1,12 @@
-// ========================================================================
-// SC.isArray Tests
-// ========================================================================
-/*globals module test */
+// ==========================================================================
+// Project:   SproutCore Runtime - Property Observing Library
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
+// ==========================================================================
 
-"import core_test:package core";
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var objectA,objectB,objectC, objectD, objectE; //global variables
 

@@ -2,8 +2,6 @@
 // SC.Logger
 // ==========================================================================
 
-var SC = require('core');
-require('system/object');
 
 /**
   If {@link SC.Logger.format} is true, this delimiter will be put between arguments.
@@ -69,7 +67,7 @@ SC.Logger = SC.Object.create({
 
     @property: {Boolean}
   */
-  debugEnabled: NO,
+  debugEnabled: false,
 
   /**
     Computed property that checks for the existence of the reporter object.
@@ -77,7 +75,7 @@ SC.Logger = SC.Object.create({
     @property {Boolean}
   */
   exists: function() {
-    return (typeof this.get('reporter') !== 'undefined') && (this.get('reporter') !== null);
+    return typeof(this.get('reporter')) !== 'undefined' && this.get('reporter') != null;
   }.property('reporter').cacheable(),
 
   /**
@@ -89,7 +87,7 @@ SC.Logger = SC.Object.create({
     @property {Boolean}
   */
   fallBackOnAlert: false,
-  
+
   /**
     If some function, such as console.dir, does not exist,
     SC.Logger will try console.log if this is true.
@@ -97,7 +95,7 @@ SC.Logger = SC.Object.create({
     @property {Boolean}
   */
   fallBackOnLog: true,
-  
+
   /**
     Whether or not to format multiple arguments together
     or let the browser deal with that.
@@ -105,7 +103,7 @@ SC.Logger = SC.Object.create({
     @property {Boolean}
   */
   format: true,
-  
+
   /**
     The reporter is the object which implements the actual logging functions.
 
@@ -128,7 +126,7 @@ SC.Logger = SC.Object.create({
     var reporter = this.get('reporter');
 
     // log through the reporter
-    if (this.get('exists') && (typeof reporter.log === SC.T_FUNCTION)) {
+    if (this.get('exists') && typeof(reporter.log) === "function") {
       if (this.get('format')) {
         reporter.log(this._argumentsToString.apply(this, arguments));
       }
@@ -143,7 +141,7 @@ SC.Logger = SC.Object.create({
       var s = this.get('format') ? this._argumentsToString.apply(this, arguments) : arguments;
       // include support for overriding the alert through the reporter
       // if it has come this far, it's likely this will fail
-      if (this.get('exists') && (typeof reporter.alert === SC.T_FUNCTION)) {
+      if (this.get('exists') && typeof(reporter.alert) === "function") {
         reporter.alert(s);
       }
       else {
@@ -166,7 +164,7 @@ SC.Logger = SC.Object.create({
   debug: function() {
     var reporter = this.get('reporter');
 
-    if (this.get('debugEnabled') !== YES) {
+    if (this.get('debugEnabled') !== true) {
       return false;
     }
 
@@ -193,14 +191,14 @@ SC.Logger = SC.Object.create({
   */
   dir: function() {
     var reporter = this.get('reporter');
-    
-  	if (this.get('exists') && (typeof reporter.dir === SC.T_FUNCTION)) {
+
+    if (this.get('exists') && typeof(reporter.dir) === "function") {
       // Firebug's console.dir doesn't support multiple objects here
       // but maybe custom reporters will
-  	  reporter.dir.apply(reporter, arguments);
-  	  return true;
-	  }
-  	return this.fallBackOnLog ? this.log.apply(this, arguments) : false;
+      reporter.dir.apply(reporter, arguments);
+      return true;
+    }
+    return (this.fallBackOnLog) ? this.log.apply(this, arguments) : false;
   },
 
   /**
@@ -214,14 +212,14 @@ SC.Logger = SC.Object.create({
   */
   dirxml: function() {
     var reporter = this.get('reporter');
-    
-    if (this.get('exists') && (typeof reporter.dirxml === SC.T_FUNCTION)) {
+
+    if (this.get('exists') && typeof(reporter.dirxml) === "function") {
       // Firebug's console.dirxml doesn't support multiple objects here
       // but maybe custom reporters will
       reporter.dirxml.apply(reporter, arguments);
       return true;
     }
-    return this.fallBackOnLog ? this.log.apply(this, arguments) : false;
+    return (this.fallBackOnLog) ? this.log.apply(this, arguments) : false;
   },
 
   /**
@@ -235,14 +233,14 @@ SC.Logger = SC.Object.create({
   */
   error: function() {
     var reporter = this.get('reporter');
-    
-    if (this.get('exists') && (typeof reporter.error === SC.T_FUNCTION)) {
+
+    if (this.get('exists') && typeof(reporter.error) === "function") {
       reporter.error.apply(reporter, arguments);
       return true;
     }
     else if (this.fallBackOnLog) {
       var a = this._argumentsToArray(arguments);
-      if (typeof a.unshift === SC.T_FUNCTION) a.unshift(SC.LOGGER_LOG_ERROR);
+      if (typeof(a.unshift) === "function") a.unshift(SC.LOGGER_LOG_ERROR);
       return this.log.apply(this, a);
     }
     return false;
@@ -258,8 +256,8 @@ SC.Logger = SC.Object.create({
   */
   group: function(s) {
     var reporter = this.get('reporter');
-    
-    if (this.get('exists') && (typeof reporter.group === SC.T_FUNCTION)) {
+
+    if (this.get('exists') && typeof(reporter.group) === "function") {
       reporter.group(s);
       return true;
     }
@@ -274,8 +272,8 @@ SC.Logger = SC.Object.create({
   */
   groupEnd: function() {
     var reporter = this.get('reporter');
-    
-    if (this.get('exists') && (typeof reporter.groupEnd === SC.T_FUNCTION)) {
+
+    if (this.get('exists') && typeof(reporter.groupEnd) === "function") {
       reporter.groupEnd();
       return true;
     }
@@ -293,14 +291,14 @@ SC.Logger = SC.Object.create({
   */
   info: function() {
     var reporter = this.get('reporter');
-    
-    if (this.get('exists') && (typeof reporter.info === SC.T_FUNCTION)) {
+
+    if (this.get('exists') && typeof(reporter.info) === "function") {
       reporter.info.apply(reporter, arguments);
       return true;
     }
     else if (this.fallBackOnLog) {
       var a = this._argumentsToArray(arguments);
-      if (typeof a.unshift === SC.T_FUNCTION) a.unshift(SC.LOGGER_LOG_INFO);
+      if (typeof(a.unshift) === "function") a.unshift(SC.LOGGER_LOG_INFO);
       return this.log.apply(this, a);
     }
     return false;
@@ -314,8 +312,8 @@ SC.Logger = SC.Object.create({
   */
   profile: function() {
     var reporter = this.get('reporter');
-    
-    if (this.get('exists') && (typeof reporter.profile  === SC.T_FUNCTION)) {
+
+    if (this.get('exists') && typeof(reporter.profile) === "function") {
       reporter.profile();
       return true;
     }
@@ -330,8 +328,8 @@ SC.Logger = SC.Object.create({
   */
   profileEnd: function() {
     var reporter = this.get('reporter');
-    
-    if (this.get('exists') && (typeof reporter.profileEnd === SC.T_FUNCTION)) {
+
+    if (this.get('exists') && typeof(reporter.profileEnd) === "function") {
       reporter.profileEnd();
       return true;
     }
@@ -348,8 +346,8 @@ SC.Logger = SC.Object.create({
   */
   time: function(name) {
     var reporter = this.get('reporter');
-    
-    if (this.get('exists') && (typeof reporter.time === SC.T_FUNCTION)) {
+
+    if (this.get('exists') && typeof(reporter.time) === "function") {
       reporter.time(name);
       return true;
     }
@@ -365,8 +363,8 @@ SC.Logger = SC.Object.create({
   */
   timeEnd: function(name) {
     var reporter = this.get('reporter');
-    
-    if (this.get('exists') && (typeof reporter.timeEnd === SC.T_FUNCTION)) {
+
+    if (this.get('exists') && typeof(reporter.timeEnd) === "function") {
       reporter.timeEnd(name);
       return true;
     }
@@ -380,8 +378,8 @@ SC.Logger = SC.Object.create({
   */
   trace: function() {
     var reporter = this.get('reporter');
-    
-    if (this.get('exists') && (typeof reporter.trace === SC.T_FUNCTION)) {
+
+    if (this.get('exists') && typeof(reporter.trace) === "function") {
       reporter.trace();
       return true;
     }
@@ -399,14 +397,14 @@ SC.Logger = SC.Object.create({
   */
   warn: function() {
     var reporter = this.get('reporter');
-    
-    if (this.get('exists') && (typeof reporter.warn === SC.T_FUNCTION)) {
+
+    if (this.get('exists') && typeof(reporter.warn) === "function") {
       reporter.warn.apply(reporter, arguments);
       return true;
     }
     else if (this.fallBackOnLog) {
       var a = this._argumentsToArray(arguments);
-      if (typeof a.unshift === SC.T_FUNCTION) a.unshift(SC.LOGGER_LOG_WARN);
+      if (typeof(a.unshift) === "function") a.unshift(SC.LOGGER_LOG_WARN);
       return this.log.apply(this, a);
     }
     return false;
@@ -425,11 +423,11 @@ SC.Logger = SC.Object.create({
     @param {Array} arguments The arguments property of a function
     @returns {Array} An array containing the elements of arguments parameter
   */
-  _argumentsToArray: function(args) {
-    if (!args) return [];
+  _argumentsToArray: function(arguments) {
+    if (!arguments) return [];
     var a = [];
-    for (var i = 0; i < args.length; i++) {
-      a[i] = args[i];
+    for (var i = 0; i < arguments.length; i++) {
+      a[i] = arguments[i];
     }
     return a;
   },

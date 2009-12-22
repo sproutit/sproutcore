@@ -1,11 +1,13 @@
-// ========================================================================
-// SC.objectForPropertyPath Tests
-// ========================================================================
-/*globals module test ok same equals expects */
+// ==========================================================================
+// Project:   SproutCore Runtime - Property Observing Library
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
+// ==========================================================================
 
 "import package core_test";
-"import default:system as system";
-"import core";
+var SC = require('index'); // load sproutcore/foundation
+var system = require('system', 'default');
 
 // An ObjectController will make a content object or an array of content objects 
 module("SC.objectForPropertyPath") ;

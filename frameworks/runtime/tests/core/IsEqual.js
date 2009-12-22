@@ -1,9 +1,12 @@
-// ========================================================================
-// SC.isEqual Tests
-// ========================================================================
-/*globals module test */
+// ==========================================================================
+// Project:   SproutCore Runtime - Property Observing Library
+// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
+// ==========================================================================
 
-"import core_test:package core";
+"import package core_test";
+var SC = require('index'); // load sproutcore/foundation
 
 var StringA, StringB, StringC;
 
@@ -52,7 +55,7 @@ module("Array's - isEqual",{
 });
 	
 test("array should be equal  ",function(){
-	// falseTE: We don't test for array contents -- that would be too expensive.
+	// NOTE: We don't test for array contents -- that would be too expensive.
 	equals(SC.isEqual(objectA,objectB),false, 'two array instances with the same values should not be equal');
 	equals(SC.isEqual(objectA,objectC),false, 'two array instances with different values should not be equal');
 });	
