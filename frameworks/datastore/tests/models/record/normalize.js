@@ -3,13 +3,12 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 // test normalize method for SC.Record
+var MyApp;
 var storeKeys, rec, rec2, rec3, rec4;
 module("SC.Record normalize method", {
   setup: function() {
@@ -19,6 +18,7 @@ module("SC.Record normalize method", {
     MyApp = SC.Object.create({
       store: SC.Store.create()
     });
+    SC.global('MyApp', MyApp);
     
     MyApp.Foo = SC.Record.extend({
       
@@ -93,6 +93,7 @@ module("SC.Record normalize method", {
   
   teardown: function() {
     SC.RunLoop.end();
+    SC.global('MyApp', null);
   }
   
 });
@@ -139,7 +140,7 @@ test("normalizing with includeNull flag" ,function() {
   equals(rec3.attributes()['firstName'], undefined, 'hash value of firstName is undefined');
   equals(rec3.get('firstName'), null, 'get value of firstName is null');
   
-  rec3.normalize(YES);
+  rec3.normalize(true);
   
   equals(rec3.attributes()['firstName'], null, 'hash value of firstName after normalizing is null');
   equals(rec3.get('firstName'), null, 'get value of firstName after normalizing is null');

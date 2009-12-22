@@ -5,8 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"export package";
+var SC = require('core');
 
 /**
   @class
@@ -47,7 +46,7 @@ SC.Record = SC.Object.extend(
   
     @property {Boolean}
   */
-  isRecord: YES,
+  isRecord: true,
   
   // ...............................
   // PROPERTIES
@@ -121,7 +120,7 @@ SC.Record = SC.Object.extend(
   storeKey: null,
 
   /** 
-    YES when the record has been destroyed
+    true when the record has been destroyed
     
     @property {Boolean}
   */
@@ -130,26 +129,26 @@ SC.Record = SC.Object.extend(
   }.property('status').cacheable(),
   
   /**
-    YES when the record is in an editable state.  You can use this property to
+    true when the record is in an editable state.  You can use this property to
     quickly determine whether attempting to modify the record would raise an 
     exception or not.
     
     This property is both readable and writable.  Note however that if you 
-    set this property to YES but the status of the record is anything but
-    SC.Record.READY, the return value of this property may remain NO.
+    set this property to true but the status of the record is anything but
+    SC.Record.READY, the return value of this property may remain false.
     
     @property {Boolean}
   */
   isEditable: function(key, value) {
     if (value !== undefined) this._screc_isEditable = value;
     if (this.get('status') & SC.Record.READY) return this._screc_isEditable;
-    else return NO ;
+    else return false ;
   }.property('status').cacheable(),
   
-  _screc_isEditable: YES, // default
+  _screc_isEditable: true, // default
   
   /**
-    YES when the record's contents have been loaded for the first time.  You 
+    true when the record's contents have been loaded for the first time.  You 
     can use this to quickly determine if the record is ready to display.
     
     @property {Boolean}
@@ -206,7 +205,7 @@ SC.Record = SC.Object.extend(
   /**
     Deletes the record along with any dependent records.  This will mark the 
     records destroyed in the store as well as changing the isDestroyed 
-    property on the record to YES.  If this is a new record, this will avoid 
+    property on the record to true.  If this is a new record, this will avoid 
     creating the record in the first place.
     
     @returns {SC.Record} receiver
@@ -356,7 +355,7 @@ SC.Record = SC.Object.extend(
       var dataHash = this.get('store').readDataHash(storeKey);
       aggregates = [];
       for(k in dataHash) {
-        if(this[k] && this[k].get && this[k].get('aggregate')===YES) {
+        if(this[k] && this[k].get && this[k].get('aggregate')===true) {
           aggregates.push(k);
         }
       }
@@ -382,7 +381,7 @@ SC.Record = SC.Object.extend(
             if (parentStatus === K.READY_CLEAN) {
               // Note:  storeDidChangeProperties() won't put it in the
               //        changelog!
-              rec.get('store').recordDidChange(rec.constructor, null, rec.get('storeKey'), null, YES);
+              rec.get('store').recordDidChange(rec.constructor, null, rec.get('storeKey'), null, true);
             }
           }
         }
@@ -511,7 +510,7 @@ SC.Record = SC.Object.extend(
       var storeKey = this.get('storeKey'),
         recordType = SC.Store.recordTypeFor(storeKey);
       
-      if(recordType.ignoreUnknownProperties===YES) {
+      if(recordType.ignoreUnknownProperties===true) {
         this[key] = value;
         return value;
       }
@@ -550,7 +549,7 @@ SC.Record = SC.Object.extend(
   // 
   
   /**
-    Returns YES whenever the status is SC.Record.ERROR.  This will allow you 
+    Returns true whenever the status is SC.Record.ERROR.  This will allow you 
     to put the UI into an error state.
     
     @property {Boolean}
@@ -627,7 +626,7 @@ SC.Record.mixin( /** @scope SC.Record */ {
     
     @property {Boolean}
   */
-  ignoreUnknownProperties: NO,
+  ignoreUnknownProperties: false,
 
   // ..........................................................
   // CONSTANTS
@@ -875,7 +874,7 @@ SC.Record.mixin( /** @scope SC.Record */ {
     
     {{{
       MyApp.Contact = SC.Record.extend({
-        firstName: SC.Record.attr(String, { isRequired: YES })
+        firstName: SC.Record.attr(String, { isRequired: true })
       });
     }}}
     
@@ -915,7 +914,7 @@ SC.Record.mixin( /** @scope SC.Record */ {
     array of guids stored in the underlying JSON.  You can edit the contents
     of this relationship.
     
-    If you set the inverse and isMaster: NO key, then editing this array will
+    If you set the inverse and isMaster: false key, then editing this array will
     modify the underlying data, but the inverse key on the matching record
     will also be edited and that record will be marked as needing a change.
     

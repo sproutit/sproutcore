@@ -5,9 +5,8 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import models/record";
-"export package";
+var SC = require('core');
+require('models/record');
 
 /** @class
 
@@ -20,7 +19,7 @@
   {{{
     title: SC.Record.attr(String, { 
       defaultValue: 'Untitled',
-      isRequired: YES|NO
+      isRequired: true|false
     })
   }}}
   
@@ -86,19 +85,19 @@ SC.RecordAttribute = SC.Object.extend(
   key: null,
   
   /**
-    If YES, then the attribute is required and will fail validation unless
+    If true, then the attribute is required and will fail validation unless
     the property is set to a non-null or undefined value.
     
     @property {Boolean}
   */
-  isRequired: NO,
+  isRequired: false,
   
   /**
-    If NO then attempts to edit the attribute will be ignored.
+    If false then attempts to edit the attribute will be ignored.
     
     @property {Boolean}
   */
-  isEditable: YES,  
+  isEditable: true,  
   
   /**
     If set when using the Date format, expect the ISO8601 date format.  
@@ -106,10 +105,10 @@ SC.RecordAttribute = SC.Object.extend(
     
     @property {Boolean}
   */
-  useIsoDate: YES,
+  useIsoDate: true,
   
   /**
-    Can only be used for toOne or toMany relationship attributes. If YES,
+    Can only be used for toOne or toMany relationship attributes. If true,
     this flag will ensure that any related objects will also be marked
     dirty when this record dirtied. 
     
@@ -120,7 +119,7 @@ SC.RecordAttribute = SC.Object.extend(
     
     @property {Boolean}
   */
-  aggregate: NO,
+  aggregate: false,
   
   // ..........................................................
   // HELPER PROPERTIES
@@ -242,10 +241,10 @@ SC.RecordAttribute = SC.Object.extend(
   // 
   
   /** @private - Make this look like a property so that get() will call it. */
-  isProperty: YES,
+  isProperty: true,
   
   /** @private - Make this look cacheable */
-  isCacheable: YES,
+  isCacheable: true,
   
   /** @private - needed for KVO property() support */
   dependentKeys: [],

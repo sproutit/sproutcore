@@ -3,11 +3,9 @@
 // Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module ok equals same test MyApp plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 // test core array-mapping methods for RecordArray with RecordAttribute
 var storeKeys, rec, rec2, bar, MyApp;
@@ -65,8 +63,8 @@ module("SC.RecordAttribute core methods", {
     });
     
     MyApp.Bar = SC.Record.extend({
-      parent: SC.Record.toOne('MyApp.Foo', { aggregate: YES }),
-      relatedMany: SC.Record.toMany('MyApp.Foo', { aggregate: YES })
+      parent: SC.Record.toOne('MyApp.Foo', { aggregate: true }),
+      relatedMany: SC.Record.toMany('MyApp.Foo', { aggregate: true })
     });
     
     SC.RunLoop.begin();
@@ -170,8 +168,8 @@ test("writing pass-through should simply set value", function() {
   rec.set("firstName", 23);
   equals(rec.readAttribute("firstName"), 23, "should write number");
 
-  rec.set("firstName", YES);
-  equals(rec.readAttribute("firstName"), YES, "should write bool");
+  rec.set("firstName", true);
+  equals(rec.readAttribute("firstName"), true, "should write bool");
   
 });
 

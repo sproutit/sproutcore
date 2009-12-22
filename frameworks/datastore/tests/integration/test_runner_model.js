@@ -1,14 +1,11 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
-//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module test ok equals same plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 var TestRunner;
 module("Sample Model from TestRunner Application", { 
@@ -49,8 +46,8 @@ module("Sample Model from TestRunner Application", {
       
       target: SC.Record.attr('TestRunner.Target', {
         inverse: 'tests',
-        isMaster: YES,
-        isEditable: NO
+        isMaster: true,
+        isEditable: false
       })
       
     });
