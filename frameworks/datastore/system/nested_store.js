@@ -5,11 +5,10 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package sproutcore/runtime";
-"import system/store";
-"import models/record";
-"import system/query";
-"export package";
+var SC = require('core');
+require('system/store');
+require('models/record');
+require('system/query');
 
 /**
   @class
@@ -30,13 +29,13 @@ SC.NestedStore = SC.Store.extend(
 /** @scope SC.NestedStore.prototype */ {
 
   /**
-    This is set to YES when there are changes that have not been committed 
+    This is set to true when there are changes that have not been committed 
     yet.
 
     @property {Boolean}
-    @default NO
+    @default false
   */
-  hasChanges: NO,
+  hasChanges: false,
 
   /**
     The parent store this nested store is chained to.  Nested stores must have
@@ -49,19 +48,19 @@ SC.NestedStore = SC.Store.extend(
   parentStore: null,
 
   /**
-    YES if the view is nested. Walk like a duck
+    true if the view is nested. Walk like a duck
     
     @property {Boolean}
   */
-  isNested: YES,
+  isNested: true,
 
   /**
-    If YES, then the attribute hash state will be locked when you first 
+    If true, then the attribute hash state will be locked when you first 
     read the data hash or status.  This means that if you retrieve a record
     then change the record in the parent store, the changes will not be 
     visible to your nested store until you commit or discard changes.
     
-    If NO, then the attribute hash will lock only when you write data.
+    If false, then the attribute hash will lock only when you write data.
     
     Normally you want to lock your attribute hash the first time you read it.
     This will make your nested store behave most consistently.  However, if
@@ -73,7 +72,7 @@ SC.NestedStore = SC.Store.extend(
     
     @property {Boolean} 
   */
-  lockOnRead: YES,
+  lockOnRead: true,
 
   /** @private
     Array contains the base revision for an attribute hash when it was first
@@ -125,7 +124,7 @@ SC.NestedStore = SC.Store.extend(
     Propagate this store's changes to its parent.  If the store does not 
     have a parent, this has no effect other than to clear the change set.
 
-    @param {Boolean} force if YES, does not check for conflicts first
+    @param {Boolean} force if true, does not check for conflicts first
     @returns {SC.Store} receiver
   */
   commitChanges: function(force) {
@@ -206,7 +205,7 @@ SC.NestedStore = SC.Store.extend(
 
     // TODO: Notify record instances
     
-    this.set('hasChanges', NO);
+    this.set('hasChanges', false);
   },
   
   /** @private
@@ -389,7 +388,7 @@ SC.NestedStore = SC.Store.extend(
       this._notifyRecordPropertyChange(storeKey, statusOnly, key);
     }
 
-    this.setIfChanged('hasChanges', YES);
+    this.setIfChanged('hasChanges', true);
     return this ;
   },
 
@@ -447,7 +446,7 @@ SC.NestedStore = SC.Store.extend(
   
   /** @private - adapt for nested store
   
-    Unlike for the main store, for nested stores if isRefresh=YES, we'll throw
+    Unlike for the main store, for nested stores if isRefresh=true, we'll throw
     an error if the record is dirty.  We'll otherwise avoid setting our status
     because that can disconnect us from upper and/or lower stores.
   */
@@ -480,24 +479,24 @@ SC.NestedStore = SC.Store.extend(
               editables  = this.editables,
               locks      = this.locks;
 
-          var changed    = NO;
-          var statusOnly = NO;
+          var changed    = false;
+          var statusOnly = false;
   
           if (dataHashes  &&  dataHashes.hasOwnProperty(storeKey)) {
             delete dataHashes[storeKey];
-            changed = YES;
+            changed = true;
           }
           if (revisions   &&  revisions.hasOwnProperty(storeKey)) {
             delete revisions[storeKey];
-            changed = YES;
+            changed = true;
           }
           if (editables) delete editables[storeKey];
           if (locks) delete locks[storeKey];
 
           if (statuses  &&  statuses.hasOwnProperty(storeKey)) {
             delete statuses[storeKey];
-            if (!changed) statusOnly = YES;
-            changed = YES;
+            if (!changed) statusOnly = true;
+            changed = true;
           }
           
           if (changed) this._notifyRecordPropertyChange(storeKey, statusOnly);

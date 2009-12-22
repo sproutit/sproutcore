@@ -1,14 +1,11 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
-//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// Copyright: ©2006-2009 Apple Inc. and contributors.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
-/*globals module test ok equals same AB plan */
 
 "import package core_test";
-"import package sproutcore/runtime";
-"import package sproutcore/datastore";
+var SC = require('index');
 
 var AB;
 module("Sample Model from an address book app", { 
@@ -61,7 +58,7 @@ module("Sample Model from an address book app", {
 
       // firstName, lastName, middleName
       // companyName
-      isCompany: SC.Record.property(Boolean, { defaultValue: NO }),
+      isCompany: SC.Record.property(Boolean, { defaultValue: false }),
       
       // contact has one or more phones stored in a hash.  
       phones: SC.Collection.inline({ recordType: 'AB.PhoneNumber' })
@@ -96,7 +93,7 @@ module("Sample Model from an address book app", {
       lastNameType:  String,
       
       contactDetailsType: SC.Collection.inline({
-        isDependent: YES,
+        isDependent: true,
         recordType:  'AB.ContactDetail'
       }),
       
