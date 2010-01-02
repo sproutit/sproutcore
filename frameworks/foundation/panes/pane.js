@@ -514,7 +514,7 @@ SC.Pane = SC.View.extend( /** @scope SC.Pane.prototype */ {
     if (!this.get('isPaneAttached')) return this ; // nothing to do
     
     // remove layer...
-    this.set('isVisibleInWindow', NO);
+    this.set('isVisibleInWindow', false);
     var dom = this.get('layer') ;
     if (dom.parentNode) dom.parentNode.removeChild(dom) ;
     dom = null ;
@@ -529,7 +529,7 @@ SC.Pane = SC.View.extend( /** @scope SC.Pane.prototype */ {
     this.rootResponder = null ;
     
     // clean up some of my own properties
-    this.set('isPaneAttached', NO) ;
+    this.set('isPaneAttached', false) ;
     return this ;
   },
   
@@ -682,7 +682,7 @@ SC.Pane = SC.View.extend( /** @scope SC.Pane.prototype */ {
     // if the state has changed, update it and notify children
     // if (last !== cur) {
       this.set('isVisibleInWindow', cur) ;
-      this._needsVisibiltyChange = YES ; // update even if we aren't visible      
+      this._needsVisibiltyChange = true; // update even if we aren't visible      
       
       // if we just became visible, update layer + layout if needed...
       if (cur && this.get('layerNeedsUpdate')) this.updateLayerIfNeeded();

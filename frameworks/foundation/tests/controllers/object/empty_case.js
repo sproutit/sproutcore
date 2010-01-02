@@ -83,3 +83,5 @@ test("allowsMultipleContent should have no effect", function() {
   equals(controller.get("length"), undefined, "controller.get(length)");
   equals(controller.get('hasContent'), false, 'controller.hasContent');
 });
+
+plan.run();

@@ -56,7 +56,7 @@ module("SC.View#nextValidKeyView", {
 });
 
 test("Navigate between textfields- going forward", function() {
-  SC.SAFARI_FOCUS_BEHAVIOR = YES;
+  SC.SAFARI_FOCUS_BEHAVIOR = true;
   var v = view2.nextValidKeyView();
   same(v, textfield_view3, "The next view should be " + textfield_view3.toString());
   v = textfield_view3.nextValidKeyView();
@@ -64,7 +64,7 @@ test("Navigate between textfields- going forward", function() {
 });
 
 test("Navigate between textfields- going backwards", function() {
-  SC.SAFARI_FOCUS_BEHAVIOR = YES;
+  SC.SAFARI_FOCUS_BEHAVIOR = true;
   var v = view2.previousValidKeyView();
   same(v, textfield_view2, "The previous key view should be " + textfield_view2.toString());
 
@@ -72,7 +72,7 @@ test("Navigate between textfields- going backwards", function() {
 
 
 test("Navigate forward with view that have a nextKeyView set", function() {
-  SC.SAFARI_FOCUS_BEHAVIOR = YES;
+  SC.SAFARI_FOCUS_BEHAVIOR = true;
   var v = view2.nextValidKeyView();
   same(v, textfield_view3, "The next view should be " + textfield_view3.toString());
   view3.set('nextKeyView', textfield_view1);
@@ -82,7 +82,7 @@ test("Navigate forward with view that have a nextKeyView set", function() {
 
 
 test("Navigate backwards with view that have a previousKeyView set", function() {
-  SC.SAFARI_FOCUS_BEHAVIOR = YES;
+  SC.SAFARI_FOCUS_BEHAVIOR = true;
   var v = view2.previousValidKeyView();
   same(v, textfield_view2, "The next view should be " + textfield_view2.toString());
   view4.set('previousKeyView', textfield_view1);

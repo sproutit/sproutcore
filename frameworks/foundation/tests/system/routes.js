@@ -7,6 +7,7 @@
 
 "import package core_test";
 var SC = require('index'); // load sproutcore/foundation
+var Ct = require('core_test');
 
 var currentRoute;
 
@@ -29,11 +30,11 @@ module("SC.routes", {
 
 test("Routes with UTF-8 characters", function() {
   SC.routes.set('location', 'éàçùß€');
-  equals(currentRoute, 'éàçùß€');
-  stop();
+  Ct.equals(currentRoute, 'éàçùß€');
+  Ct.stop();
   setTimeout(function() {
-    start();
-    equals(currentRoute, 'éàçùß€');
+    Ct.equals(currentRoute, 'éàçùß€');
+    Ct.start();
   }, 1200);
 });
 

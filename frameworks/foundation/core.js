@@ -49,7 +49,7 @@ SC.DROP_ANY = 0x07 ;
 /**
   This variable is here to make the tab focus behavior work like safari's.
 */
-SC.SAFARI_FOCUS_BEHAVIOR = YES;
+SC.SAFARI_FOCUS_BEHAVIOR = true;
 
 SC.mixin(/** @lends SC */ {
   

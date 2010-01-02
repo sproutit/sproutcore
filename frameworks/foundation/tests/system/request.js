@@ -188,8 +188,8 @@ test("Test timeouts", function() {
 
 
   // Make sure timeouts actually fire, and fire when expected.
-  var changedBefore  = NO,
-      changedAfter   = NO,
+  var changedBefore  = false,
+      changedAfter   = false,
       timeoutRequest = SC.Request.getUrl("http://www.sproutcore.com"),
       checkstop;
 

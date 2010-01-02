@@ -111,7 +111,7 @@ SC.Request = SC.Object.extend(SC.Copyable, SC.Freezable,
     and the didTimeout() callback will be called.
     
     An exception will be thrown if you try to invoke send() on a request that
-    has both a timeout and isAsyncronous set to NO.
+    has both a timeout and isAsyncronous set to false.
     
     @property {Number}
   */

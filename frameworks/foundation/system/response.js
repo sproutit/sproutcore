@@ -176,7 +176,7 @@ SC.Response = SC.Object.extend(
   isCancelled: false,
   
   /**
-    Set to YES if the request timed out.  Set to NO if the request has
+    Set to YES if the request timed out.  Set to false if the request has
     completed before the timeout value.  Set to null if the timeout timer is
     still ticking.
   */
@@ -219,7 +219,7 @@ SC.Response = SC.Object.extend(
         target:   this, 
         action:   'timeoutReached', 
         interval: timeout,
-        repeats:  NO
+        repeats:  false
       });
       this.set('timeoutTimer', timer);
     }
@@ -239,7 +239,7 @@ SC.Response = SC.Object.extend(
   /**
     Invoked by the transport when it receives a response.  The passed-in
     callback will be invoked to actually process the response.  If cancelled
-    we will pass NO.  You should clean up instead.
+    we will pass false.  You should clean up instead.
     
     Invokes callbacks on the source request also.
     
@@ -253,7 +253,7 @@ SC.Response = SC.Object.extend(
       // If we had a timeout timer scheduled, invalidate it now.
       var timer = this.get('timeoutTimer');
       if (timer) timer.invalidate();
-      this.set('timedOut', NO);
+      this.set('timedOut', false);
     
       var req = this.get('request');
       var source = req ? req.get('source') : null;
@@ -300,14 +300,14 @@ SC.Response = SC.Object.extend(
     // If we already received a response yet the timer still fired for some
     // reason, do nothing.
     if (this.get('timedOut') === null) {
-      this.set('timedOut', YES);
+      this.set('timedOut', true);
       this.cancelTransport();
       SC.Request.manager.transportDidClose(this);
       
       // Set our value to an error.
       var error = SC.$error("HTTP Request timed out", "Request", 408) ;
       error.set("errorValue", this) ;
-      this.set('isError', YES);
+      this.set('isError', true);
       this.set('errorObject', error);
       
       // Invoke the didTimeout callback.
