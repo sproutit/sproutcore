@@ -49,7 +49,7 @@ config :foundation,
   :required       => [:tiki, :runtime],
   :debug_required => [],
   :test_required  => :core_test,
-  :use_modules    => true,
+  :use_modules    => false, # not yet ready
   :factory_format => :function
 
 # APP-LEVEL FRAMEWORKS
