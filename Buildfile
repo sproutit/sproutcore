@@ -20,7 +20,7 @@ config :all,
 # off in your project buildfile by referencing sproutcore specifically
 mode :debug do
   config :all, 
-    :combine_javascript => false,
+    :combine_javascript => true,
     :combine_stylesheet => true
   
 end
@@ -36,17 +36,15 @@ config :runtime,
   :debug_required => [],
   :test_required => :core_test,
   :use_modules => true,
-  :factory_format => :function,
-  :combine_javascript => true
-  
+  :factory_format => :function
+    
 config :datastore,
   :required       => [:tiki, :runtime],
   :debug_required => [],
   :test_required  => :core_test,
   :use_modules    => true,
-  :factory_format => :function,
-  :combine_javascript => true
-
+  :factory_format => :function
+  
 config :foundation,
   :required       => [:tiki, :runtime],
   :debug_required => [],
