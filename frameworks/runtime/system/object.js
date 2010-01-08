@@ -778,7 +778,7 @@ function findClassNames() {
     }
   } ;
 
-  searchObject(null, require('system:index').global, 2) ;
+  searchObject(null, require('system', 'default').global, 2) ;
 
   // Internet Explorer doesn't loop over global variables...
   /*if ( SC.browser.isIE ) {
