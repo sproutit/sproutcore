@@ -25,3 +25,7 @@ require('system/nested_store');
 require('system/query');
 require('system/record_array');
 require('system/store');
+
+// consumed by tiki.globals() to avoid making all symbols global
+// note: these symbols come from sproutcore/runtime
+exports.__globals__ = ['SC', 'SproutCore', 'YES', 'NO'];
