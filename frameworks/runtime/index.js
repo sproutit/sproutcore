@@ -35,3 +35,6 @@ require('system/run_loop');
 require('system/selection_set');
 require('system/set');
 require('system/sparse_array');
+
+// consumed by tiki.globals() to avoid making all symbols global
+exports.__globals__ = ['SC', 'SproutCore', 'YES', 'NO'];

@@ -36,20 +36,22 @@ config :runtime,
   :debug_required => [],
   :test_required => :core_test,
   :use_modules => true,
-  :factory_format => :function
+  :factory_format => :function,
+  :combine_javascript => true
   
 config :datastore,
   :required       => [:tiki, :runtime],
   :debug_required => [],
   :test_required  => :core_test,
   :use_modules    => true,
-  :factory_format => :function
+  :factory_format => :function,
+  :combine_javascript => true
 
 config :foundation,
   :required       => [:tiki, :runtime],
   :debug_required => [],
-  :test_required  => :core_test,
-  :use_modules    => false, # not yet ready
+  #:test_required  => :core_test,
+  :use_modules    => false, # not yet ready for modules
   :factory_format => :function
 
 # APP-LEVEL FRAMEWORKS
