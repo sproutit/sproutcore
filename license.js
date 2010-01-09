@@ -25,6 +25,5 @@ SproutCore and the SproutCore logo are trademarks of Sprout Systems, Inc.
 
 For more information about SproutCore, visit http://www.sproutcore.com
 
-
 ==========================================================================
 @license */
