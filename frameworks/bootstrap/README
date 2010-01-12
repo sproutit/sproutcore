@@ -1,9 +1,10 @@
 SproutCore Bootstrap
 
-The bootstrap framework contains several basic elements needed to load 
-SproutCore applications including browser detection and module loading.  By
-default the SproutCore build system will load the bootstrap framework as an 
-inline JavaScript at the top of the page.
+This framework contains some basic setup code that should be inserted at the 
+top of an HTML page.  The default code included here will detect the current
+browser and add class names to the body tag to allow CSS rules to be applied 
+to specific platforms.
 
-When building SproutCore Mini, the bootstrap framework is also the first bit
-of code included in the build.
+If your loading HTML does not care about the specific platform you are on,
+you can generally leave this framework out of your main code.  The same class
+names will be added to the run sc-pane as well.
