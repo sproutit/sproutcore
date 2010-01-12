@@ -46,7 +46,9 @@
    # body content based on JS-selected conditions.  Use this to make sure you
    # show the proper CSS as soon as the page appears. 
 -%>
-<%= inline_javascript('sproutcore/bootstrap:setup_body_class_names') %>
+<% if target.config.bootstrap_inline %>
+<%= inline_javascript('sproutcore/bootstrap:setup_body_class_names')  %>
+<% end -%>
 
 <% #
    # This is where you root body element will appear.  To cause your 
