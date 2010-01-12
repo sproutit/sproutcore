@@ -1,4 +1,4 @@
-.sc-toolbar-view {
+.sc-theme .sc-toolbar-view {
   background: sc_static('images/sc-theme-repeat-x') repeat-x 0px -650px; 
   border: none;
   border-top: 1px solid #4d5567; /* #818ea4; */
