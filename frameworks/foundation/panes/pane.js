@@ -4,6 +4,7 @@
 //            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
+/*globals ENV */
 
 sc_require('views/view');
 
@@ -707,15 +708,52 @@ SC.Pane = SC.View.extend( /** @scope SC.Pane.prototype */ {
 
   /** @private */
   init: function() {
+    
     // if a layer was set manually then we will just attach to existing 
     // HTML.
     var hasLayer = !!this.get('layer') ;
     sc_super() ;
+
+    // set theme, if needed...get from environment if available
+    var theme = this.get('theme') ;
+    if (!theme && ('undefined' !== ENV)) theme = ENV.theme;
+    if (theme) {
+      var classNames = this.get('classNames').copy();
+      classNames.push(theme);
+      this.set('classNames', classNames);
+    }
+    
     if (hasLayer) this.paneDidAttach();
   },
 
-  /** @private */
-  classNames: 'sc-pane'.w()
+  /** @private - returns a set of class names based on the current platform */
+  classNames: function() {
+
+    var ret = ['sc-pane'],
+              browser, platform, shadows, borderRad, classNames, style;
+
+    browser = SC.browser.current ;
+    platform = SC.browser.windows ? 'windows' : SC.browser.mac ? 'mac' : 'other-platform' ;
+    style = document.documentElement.style;
+    shadows = (style.MozBoxShadow !== undefined) || 
+                  (style.webkitBoxShadow !== undefined) ||
+                  (style.oBoxShadow !== undefined) ||
+                  (style.boxShadow !== undefined);
+
+    borderRad = (style.MozBorderRadius !== undefined) || 
+                (style.webkitBorderRadius !== undefined) ||
+                (style.oBorderRadius !== undefined) ||
+                (style.borderRadius !== undefined);
+
+    if(shadows) ret.push('box-shadow');
+    if(borderRad) ret.push('border-rad');
+    ret.push(browser) ;
+    ret.push(platform) ;
+    if (SC.browser.msie==7) ret.push('ie7') ;
+    if (SC.browser.mobileSafari) ret.push('mobile-safari') ;
+    
+    return ret ;
+    
+  }()
   
 }) ;
-

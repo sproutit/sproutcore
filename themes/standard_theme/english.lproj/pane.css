@@ -1,4 +1,4 @@
-.sc-theme .sc-dialog-pane {
+.sc-theme.sc-dialog-pane {
   z-index: 2000;
   background: #494949;
 }
@@ -12,7 +12,7 @@ Content-Transfer-Encoding:base64
 
 R0lGODlhAQABAJAAAP///wAAACH5BAUQAAAALAAAAAABAAEAAAICBAEAOw==
 */
-.sc-theme div.sc-ghost-view {
+div.sc-ghost-view {
   background-image: url(data:image/gif;base64,R0lGODlhAQABAJAAAP///wAAACH5BAUQAAAALAAAAAABAAEAAAICBAEAOw==) top left no-repeat; 
   *background-image: sc_static('blank.gif') top left no-repeat; /* IE < 8 */
 }

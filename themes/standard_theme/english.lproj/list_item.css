@@ -1,6 +1,6 @@
 /* @group Checkbox */
 
-.sc-list-item-view .sc-checkbox-view {
+.sc-theme .sc-list-item-view .sc-checkbox-view {
 	position: absolute;
 	display: block;
 	border: none;
@@ -12,17 +12,17 @@
   background: none;
 }
 
-.sc-list-item-view.sel .sc-checkbox-view {
+.sc-theme .sc-list-item-view.sel .sc-checkbox-view {
   background: none;
 	border: none;
 }
 
-.sc-list-item-view .sc-checkbox-view.sel {
+.sc-theme .sc-list-item-view .sc-checkbox-view.sel {
   background: none;
 	border: none;
 }
 
-.sc-list-item-view .sc-checkbox-view.active {
+.sc-theme .sc-list-item-view .sc-checkbox-view.active {
   background: none;
 	border: none;
 }
@@ -31,7 +31,7 @@
 
 /* @group Disclosure */
 
-.sc-list-item-view img.disclosure {
+.sc-theme .sc-list-item-view img.disclosure {
 	position: absolute ;
 	left: -11px;
 	top: 50%;
@@ -42,25 +42,25 @@
 	background-position: -16px -1614px ;
 }
 
-.sc-list-item-view img.disclosure.open {
+.sc-theme .sc-list-item-view img.disclosure.open {
 	background-position: 0px -1597px ;
 }
 
-.sc-list-item-view img.disclosure.active {
+.sc-theme .sc-list-item-view img.disclosure.active {
 	background-position: -0px -1630px ;
 }
 
-.sc-list-item-view img.disclosure.open.active {
+.sc-theme .sc-list-item-view img.disclosure.open.active {
 	background-position: -16px -1597px ;
 }
 
-.sc-list-item-view.disabled img.disclosure,
-.sc-list-item-view.disabled img.disclosure.active {
+.sc-theme .sc-list-item-view.disabled img.disclosure,
+.sc-theme .sc-list-item-view.disabled img.disclosure.active {
 	background-position: -16px -1630px ;
 }
 
-.sc-list-item-view.disabled img.disclosure.open,
-.sc-list-item-view.disabled img.disclosure.open.active {
+.sc-theme .sc-list-item-view.disabled img.disclosure.open,
+.sc-theme .sc-list-item-view.disabled img.disclosure.open.active {
 	background-position: 0px -1613px ;
 }
 
@@ -69,13 +69,13 @@
 
 /* @group Branch */
 
-.sc-list-item-view .branch {
+.sc-theme .sc-list-item-view .branch {
 	background-image: sc_static('icons/mini_454545'); 
 	background-position: -32px 0;
 }
 
-.sc-list-item-view.sel .branch,
-.sc-list-item-view.active .branch {
+.sc-theme .sc-list-item-view.sel .branch,
+.sc-theme .sc-list-item-view.active .branch {
 	background-image: sc_static('icons/mini_ffffff'); 
 }
 
