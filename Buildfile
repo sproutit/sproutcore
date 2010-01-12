@@ -62,8 +62,15 @@ config :mobile,
   :test_layout    => 'sproutcore/mobile:lib/index.rhtml'
 
 # WRAPPER FRAMEWORKS
+
+config :sproutcore,
+  :required       => [:tiki, :runtime, :datastore, :foundation, :desktop],
+  :debug_reuqired => [],
+  :test_required  => :core_test,
+  :use_modules    => true,
+  :factory_format => :function
+  
 config :designer, :required => [:runtime, :foundation]
-config :sproutcore, :required => :desktop
 config :mini, :required => [:runtime, :datastore]
 
 
