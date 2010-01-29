@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 var system = require('system', 'default');
 
@@ -42,4 +42,4 @@ test("should check for the tuple property when path is undefined",function(){   
      equals(true,object2 === null,'returns null for undefined path');	
 });
 
-plan.run();
+run();

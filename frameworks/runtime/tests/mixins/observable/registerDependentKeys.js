@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var object ;
@@ -79,4 +79,4 @@ test("should indicate the registered property changes if the dependent key value
   equals(object.get('observedValue'), 'Jane Johnson');
 });
 
-plan.run();
+run();

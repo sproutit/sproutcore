@@ -4,7 +4,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var AB;
@@ -131,4 +131,4 @@ module("Sample Model from an address book app", {
   }
 });
 
-plan.run();
+run();

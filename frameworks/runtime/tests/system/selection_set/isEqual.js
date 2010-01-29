@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var set1, set2, content;
@@ -61,4 +61,4 @@ test("set1.isEqual(set2) after set2 is filled and emptied", function() {
   ok(set1.isEqual(set2), 'same content should return true');
 });
 
-plan.run();
+run();

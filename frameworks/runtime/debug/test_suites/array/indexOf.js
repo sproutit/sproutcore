@@ -13,21 +13,21 @@ SC.ArraySuite.define(function(T) {
   
   T.module("indexOf");
   
-  Ct.test("should return index of object", function() {
+  Ct.test("should return index of object", function(t) {
     var expected = T.expected(3), 
         obj      = T.newObject(3), 
         len      = 3,
         idx;
         
     for(idx=0;idx<len;idx++) {
-      Ct.equals(obj.indexOf(expected[idx]), idx, 'obj.indexOf(%@) should match idx'.fmt(expected[idx]));
+      t.equal(obj.indexOf(expected[idx]), idx, 'obj.indexOf(%@) should match idx'.fmt(expected[idx]));
     }
     
   });
   
-  Ct.test("should return -1 when requesting object not in index", function() {
+  Ct.test("should return -1 when requesting object not in index", function(t) {
     var obj = T.newObject(3), foo = {};
-    Ct.equals(obj.indexOf(foo), -1, 'obj.indexOf(foo) should be < 0');
+    t.equal(obj.indexOf(foo), -1, 'obj.indexOf(foo) should be < 0');
   });
   
 });

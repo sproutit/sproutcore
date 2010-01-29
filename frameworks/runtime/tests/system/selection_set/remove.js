@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var set, array, array2, expected, expected2 ;
@@ -114,4 +114,4 @@ test("removing index set should also remove individually added objects", functio
 });
 
 
-plan.run();
+run();

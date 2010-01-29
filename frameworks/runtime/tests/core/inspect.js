@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var obj1,obj2,obj3; //global variables
@@ -31,4 +31,4 @@ test("SC.inspect module should give a string type",function(){
 	equals(true,SC.T_STRING === SC.typeOf(object3),'description of the object');
 });
 
-plan.run();
+run();

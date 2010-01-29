@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var revMatches = false , ObjectA;
@@ -136,4 +136,4 @@ test("revision passed to observers should match .propertyRevision", function() {
   
 });
 
-plan.run();
+run();

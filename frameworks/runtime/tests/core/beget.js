@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var objectA, objectB , arrayA, stringA; // global variables
@@ -26,4 +26,4 @@ test("should return a new object with same prototype as that of passed object", 
 	equals(true, SC.beget(arrayA) !== arrayA, "Beget for an array") ;
 });
 
-plan.run(); 
+run(); 

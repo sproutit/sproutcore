@@ -4,7 +4,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
  
 // test parsing of query string
@@ -132,4 +132,4 @@ test("comparing by equal properties should use guid for order", function() {
   equals(q.compare(rec1,rec2), -1, 'guid 1 should be before guid 2');
 });
 
-plan.run();
+run();

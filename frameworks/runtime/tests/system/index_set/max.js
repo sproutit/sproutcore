@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 module("SC.IndexSet#max");
@@ -41,4 +41,4 @@ test("after removing all ranges", function() {
 });
 
 
-plan.run();
+run();

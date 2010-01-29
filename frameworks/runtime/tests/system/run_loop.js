@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var first, second, third, binding1, binding2;
@@ -142,4 +142,4 @@ test("Should propograte bindings after the RunLoop completes (checking invokeOnc
 }); 
 
 
-plan.run();
+run();

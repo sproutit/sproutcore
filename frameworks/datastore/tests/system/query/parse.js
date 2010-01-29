@@ -4,7 +4,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 // test parsing of query string
@@ -201,6 +201,6 @@ test("token tree should build", function() {
   
 });
 
-plan.run();
+run();
 
 

@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var set ;
@@ -51,4 +51,4 @@ test("adding should iterate over a indexset", function() {
   same(iter(set), [1000, 1001, 1010, 1020, 1030]);
 });
 
-plan.run();
+run();

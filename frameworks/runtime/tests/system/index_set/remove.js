@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var set ;
@@ -191,4 +191,4 @@ test("remove() raises exception when frozen", function() {
   }, SC.FROZEN_ERROR);  
 });
 
-plan.run();
+run();

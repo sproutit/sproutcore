@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var testObject, fromObject, extraObject, TestObject, TestNamespace;
@@ -344,4 +344,4 @@ test("fooBinding: SC.Binding.not(TestNamespace.fromObject.bar should override de
   equals(true, testObject.get("foo"), "testObject.foo == true");
 });
 
-plan.run();
+run();
