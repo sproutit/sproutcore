@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var store, Foo, json, foo ;
@@ -52,7 +52,7 @@ test("returns undefined when data hash is not present", function() {
   equals(foo.readAttribute("foo"), undefined, "should return undefined if data hash is missing");
 });
 
-plan.run();
+run();
 
 
 

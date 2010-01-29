@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var json1, json2, json3, json4;
@@ -76,4 +76,4 @@ test("recordDidChange", function() {
   
 });
 
-plan.run();
+run();

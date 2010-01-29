@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var PrimaryKeyId;
@@ -114,4 +114,4 @@ test("Writing primaryKey of 'id'", function(){
   equals(foo2.get('id'), 2, 'foo2.id should be 2');
 });
 
-plan.run();
+run();

@@ -5,7 +5,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var set ;
@@ -40,4 +40,4 @@ test("single index range", function() {
 
 
 
-plan.run();
+run();

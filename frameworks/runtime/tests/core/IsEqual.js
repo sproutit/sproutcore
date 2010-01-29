@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var StringA, StringB, StringC;
@@ -60,4 +60,4 @@ test("array should be equal  ",function(){
 	equals(SC.isEqual(objectA,objectC),false, 'two array instances with different values should not be equal');
 });	
 
-plan.run();
+run();

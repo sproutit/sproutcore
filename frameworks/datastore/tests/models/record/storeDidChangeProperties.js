@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var store, child, Foo, json, foo ;
@@ -170,6 +170,6 @@ test("changing attributes on a parent store should NOT notify child store if loc
 
 });
 
-plan.run();
+run();
 
 

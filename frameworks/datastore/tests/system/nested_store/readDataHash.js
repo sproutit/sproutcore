@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 // NOTE: The test below are based on the Data Hashes state chart.  This models
@@ -178,7 +178,7 @@ test("locking deep nested store when top-level parent is editable and middle sto
 });
 
 
-plan.run();
+run();
 
 
 

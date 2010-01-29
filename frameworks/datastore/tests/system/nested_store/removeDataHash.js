@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 // NOTE: The test below are based on the Data Hashes state chart.  This models
@@ -156,7 +156,7 @@ test("change should not propogate to child if child edit state = EDITABLE", func
 });
 
 
-plan.run();
+run();
 
 
 

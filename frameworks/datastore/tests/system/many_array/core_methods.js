@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 // test core array-mapping methods for ManyArray
@@ -209,5 +209,5 @@ test("reduced properties", function() {
   equals(recs.get('@average(age)'), (32+30+7+17)/4.0, 'average reducer should return the correct value');
 });
 
-plan.run();
+run();
  

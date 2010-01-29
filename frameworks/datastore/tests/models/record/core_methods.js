@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var MyApp, dataSource;
@@ -56,4 +56,4 @@ test("Can commitRecord() specific SC.Record instance", function() {
   
 });
 
-plan.run();
+run();

@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 // test core array-mapping methods for RecordArray with RecordAttribute
@@ -244,4 +244,4 @@ test("modifying a keyed toOne relationship", function(){
   equals(rec4.get('barId'), 'bar2', 'foo4.barId should == bar2');
 });
 
-plan.run();
+run();

@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 module("Make Array ", {
@@ -32,4 +32,4 @@ test("should return an array for the object passed ",function(){
 	equals(SC.isArray(ret),true) ;
 });
 
-plan.run();
+run();

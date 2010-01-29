@@ -20,31 +20,31 @@ SC.ArraySuite.define(function(T) {
     }
   });
 
-  Ct.test("[].shiftObject() => [] + returns undefined + false notify", function() {
+  Ct.test("[].shiftObject() => [] + returns undefined + false notify", function(t) {
     observer.observe('[]', 'length') ;
-    Ct.equals(obj.shiftObject(), undefined, 'should return undefined') ;
-    T.validateAfter(obj, [], observer, false, false);
+    t.equal(obj.shiftObject(), undefined, 'should return undefined') ;
+    T.validateAfter(t, obj, [], observer, false, false);
   });
 
-  Ct.test("[X].shiftObject() => [] + notify", function() {
+  Ct.test("[X].shiftObject() => [] + notify", function(t) {
     var exp = T.expected(1)[0];
     
     obj.replace(0,0, [exp]);
     observer.observe('[]', 'length') ;
 
-    Ct.equals(obj.shiftObject(), exp, 'should return shifted object') ;
-    T.validateAfter(obj, [], observer, true, true);
+    t.equal(obj.shiftObject(), exp, 'should return shifted object') ;
+    T.validateAfter(t, obj, [], observer, true, true);
   });
 
-  Ct.test("[A,B,C].shiftObject() => [B,C] + notify", function() {
+  Ct.test("[A,B,C].shiftObject() => [B,C] + notify", function(t) {
     var before  = T.expected(3),
         value   = before[0],
         after   = before.slice(1);
         
     obj.replace(0,0,before);
     observer.observe('[]', 'length') ;
-    Ct.equals(obj.shiftObject(), value, 'should return shifted object') ;
-    T.validateAfter(obj, after, observer, true);
+    t.equal(obj.shiftObject(), value, 'should return shifted object') ;
+    T.validateAfter(t, obj, after, observer, true);
   });
   
 });

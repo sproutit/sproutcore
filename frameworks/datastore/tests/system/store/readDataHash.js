@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 // NOTE: The test below are based on the Data Hashes state chart.  This models
@@ -74,5 +74,5 @@ test("should return null when accessing an unknown storeKey", function() {
   equals(store.storeKeyEditState(storeKey), SC.Store.LOCKED, 'should put into locked edit state');
 });
 
-plan.run();
+run();
 

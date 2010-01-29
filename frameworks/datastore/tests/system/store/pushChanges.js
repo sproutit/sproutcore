@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var storeKey1, storeKey2, storeKey3, storeKey4, storeKey5, storeKey6;
@@ -63,5 +63,5 @@ test("Issue a pushError and check if there is conflicts", function() {
   ok(!res, "There is a conflict, because of the state, this is expected.");
 });
 
-plan.run();
+run();
 

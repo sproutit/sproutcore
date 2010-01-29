@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 // NOTE: The test below are based on the Data Hashes state chart.  This models
@@ -101,4 +101,4 @@ test("state = EDITABLE", function() {
 // TODO: Add more special cases for SC.NestedStore#discardChanges
 
 
-plan.run();
+run();

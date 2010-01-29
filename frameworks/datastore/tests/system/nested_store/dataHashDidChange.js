@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 // NOTE: The test below are based on the Data Hashes state chart.  This models
@@ -113,6 +113,6 @@ test("marking change should update revision but leave lock alone", function() {
   ok(store.revisions[storeKey] !== parent.revisions[storeKey], 'revision should not match parent rev');  
 });
 
-plan.run();
+run();
 
 

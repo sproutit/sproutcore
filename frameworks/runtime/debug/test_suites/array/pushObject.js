@@ -20,19 +20,19 @@ SC.ArraySuite.define(function(T) {
     }
   });
 
-  Ct.test("returns pushed object", function() {
+  Ct.test("returns pushed object", function(t) {
     var exp = T.expected(1)[0];
-    Ct.equals(obj.pushObject(exp), exp, 'should return receiver');
+    t.equal(obj.pushObject(exp), exp, 'should return receiver');
   });
   
-  Ct.test("[].pushObject(X) => [X] + notify", function() {
+  Ct.test("[].pushObject(X) => [X] + notify", function(t) {
     var exp = T.expected(1);
     observer.observe('[]', 'length') ;
     obj.pushObject(exp[0]) ;
-    T.validateAfter(obj, exp, observer, true);
+    T.validateAfter(t, obj, exp, observer, true);
   });
 
-  Ct.test("[A,B,C].pushObject(X) => [A,B,C,X] + notify", function() {
+  Ct.test("[A,B,C].pushObject(X) => [A,B,C,X] + notify", function(t) {
     var after  = T.expected(4),
         before = after.slice(0,3),
         value  = after[3];
@@ -40,7 +40,7 @@ SC.ArraySuite.define(function(T) {
     obj.replace(0,0,before);
     observer.observe('[]', 'length') ;
     obj.pushObject(value) ;
-    T.validateAfter(obj, after, observer, true);
+    T.validateAfter(t, obj, after, observer, true);
   });
   
 });

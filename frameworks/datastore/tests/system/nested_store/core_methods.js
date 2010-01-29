@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var store, nestedStore, Application, dataSource;
@@ -71,5 +71,5 @@ test("Make sure that setting an attribute on a record will only notify respectiv
 
 });
 
-plan.run();
+run();
 

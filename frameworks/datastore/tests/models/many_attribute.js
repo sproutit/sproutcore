@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 // test core array-mapping methods for ManyArray with ManyAttribute
@@ -416,4 +416,4 @@ test("add a record to a one-to-many; one-side", function() {
   
 });
 
-plan.run();
+run();

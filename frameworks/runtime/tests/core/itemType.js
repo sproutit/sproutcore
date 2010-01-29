@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var object;
@@ -48,4 +48,4 @@ test("should return true for null and undefined ",function(){
 	equals(true,SC.none(b),"for a undefined parameter passed ");
 });
 
-plan.run();
+run();

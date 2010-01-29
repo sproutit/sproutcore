@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var source, indexes, observer, obj ; // base array to work with
@@ -118,4 +118,4 @@ test("notifications with context", function() {
 
 
 
-plan.run();
+run();

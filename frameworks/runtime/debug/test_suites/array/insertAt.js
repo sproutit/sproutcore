@@ -20,27 +20,27 @@ SC.ArraySuite.define(function(T) {
     }
   });
 
-  Ct.test("[].insertAt(0, X) => [X] + notify", function() {
+  Ct.test("[].insertAt(0, X) => [X] + notify", function(t) {
 
     var after = T.expected(1);
     
     observer.observe('[]') ;
     obj.insertAt(0, after[0]) ;
-    T.validateAfter(obj, [after[0]], observer);
+    T.validateAfter(t, obj, [after[0]], observer);
   });
   
-  Ct.test("[].insertAt(200,X) => OUT_OF_RANGE_EXCEPTION exception", function() {
+  Ct.test("[].insertAt(200,X) => OUT_OF_RANGE_EXCEPTION exception", function(t) {
     var didThrow = false ;
     try {
       obj.insertAt(200, T.expected(1));
     } catch (e) {
-      Ct.equals(e, SC.OUT_OF_RANGE_EXCEPTION, 'should throw SC.OUT_OF_RANGE_EXCEPTION');
+      t.equal(e, SC.OUT_OF_RANGE_EXCEPTION, 'should throw SC.OUT_OF_RANGE_EXCEPTION');
       didThrow = true ;
     }
-    Ct.ok(didThrow, 'should raise exception');
+    t.ok(didThrow, 'should raise exception');
   });
 
-  Ct.test("[A].insertAt(0, X) => [X,A] + notify", function() {
+  Ct.test("[A].insertAt(0, X) => [X,A] + notify", function(t) {
     var exp = T.expected(2), 
         before  = exp.slice(0,1),
         replace = exp[1],
@@ -50,10 +50,10 @@ SC.ArraySuite.define(function(T) {
     observer.observe('[]');
     
     obj.insertAt(0, replace);
-    T.validateAfter(obj, after, observer);
+    T.validateAfter(t, obj, after, observer);
   });
   
-  Ct.test("[A].insertAt(1, X) => [A,X] + notify", function() {
+  Ct.test("[A].insertAt(1, X) => [A,X] + notify", function(t) {
     var exp = T.expected(2), 
         before  = exp.slice(0,1),
         replace = exp[1],
@@ -63,23 +63,23 @@ SC.ArraySuite.define(function(T) {
     observer.observe('[]');
     
     obj.insertAt(1, replace);
-    T.validateAfter(obj, after, observer);
+    T.validateAfter(t, obj, after, observer);
   });
 
-  Ct.test("[A].insertAt(200,X) => OUT_OF_RANGE exception", function() {
+  Ct.test("[A].insertAt(200,X) => OUT_OF_RANGE exception", function(t) {
     obj.replace(0,0, T.expected(1)); // add an item
     
     var didThrow = false ;
     try {
       obj.insertAt(200, T.expected(1));
     } catch (e) {
-      Ct.equals(e, SC.OUT_OF_RANGE_EXCEPTION, 'should throw SC.OUT_OF_RANGE_EXCEPTION');
+      t.equal(e, SC.OUT_OF_RANGE_EXCEPTION, 'should throw SC.OUT_OF_RANGE_EXCEPTION');
       didThrow = true ;
     }
-    Ct.ok(didThrow, 'should raise exception');
+    t.ok(didThrow, 'should raise exception');
   });
   
-  Ct.test("[A,B,C].insertAt(0,X) => [X,A,B,C] + notify", function() {
+  Ct.test("[A,B,C].insertAt(0,X) => [X,A,B,C] + notify", function(t) {
     var exp = T.expected(4), 
         before  = exp.slice(1),
         replace = exp[0],
@@ -89,10 +89,10 @@ SC.ArraySuite.define(function(T) {
     observer.observe('[]');
     
     obj.insertAt(0, replace);
-    T.validateAfter(obj, after, observer);
+    T.validateAfter(t, obj, after, observer);
   });
   
-  Ct.test("[A,B,C].insertAt(1,X) => [A,X,B,C] + notify", function() {
+  Ct.test("[A,B,C].insertAt(1,X) => [A,X,B,C] + notify", function(t) {
     var exp = T.expected(4), 
         before  = exp.slice(1),
         replace = exp[0],
@@ -102,10 +102,10 @@ SC.ArraySuite.define(function(T) {
     observer.observe('[]');
     
     obj.insertAt(1, replace);
-    T.validateAfter(obj, after, observer);
+    T.validateAfter(t, obj, after, observer);
   });
 
-  Ct.test("[A,B,C].insertAt(3,X) => [A,B,C,X] + notify", function() {
+  Ct.test("[A,B,C].insertAt(3,X) => [A,B,C,X] + notify", function(t) {
     var exp = T.expected(4), 
         before  = exp.slice(1),
         replace = exp[0],
@@ -115,7 +115,7 @@ SC.ArraySuite.define(function(T) {
     observer.observe('[]');
     
     obj.insertAt(3, replace);
-    T.validateAfter(obj, after, observer);
+    T.validateAfter(t, obj, after, observer);
   });
   
 });

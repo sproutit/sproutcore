@@ -5,7 +5,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var Mail;
@@ -91,5 +91,5 @@ module("Sample Model from a webmail app", {
   }
 });
 
-plan.run();
+run();
 

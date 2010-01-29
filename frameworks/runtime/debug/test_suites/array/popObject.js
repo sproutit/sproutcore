@@ -20,31 +20,31 @@ SC.ArraySuite.define(function(T) {
     }
   });
 
-  Ct.test("[].popObject() => [] + returns undefined + false notify", function() {
+  Ct.test("[].popObject() => [] + returns undefined + false notify", function(t) {
     observer.observe('[]', 'length') ;
-    Ct.equals(obj.popObject(), undefined, 'should return undefined') ;
-    T.validateAfter(obj, [], observer, false, false);
+    t.equal(obj.popObject(), undefined, 'should return undefined') ;
+    T.validateAfter(t, obj, [], observer, false, false);
   });
 
-  Ct.test("[X].popObject() => [] + notify", function() {
+  Ct.test("[X].popObject() => [] + notify", function(t) {
     var exp = T.expected(1)[0];
     
     obj.replace(0,0, [exp]);
     observer.observe('[]', 'length') ;
 
-    Ct.equals(obj.popObject(), exp, 'should return popped object') ;
-    T.validateAfter(obj, [], observer, true, true);
+    t.equal(obj.popObject(), exp, 'should return popped object') ;
+    T.validateAfter(t, obj, [], observer, true, true);
   });
 
-  Ct.test("[A,B,C].popObject() => [A,B] + notify", function() {
+  Ct.test("[A,B,C].popObject() => [A,B] + notify", function(t) {
     var before  = T.expected(3),
         value   = before[2],
         after   = before.slice(0,2);
         
     obj.replace(0,0,before);
     observer.observe('[]', 'length') ;
-    Ct.equals(obj.popObject(), value, 'should return popped object') ;
-    T.validateAfter(obj, after, observer, true);
+    t.equal(obj.popObject(), value, 'should return popped object') ;
+    T.validateAfter(t, obj, after, observer, true);
   });
   
 });

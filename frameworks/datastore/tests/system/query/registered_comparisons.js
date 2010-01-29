@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
  
 // test parsing of query string
@@ -67,5 +67,5 @@ test("SC.Query.comparisons", function(){
   equals(q.compare(rec2,rec3), -1, "lastName should be compared by SC.compare()");
 });
 
-plan.run();
+run();
 

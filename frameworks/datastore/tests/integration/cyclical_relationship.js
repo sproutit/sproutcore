@@ -5,7 +5,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 var AB ;
 
@@ -100,7 +100,11 @@ module("Cyclical relationships", {
 test("getting all contacts in a group", function() {
   var group  = AB.store.find(AB.Group, 100);
   var expected = AB.store.find(AB.Contact).filterProperty('group', group);
-  same(group.get('contacts'), expected, 'contacts');
+  var actual = group.get('contacts');
+  equals(actual.get('length'), expected.get('length'), 'contacts.length');
+  expected.forEach(function(item, idx) {
+    same(actual.objectAt(idx), item, 'group.objectAt(%@)'.fmt(idx));
+  }, this);
 });
 
 test("finding favoriteContacts", function() {
@@ -121,6 +125,6 @@ test("finding favoriteContacts", function() {
   
 });
 
-plan.run();
+run();
 
 

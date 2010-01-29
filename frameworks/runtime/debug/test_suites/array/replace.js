@@ -20,17 +20,17 @@ SC.ArraySuite.define(function(T) {
     }
   });
   
-  Ct.test("[].replace(0,0,'X') => ['X'] + notify", function() {
+  Ct.test("[].replace(0,0,'X') => ['X'] + notify", function(t) {
 
     var exp = T.expected(1);
     
     observer.observe('[]', 'length') ;
     obj.replace(0,0,exp) ;
 
-    T.validateAfter(obj, exp, observer, true);
+    T.validateAfter(t, obj, exp, observer, true);
   });
 
-  Ct.test("[A,B,C,D].replace(1,2,X) => [A,X,D] + notify", function() {
+  Ct.test("[A,B,C,D].replace(1,2,X) => [A,X,D] + notify", function(t) {
     
     var exp = T.expected(5), 
         before = exp.slice(0,4),
@@ -42,10 +42,10 @@ SC.ArraySuite.define(function(T) {
 
     obj.replace(1,2,replace) ;
 
-    T.validateAfter(obj, after, observer, true);
+    T.validateAfter(t, obj, after, observer, true);
   });
 
-  Ct.test("[A,B,C,D].replace(1,2,[X,Y]) => [A,X,Y,D] + notify", function() {
+  Ct.test("[A,B,C,D].replace(1,2,[X,Y]) => [A,X,Y,D] + notify", function(t) {
     
     // setup the before, after, and replace arrays.  Use generated objects
     var exp  = T.expected(6),
@@ -58,10 +58,10 @@ SC.ArraySuite.define(function(T) {
 
     obj.replace(1,2, replace) ;
 
-    T.validateAfter(obj, after, observer, true);
+    T.validateAfter(t, obj, after, observer, true);
   });
   
-  Ct.test("[A,B].replace(1,0,[X,Y]) => [A,X,Y,B] + notify", function() {
+  Ct.test("[A,B].replace(1,0,[X,Y]) => [A,X,Y,B] + notify", function(t) {
 
     // setup the before, after, and replace arrays.  Use generated objects
     var exp  = T.expected(4),
@@ -74,10 +74,10 @@ SC.ArraySuite.define(function(T) {
   
     obj.replace(1,0, replace) ;
     
-    T.validateAfter(obj, after, observer, true);
+    T.validateAfter(t, obj, after, observer, true);
   });
   
-  Ct.test("[A,B,C,D].replace(2,2) => [A,B] + notify", function() {
+  Ct.test("[A,B,C,D].replace(2,2) => [A,B] + notify", function(t) {
 
     // setup the before, after, and replace arrays.  Use generated objects
     var before  = T.expected(4),
@@ -88,7 +88,7 @@ SC.ArraySuite.define(function(T) {
   
     obj.replace(2,2) ;
     
-    T.validateAfter(obj, after, observer, true);
+    T.validateAfter(t, obj, after, observer, true);
   });
   
 });

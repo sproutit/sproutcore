@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var store, storeKey, json, hash, hash2, MyRecordType;
@@ -73,4 +73,4 @@ test("Creating an empty (null) record should make the hash available", function(
   
 });
 
-plan.run();
+run();

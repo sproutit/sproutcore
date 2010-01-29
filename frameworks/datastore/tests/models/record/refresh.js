@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var MyApp;
@@ -51,6 +51,6 @@ test("should return receiver", function() {
   equals(MyApp.foo.refresh(), MyApp.foo, 'should return receiver');
 });
 
-plan.run();
+run();
 
 

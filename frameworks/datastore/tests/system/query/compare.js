@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
  
 // test parsing of query string
@@ -143,6 +143,6 @@ test("specifying a custom orderBy comparison function", function() {
   q.parse();
   equals(q.compare(rec1,rec2), 1, 'guid 2 should be before guid 1');
   equals(usedCustomFunction, YES, 'we should have used our custom comparison function');
-});});
+});
 
-plan.run();
+run();

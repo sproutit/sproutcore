@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var store, child, storeKey, json;
@@ -136,5 +136,5 @@ test("does not throw exception if optimistic locking fails but force option is p
   equals(errorCount, 0, 'should not raise error');
 });
 
-plan.run();
+run();
 

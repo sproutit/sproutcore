@@ -5,7 +5,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var object ;
@@ -84,4 +84,4 @@ test("SC.copy should be an alias for SC.clone", function() {
   equals(SC.copy, SC.clone, 'SC.copy should equal SC.clone');
 });
 
-plan.run();
+run();

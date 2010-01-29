@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 // NOTE: The test below are based on the Data Hashes state chart.  This models
@@ -158,4 +158,4 @@ test("calling _notifyRecordPropertyChange twice, once with a key and once withou
   equals(record.get('prop1'), 'New value', 'The main store’s record should return the correct value for prop1, not the stale cached version') ;
 });
 
-plan.run();
+run();

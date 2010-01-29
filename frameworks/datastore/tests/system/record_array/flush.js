@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 // test core array-mapping methods for RecordArray
@@ -130,7 +130,7 @@ test("calling storeDidChangeStoreKeys() to remove a record", function() {
   equals(recs.get('length'), 0, 'should remove storeKey on flush()');
 });
 
-plan.run();
+run();
 
 
 // ..........................................................
@@ -139,7 +139,7 @@ plan.run();
 
 var json2, foo, bar ;
 
-module("SC.RecordArray core methods", {
+module("SC.RecordArray.flush", {
   setup: function() {
     // setup dummy store
     store = SC.Store.create();
@@ -168,8 +168,6 @@ test("local query should notify changes", function() {
     // any cache
     same(recs.mapProperty('id'), ['bar', 'foo'], 'PRECOND - bar should appear before foo');
 
-    SC.stopIt = YES;
-    
     SC.RunLoop.begin();
     bar.set('name', 'zzbar');
     SC.RunLoop.end(); // should resort record array

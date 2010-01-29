@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 // This file tests the initial state of the store when it is first created
@@ -23,4 +23,4 @@ test("initial setup for root store", function() {
   ok(!store.queryErrors, 'should not have queryErrors');
 }); 
 
-plan.run();
+run();

@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 // test core array-mapping methods for RecordArray with RecordAttribute
@@ -248,4 +248,4 @@ test("writing an attribute should make many relationship aggregate dirty and add
   ok(store.changelog.contains(rec2.get('storeKey')), "foo2 should be in the store's changelog");
 });
 
-plan.run();
+run();

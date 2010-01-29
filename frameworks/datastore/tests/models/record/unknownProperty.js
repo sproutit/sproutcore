@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var MyApp;
@@ -68,7 +68,7 @@ test("set() on unknown property if model ignoreUnknownProperties=true should not
   equals(MyApp.store.dataHashes[MyApp.fooStrict.storeKey].foo, 'bar', 'should not have written new value to dataHash');
 });
 
-plan.run();
+run();
 
 
 

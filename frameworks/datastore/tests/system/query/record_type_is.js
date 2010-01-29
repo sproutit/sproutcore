@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 // test parsing of query string
@@ -44,4 +44,4 @@ test("should handle record types", function() {
   ok(!q.contains(rec), 'record with wrong type should not match');
 });
 
-plan.run();
+run();

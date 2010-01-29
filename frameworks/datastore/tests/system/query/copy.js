@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
  
 // test parsing of query string
@@ -31,4 +31,4 @@ test("basic copy", function() {
   
 });
 
-plan.run();
+run();

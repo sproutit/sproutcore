@@ -156,30 +156,30 @@ SC.ArraySuite = Ct.Suite.create("Verify SC.Array compliance: %@#%@", {
       callCount: 0,
 
       // call afterward to verify
-      expectRangeChange: function(source, object, key, indexes, context) {
-        Ct.equals(this.callCount, 1, 'expects one callback');
+      expectRangeChange: function(t, source, object, key, indexes, context) {
+        t.equal(this.callCount, 1, 'expects one callback');
         
         if (source !== undefined && source !== false) {
-          Ct.ok(this.source, source, 'source should equal array');
+          t.ok(this.source, source, 'source should equal array');
         }
         
         if (object !== undefined && object !== false) {
-          Ct.equals(this.object, object, 'object');
+          t.equal(this.object, object, 'object');
         }
         
         if (key !== undefined && key !== false) {
-          Ct.equals(this.key, key, 'key');
+          t.equal(this.key, key, 'key');
         }
         
         if (indexes !== undefined && indexes !== false) {
           if (indexes.isIndexSet) {
-            Ct.ok(this.indexes && this.indexes.isIndexSet, 'indexes should be index set');
-            Ct.ok(indexes.isEqual(this.indexes), 'indexes should match %@ (actual: %@)'.fmt(indexes, this.indexes));
-          } else Ct.equals(this.indexes, indexes, 'indexes');
+            t.ok(this.indexes && this.indexes.isIndexSet, 'indexes should be index set');
+            t.ok(indexes.isEqual(this.indexes), 'indexes should match %@ (actual: %@)'.fmt(indexes, this.indexes));
+          } else t.equal(this.indexes, indexes, 'indexes');
         }
           
         if (context !== undefined && context !== false) {
-          Ct.equals(this.context, context, 'context should match');
+          t.equal(this.context, context, 'context should match');
         }
         
       },
@@ -202,22 +202,22 @@ SC.ArraySuite = Ct.Suite.create("Verify SC.Array compliance: %@#%@", {
   /**
     Verifies that the passed object matches the passed array.
   */
-  validateAfter: function(obj, after, observer, lengthDidChange, enumerableDidChange) {
+  validateAfter: function(t, obj, after, observer, lengthDidChange, enumerableDidChange) {
     var loc = after.length;
-    Ct.equals(obj.get('length'), loc, 'length should update (%@)'.fmt(obj)) ;
+    t.equal(obj.get('length'), loc, 'length should update (%@)'.fmt(obj)) ;
     while(--loc >= 0) {
-      Ct.equals(obj.objectAt(loc), after[loc], 'objectAt(%@)'.fmt(loc)) ;
+      t.equal(obj.objectAt(loc), after[loc], 'objectAt(%@)'.fmt(loc)) ;
     }
 
     // note: we only test that the length notification happens when we expect
     // it.  If we don't expect a length notification, it is OK for a class
     // to trigger a change anyway so we don't check for this case.
     if (enumerableDidChange !== false) {
-      Ct.equals(observer.didNotify("[]"), true, 'should notify []') ;
+      t.equal(observer.didNotify("[]"), true, 'should notify []') ;
     }
     
     if (lengthDidChange) {
-      Ct.equals(observer.didNotify('length'), true, 'should notify length change');
+      t.equal(observer.didNotify('length'), true, 'should notify length change');
     }
   }
   
@@ -227,13 +227,13 @@ SC.ArraySuite = Ct.Suite.create("Verify SC.Array compliance: %@#%@", {
 SC.ArraySuite.define(function(T) {
   T.module("length");
   
-  Ct.test("should return 0 on empty array", function() {
-    Ct.equals(T.object.get('length'), 0, 'should have empty length');
+  Ct.test("should return 0 on empty array", function(t) {
+    t.equal(T.object.get('length'), 0, 'should have empty length');
   });
   
-  Ct.test("should return array length", function() {
+  Ct.test("should return array length", function(t) {
     var obj = T.newObject(3);
-    Ct.equals(obj.get('length'), 3, 'should return length');
+    t.equal(obj.get('length'), 3, 'should return length');
   });
   
 });

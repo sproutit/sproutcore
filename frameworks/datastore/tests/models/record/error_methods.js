@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var store, Application;
@@ -57,5 +57,5 @@ test("Verify error methods behave correctly", function() {
     "get('errorObject') on thing2 should return null");
 });
 
-plan.run();
+run();
 

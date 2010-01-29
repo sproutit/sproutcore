@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 // test core array-mapping methods for RecordArray
@@ -178,4 +178,4 @@ test("swapping storeKey array should change recordArray and observers", function
 
 });
 
-plan.run();
+run();

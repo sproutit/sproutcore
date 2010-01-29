@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var json1, json2, json3, json4, json5, json6, json7, json8, json9, json10,
@@ -287,5 +287,5 @@ test("Confirm that errors passed to dataSourceDidError make it into the recordEr
     "recordErrors[storeKey] should be the right error object");
 });
 
-plan.run();
+run();
 

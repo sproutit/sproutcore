@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var store, storeKey1, storeKey2, storeKey3, storeKey4, storeKey5, storeKey6;
@@ -210,5 +210,5 @@ test("calling commitRecords() with params", function() {
   ds.expect(0);
 });
 
-plan.run();
+run();
 

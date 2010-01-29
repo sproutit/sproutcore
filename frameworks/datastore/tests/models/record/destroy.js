@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var MyApp;
@@ -97,6 +97,6 @@ test("destroy should update status cache", function() {
   SC.RunLoop.end();
 });
 
-plan.run();
+run();
 
 

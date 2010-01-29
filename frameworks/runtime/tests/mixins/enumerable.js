@@ -5,7 +5,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 /*globals module test ok isObj equals expects */
@@ -624,4 +624,4 @@ test("should notify observers even if reduced property is cached on prototype", 
   equals(5, observedValue, "observedValue") ;
 });
 
-plan.run();
+run();

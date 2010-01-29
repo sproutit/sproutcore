@@ -5,7 +5,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 /*globals module test ok isObj equals expects */
@@ -46,4 +46,4 @@ test("should be comparable and return the correct result", function() {
   equals(SC.compare(r2, r1), 1);
 });
 
-plan.run();
+run();

@@ -20,20 +20,20 @@ SC.ArraySuite.define(function(T) {
     }
   });
 
-  Ct.test("returns unshifted object", function() {
+  Ct.test("returns unshifted object", function(t) {
     var exp = T.expected(1)[0];
-    Ct.equals(obj.pushObject(exp), exp, 'should return receiver');
+    t.equal(obj.pushObject(exp), exp, 'should return receiver');
   });
   
 
-  Ct.test("[].unshiftObject(X) => [X] + notify", function() {
+  Ct.test("[].unshiftObject(X) => [X] + notify", function(t) {
     var exp = T.expected(1);
     observer.observe('[]', 'length') ;
     obj.unshiftObject(exp[0]) ;
-    T.validateAfter(obj, exp, observer, true);
+    T.validateAfter(t, obj, exp, observer, true);
   });
 
-  Ct.test("[A,B,C].unshiftObject(X) => [X,A,B,C] + notify", function() {
+  Ct.test("[A,B,C].unshiftObject(X) => [X,A,B,C] + notify", function(t) {
     var after  = T.expected(4),
         before = after.slice(1),
         value  = after[0];
@@ -41,7 +41,7 @@ SC.ArraySuite.define(function(T) {
     obj.replace(0,0,before);
     observer.observe('[]', 'length') ;
     obj.unshiftObject(value) ;
-    T.validateAfter(obj, after, observer, true);
+    T.validateAfter(t, obj, after, observer, true);
   });
   
 });

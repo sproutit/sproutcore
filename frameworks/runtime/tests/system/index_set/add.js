@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var set ;
@@ -214,4 +214,4 @@ test("adding in the same range should keep length consistent", function() {
   
 });
 
-plan.run();
+run();

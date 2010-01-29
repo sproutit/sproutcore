@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var store, fds, storeKey1,storeKey2;
@@ -118,4 +118,4 @@ test("Update and commit a record", function() {
     
 });
 
-plan.run();
+run();

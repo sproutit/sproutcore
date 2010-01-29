@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var MyApp;
@@ -534,5 +534,5 @@ test("creating record appears in future find()", function() {
   equals(r.get('length'), 3, 'should return additional record');  
 });
 
-plan.run();
+run();
 
