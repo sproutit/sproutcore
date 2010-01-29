@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var a, b, c ; // global variables
@@ -296,4 +296,4 @@ test("the clone() should return an indentical set", function() {
 	equals(true,obj.contains(set[4]));
 });
 
-plan.run();
+run();

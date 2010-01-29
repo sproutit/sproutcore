@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 module("SC.SelectionSet.copy");
@@ -20,4 +20,4 @@ test("basic copy", function() {
   same(copy, set, 'copy should be the same as original set');
 });
 
-plan.run();
+run();

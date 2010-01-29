@@ -20,12 +20,12 @@ SC.ArraySuite.define(function(T) {
     }
   });
 
-  Ct.test("should return receiver", function() {
+  Ct.test("should return receiver", function(t) {
     obj = T.newObject(3);
-    Ct.equals(obj.removeObject(obj.objectAt(0)), obj, 'should return receiver');
+    t.equal(obj.removeObject(obj.objectAt(0)), obj, 'should return receiver');
   });
   
-  Ct.test("[A,B,C].removeObject(B) => [A,C] + notify", function() {
+  Ct.test("[A,B,C].removeObject(B) => [A,C] + notify", function(t) {
 
     var before = T.expected(3),
         after  = [before[0], before[2]];
@@ -33,17 +33,17 @@ SC.ArraySuite.define(function(T) {
     observer.observe('[]', 'length') ;
     
     obj.removeObject(before[1]) ;
-    T.validateAfter(obj, after, observer, true);
+    T.validateAfter(t, obj, after, observer, true);
   });
   
-  Ct.test("[A,B,C].removeObject(D) => [A,B,C]", function() {
+  Ct.test("[A,B,C].removeObject(D) => [A,B,C]", function(t) {
     var exp = T.expected(4),
         extra = exp.pop();
     obj.replace(0,0,exp);
     observer.observe('[]', 'length') ;
     
     obj.removeObject(extra);
-    T.validateAfter(obj, exp, observer, false, false);
+    T.validateAfter(t, obj, exp, observer, false, false);
   });
   
 });

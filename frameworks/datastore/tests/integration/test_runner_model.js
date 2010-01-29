@@ -4,7 +4,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 var TestRunner;
@@ -55,5 +55,5 @@ module("Sample Model from TestRunner Application", {
   }
 });
 
-plan.run();
+run();
 

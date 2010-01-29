@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 module("SC.ERROR");
@@ -57,4 +57,4 @@ test("errorObject property should return the error itself", function() {
   equals(er.get('errorObject'), er, 'errorObject should return receiver');
 });
 
-plan.run();
+run();

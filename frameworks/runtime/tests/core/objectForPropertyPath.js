@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 var system = require('system', 'default');
 
@@ -24,4 +24,4 @@ test("should be able to resolve an object on the window", function() {
   system.global.myGlobal =null ;
 });
 
-plan.run();
+run();

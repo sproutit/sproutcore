@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var ObjectA;
@@ -89,4 +89,4 @@ test("should notify all observers that their property might have changed", funct
 	equals(ObjectA.normal2,'newZeroValue') ;
 });
 
-plan.run();
+run();

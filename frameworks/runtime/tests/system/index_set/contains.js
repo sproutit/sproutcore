@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var set ;
@@ -74,5 +74,5 @@ test("handle self", function() {
   equals(set.contains(set), true, 'should return true when passed itself');  
 });
 
-plan.run();
+run();
 

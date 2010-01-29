@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 // functions borrowed from http://www.quirksmode.org/js/cookies.html
@@ -166,4 +166,4 @@ test("find", function() {
   setCookies = ["cookie-find"];
 });
 
-plan.run();
+run();

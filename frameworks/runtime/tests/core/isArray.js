@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var objectA,objectB,objectC, objectD, objectE; //global variables
@@ -29,4 +29,4 @@ test("should check if a given object is an array or not " ,function(){
 	equals(SC.isArray(objectE),false);
 });
 
-plan.run();
+run();

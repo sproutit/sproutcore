@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var objectA, objectB ; // global variables
@@ -153,4 +153,4 @@ test("guid should not parse to a number", function() {
   equals(true, isNaN(parseInt(SC.guidFor(array1), 0))) ;
 });
 
-plan.run();
+run();

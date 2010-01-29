@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var obj, obj1, don, don1 ; // global variables
@@ -152,5 +152,5 @@ test("subclasses should contain defined subclasses", function() {
   ok(obj1.subclasses.contains(kls2), 'obj1.subclasses should contain kls2');
 });
 
-plan.run();
+run();
 

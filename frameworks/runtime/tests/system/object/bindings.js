@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var testObject, fromObject, extraObject, TestObject, TestNamespace;
@@ -369,4 +369,4 @@ test("Chained binding should be null if intermediate object in chain is null", f
   equals(a.get('z'), null, "a.z == null");
 });
 
-plan.run();
+run();

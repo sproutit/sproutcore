@@ -4,7 +4,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index');
 
 // test normalize method for SC.Record
@@ -249,5 +249,5 @@ test("normalizing a new record with no guid should work with defaultValue" ,func
   
 });
 
-plan.run();
+run();
 

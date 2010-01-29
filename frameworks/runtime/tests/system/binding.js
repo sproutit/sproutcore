@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 var system = require('system' ,'default');
 
@@ -288,4 +288,4 @@ test("two bindings to the same value should sync in the order they are initializ
   
 });
 
-plan.run();
+run();

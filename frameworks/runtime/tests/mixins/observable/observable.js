@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import package core_test";
+"import core_test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var object, ObjectC, ObjectD, objectA, objectB ;
@@ -677,5 +677,5 @@ test("changing chained observer object to null should not raise exception", func
   equals(callCount, 1, 'changing bar should trigger observer');
 });
 
-plan.run();
+run();
 
