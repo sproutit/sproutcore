@@ -6,10 +6,13 @@
 /* Always use Helvetica and this background color. */
 .sc-theme {
 	font: 12px/18px "Lucida Grande", "Lucida Sans", Verdana, Arial, sans-serif;
-	background-color: #57647f ;
 	padding: 0px;
 }
 
+.sc-main.sc-theme,
+body.sc-theme {
+  background-color: #57647f ;
+}
 
 .sc-theme .sc-view.invalid {
   outline: 2px red solid;
