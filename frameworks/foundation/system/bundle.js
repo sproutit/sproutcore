@@ -48,6 +48,12 @@ SC.mixin(/** @scope SC */ {
 
     
     var args = SC.A(arguments).slice(3);
+    
+    if (target && (method===undefined)) {
+      method = target;
+      target = this; 
+    }
+    
     var handler = function() {
       if (SC.T_STRING === typeof target) {
         target = SC.objectForPropertyPath(target);
@@ -57,13 +63,17 @@ SC.mixin(/** @scope SC */ {
         method = SC.objectForPropertyPath(method, target);
       }
 
-      if (!target || !method) throw "could not find callback for load";
+      // invoke callback only if it exists...
+      if (target) {
+        if (SC.T_STRING === typeof method) method = target[method];
+        if (!method) throw "could not find callback for load";
+
+        SC.RunLoop.begin();
+        method.apply(target, args);
+        SC.RunLoop.end();
+      }
       
-      SC.RunLoop.begin();
-      method.apply(target, args);
-      SC.RunLoop.end();
-      
-      handler = null; // cleanup memory
+      handler = target = method = null; // cleanup memory
     };
     
     tiki.async(bundleName).then(function() {
