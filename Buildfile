@@ -21,7 +21,7 @@ config :all,
 mode :debug do
   config :all, 
     :combine_javascript => true,
-    :combine_stylesheet => true
+    :combine_stylesheets => true
   
 end
 
