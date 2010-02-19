@@ -91,7 +91,7 @@ test("suspended observing during bindings", function() {
 
 test("binding will disconnect", function() {
   binding.disconnect();
-  equals(binding.isConnected, NO, "binding.isConnected");
+  equals(binding.isConnected, false, "binding.isConnected");
 });
 
 test("binding disconnection actually works", function() {
