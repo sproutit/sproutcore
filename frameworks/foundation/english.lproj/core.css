@@ -6,7 +6,7 @@
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
-.ellipsis {
+.sc-view .ellipsis {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
