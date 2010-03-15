@@ -1,4 +1,4 @@
-/* Common SC.TextFieldView styles - needed to work properly */
+/* SC.TextFieldView - sc-theme */
 
 .sc-view .sc-text-field-view {
   border:none;
@@ -130,4 +130,6 @@
 .sc-text-field-view.not-empty .sc-hint {
   display: none ;
 }
+
+
 
