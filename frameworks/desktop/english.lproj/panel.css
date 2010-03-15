@@ -13,11 +13,6 @@
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=30);
 }
 
-.sc-pane.sc-panel > .sc-view {
-  border: 0px #444 solid;
-  background-color: #eaeaea ;
-}
-
 .sc-pane.sc-panel > .top-right-edge {
   position: absolute;
   width: 40px;
