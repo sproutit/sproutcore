@@ -6,3 +6,10 @@ body {
   right: 0;
   position: absolute;
 }
+
+.sc-theme {
+	font: 12px "Lucida Sans", "Lucida Sans", Verdana, Arial, sans-serif;
+	padding: 0px;
+    line-height: 1.4
+}
+
