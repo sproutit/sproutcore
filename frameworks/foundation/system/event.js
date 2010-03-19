@@ -812,7 +812,6 @@ SC.Event.prototype = {
       if (ret) {
         if (this.altKey) modifiers += 'alt_' ;
         if (this.ctrlKey || this.metaKey) modifiers += 'ctrl_' ;
-        if (this.shiftKey) modifiers += 'shift_' ;
       }
     }
 
@@ -827,6 +826,8 @@ SC.Event.prototype = {
         
       } else ret = null ;
     }
+
+    if (this.shiftKey && ret) modifiers += 'shift_' ;
 
     if (ret) ret = modifiers + ret ;
     return [ret, key] ;
@@ -870,4 +871,20 @@ SC.PRINTABLE_KEYS = {
   79:"o", 80:"p", 81:"q", 82:"r", 83:"s", 84:"t", 85:"u", 86:"v", 87:"w",
   88:"x", 89:"y", 90:"z", 107:"+", 109:"-", 110:".", 188:",", 190:".",
   191:"/", 192:"`", 219:"[", 220:"\\", 221:"]", 222:"\""
-} ;
+};
+
+// Create the lookup table for Firefox to convert charCodes to keyCodes
+// in the keyPress event.
+SC.PRINTABLE_KEYS_CHARCODE = {};
+
+// Function to create the table.
+(function() {
+  var k;
+  for (i in SC.PRINTABLE_KEYS) {
+    k = SC.PRINTABLE_KEYS[i];
+    SC.PRINTABLE_KEYS_CHARCODE[k.charCodeAt(0)] = i;
+    if (k.toUpperCase() != k) {
+      SC.PRINTABLE_KEYS_CHARCODE[k.toUpperCase().charCodeAt(0)] = i;
+    }
+  }
+})();
