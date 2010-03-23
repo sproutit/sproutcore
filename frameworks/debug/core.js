@@ -70,6 +70,7 @@ SC.mapDisplayNames = function(obj, level, path, seenHash, seenArray) {
     if (key === "constructor") continue ;
     if (key === "superclass") continue ;
     if (key === "document") continue ;
+    if (key === "cookie") continue ;
 
     // Avoid TypeError's in WebKit based browsers
     if (obj.type && obj.type === 'file') {
