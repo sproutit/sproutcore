@@ -308,7 +308,7 @@ CoreTest.Plan = {
         this.warn("Test not yet implemented: " + name);
       } else {
         try {
-          if (CoreTest.trace) console.log("run: " + name);
+          if (CoreTest.trace) SC.Logger.log("run: " + name);
           this.working.test_begin = this.now();
           func.call(this);
           this.working.test_end = this.now();

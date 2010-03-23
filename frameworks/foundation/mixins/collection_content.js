@@ -160,7 +160,7 @@ SC.CollectionContent = {
     @returns {void}
   */
   contentIndexExpand: function(view, content, idx) {
-    console.log('contentIndexExpand(%@, %@, %@)'.fmt(view,content,idx));
+    SC.Logger.log('contentIndexExpand(%@, %@, %@)'.fmt(view,content,idx));
   },
   
   /**
@@ -173,7 +173,7 @@ SC.CollectionContent = {
     @returns {void}
   */
   contentIndexCollapse: function(view, content, idx) {
-    console.log('contentIndexCollapse(%@, %@, %@)'.fmt(view,content,idx));
+    SC.Logger.log('contentIndexCollapse(%@, %@, %@)'.fmt(view,content,idx));
   }
     
 };

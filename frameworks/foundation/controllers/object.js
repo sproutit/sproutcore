@@ -259,11 +259,11 @@ SC.ObjectController = SC.Controller.extend(
       this._scoc_content = cur;
       var func = this._scoc_enumerableContentDidChange;
       if (last && last.isEnumerable) {
-        //console.log('no longer observing [] on last');
+        //SC.Logger.log('no longer observing [] on last');
         last.removeObserver('[]', this, func);
       }
       if (cur && cur.isEnumerable) {
-        //console.log('observing [] on cur');
+        //SC.Logger.log('observing [] on cur');
         cur.addObserver('[]', this, func);
       }
     }
@@ -281,7 +281,7 @@ SC.ObjectController = SC.Controller.extend(
         efunc= this._scoc_enumerableContentDidChange;
 
     if (last === cur) return this; // nothing to do
-    //console.log('observableContentDidChange');
+    //SC.Logger.log('observableContentDidChange');
     
     this._scoc_observableContent = cur; // save old content
     

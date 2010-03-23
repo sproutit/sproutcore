@@ -140,7 +140,7 @@ SC.TableHeaderView = SC.View.extend({
   
   // _scthv_hideViewInDragMode: function() {    
   //   var shouldBeVisible = !this.get('isInDragMode'), layer = this.get('layer');
-  //   console.log('should be visible: %@'.fmt(!this.get('isInDragMode')));
+  //   SC.Logger.log('should be visible: %@'.fmt(!this.get('isInDragMode')));
   //   SC.RunLoop.begin();
   //   SC.$(layer).css('display', shouldBeVisible ? 'block' : 'none');
   //   SC.RunLoop.end();

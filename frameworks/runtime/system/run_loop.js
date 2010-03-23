@@ -54,7 +54,7 @@ SC.RunLoop = SC.Object.extend(/** @scope SC.RunLoop.prototype */ {
   beginRunLoop: function() {
     this._start = new Date().getTime() ; // can't use Date.now() in runtime
     if (SC.LOG_BINDINGS || SC.LOG_OBSERVERS) {
-      console.log("-- SC.RunLoop.beginRunLoop at %@".fmt(this._start));
+      SC.Logger.log("-- SC.RunLoop.beginRunLoop at %@".fmt(this._start));
     } 
     return this ; 
   },
@@ -76,7 +76,7 @@ SC.RunLoop = SC.Object.extend(/** @scope SC.RunLoop.prototype */ {
     var didChange ;
 
     if (SC.LOG_BINDINGS || SC.LOG_OBSERVERS) {
-      console.log("-- SC.RunLoop.endRunLoop ~ flushing application queues");
+      SC.Logger.log("-- SC.RunLoop.endRunLoop ~ flushing application queues");
     } 
     
     do {
@@ -86,7 +86,7 @@ SC.RunLoop = SC.Object.extend(/** @scope SC.RunLoop.prototype */ {
     this._start = null ;
 
     if (SC.LOG_BINDINGS || SC.LOG_OBSERVERS) {
-      console.log("-- SC.RunLoop.endRunLoop ~ End");
+      SC.Logger.log("-- SC.RunLoop.endRunLoop ~ End");
     } 
     
     return this ; 

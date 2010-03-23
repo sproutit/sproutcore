@@ -227,7 +227,7 @@ SC.RenderContext = SC.Builder.create(/** SC.RenderContext.fn */ {
     @returns {SC.RenderContext} new context
   */
   begin: function(tagNameOrElement) {
-    // console.log('%@.begin(%@) called'.fmt(this, tagNameOrElement));
+    // SC.Logger.log('%@.begin(%@) called'.fmt(this, tagNameOrElement));
     return SC.RenderContext(tagNameOrElement, this);
   },
   
@@ -267,7 +267,7 @@ SC.RenderContext = SC.Builder.create(/** SC.RenderContext.fn */ {
     Removes an element with the passed id in the currently managed element.
   */
   remove: function(elementId) {
-    // console.log('remove('+elementId+')');
+    // SC.Logger.log('remove('+elementId+')');
     if (!elementId) return ;
     
     var el, elem = this._elem ;
@@ -305,9 +305,9 @@ SC.RenderContext = SC.Builder.create(/** SC.RenderContext.fn */ {
       return ;
     }
     
-    // console.log('%@#update() called'.fmt(this));
-    // if (this.length>0) console.log(this.join());
-    // else console.log('<no length>');
+    // SC.Logger.log('%@#update() called'.fmt(this));
+    // if (this.length>0) SC.Logger.log(this.join());
+    // else SC.Logger.log('<no length>');
     
     // replace innerHTML
     if (this.length>0) {
@@ -393,7 +393,7 @@ SC.RenderContext = SC.Builder.create(/** SC.RenderContext.fn */ {
     @returns {SC.RenderContext} 
   */
   end: function() {
-    // console.log('%@.end() called'.fmt(this));
+    // SC.Logger.log('%@.end() called'.fmt(this));
     // NOTE: If you modify this method, be careful to consider memory usage
     // and performance here.  This method is called frequently during renders
     // and we want it to be as fast as possible.
@@ -457,7 +457,7 @@ SC.RenderContext = SC.Builder.create(/** SC.RenderContext.fn */ {
     var selfClosing = (this._selfClosing === NO) ? NO : (this.length === 1) ;
     tag.push(selfClosing ? ' />' : '>') ;
     
-    // console.log('selfClosing == %@'.fmt(selfClosing));
+    // SC.Logger.log('selfClosing == %@'.fmt(selfClosing));
     
     strings[this.offset] = tag.join('');
     tag.length = 0 ; // reset temporary object
@@ -593,7 +593,7 @@ SC.RenderContext = SC.Builder.create(/** SC.RenderContext.fn */ {
   */
   addClass: function(nameOrClasses) {
     if(nameOrClasses === undefined || nameOrClasses === null) {
-      console.warn('You are adding an undefined or empty class'+ this.toString());
+      SC.Logger.warn('You are adding an undefined or empty class'+ this.toString());
       return this;
     }
     

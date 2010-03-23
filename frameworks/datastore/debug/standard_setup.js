@@ -42,7 +42,7 @@ var StandardTestSetup = {
     //       return;
     //     }
     //     if(guid === 'jim locke') {
-    //       console.log('LOADING JIM LOCKE %@'.fmt(storeKey));
+    //       SC.Logger.log('LOADING JIM LOCKE %@'.fmt(storeKey));
     //       this.get('childStore').didCreateRecords([storeKey], ['abc'], [{guid: 'abc', fullName: "Jim Locke", bookTitle: "A Letter Concerning Toleration Part Deux"}]);
     // 
     //       return;

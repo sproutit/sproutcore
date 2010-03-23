@@ -708,7 +708,7 @@ SC.Record = SC.Object.extend(
     // Add the child record to the hash.
     var crManager = this.get('childRecords');
     if (SC.none(crManager)) {
-      //console.log('Creating Child Record Manager for (%@)'.fmt(SC.guidFor(this)));
+      //SC.Logger.log('Creating Child Record Manager for (%@)'.fmt(SC.guidFor(this)));
       crManager = SC.Object.create();
       this.set('childRecords', crManager);
     }

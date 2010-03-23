@@ -145,7 +145,7 @@ SC.Benchmark = {
     }
     var start = stat._starts.pop() ;
     if (!start) {
-      console.log('SC.Benchmark "%@" ended without a matching start.  No information was saved.'.fmt(key));
+      SC.Logger.log('SC.Benchmark "%@" ended without a matching start.  No information was saved.'.fmt(key));
       return ;
     }
 
@@ -363,7 +363,7 @@ SC.Benchmark = {
     the console.
   */  
   log: function(key) {
-    console.log(this.report(key)) ;
+    SC.Logger.log(this.report(key)) ;
   },
   
   /**

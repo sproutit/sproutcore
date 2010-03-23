@@ -523,7 +523,7 @@ test("editing a field should not change the cursor position", function() {
 
   ok(input.val() === 'John Doe', 'input value should be \'John Doe\'');
   var selection = textField.get('selection');
-  console.log("Selection:  %@".fmt(selection));
+  SC.Logger.log("Selection:  %@".fmt(selection));
   ok(selection.get('start') == 2 && selection.get('end') == 3, 'cursor position should be unchanged');
 });
 

@@ -179,7 +179,7 @@ SC.ButtonView = SC.View.extend(SC.Control, SC.Button,
    - otherwise: invoke target/action
   */
   _action: function(evt) {
-    console.log('action!');
+    SC.Logger.log('action!');
     var action = this.get('action');
     var target = this.get('target') || null;
     var pane   = this.get('pane');

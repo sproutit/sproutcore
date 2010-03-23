@@ -55,7 +55,7 @@ CoreTools.DataSource = SC.DataSource.extend({
         storeKeys;
         
     if (!SC.$ok(response)) {
-      console.error("TODO: Add handler when fetching targets fails");
+      SC.Logger.error("TODO: Add handler when fetching targets fails");
     } else {
       storeKeys = store.loadRecords(CoreTools.Target, response);
       store.loadQueryResults(query, storeKeys);
@@ -89,7 +89,7 @@ CoreTools.DataSource = SC.DataSource.extend({
         storeKeys;
         
     if (!SC.$ok(response)) {
-      console.error("TODO: Add handler when fetching tests fails");
+      SC.Logger.error("TODO: Add handler when fetching tests fails");
     } else {
       storeKeys = store.loadRecords(CoreTools.Test, response);
       store.loadQueryResults(query, storeKeys); // notify query loaded

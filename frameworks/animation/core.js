@@ -1178,7 +1178,7 @@ Test for CSS transition capability...
 
   // test
   
-  // console.error("Supports CSS transitions: " + testResult);
+  // SC.Logger.error("Supports CSS transitions: " + testResult);
 
   // and apply what we found
   SC.Animatable.enableCSSTransitions = allowsCSSTransitions;
