@@ -7,6 +7,28 @@
 
 var SC = require('core');
 
+// used in propagateToAggregates()
+var notifyDidChangeIter = function(rec) {
+
+  var K = SC.Record;
+
+  // If the child is dirty, then make sure the parent gets a dirty
+  // status.  (If the child is created or destroyed, there's no need,
+  // because the parent will dirty itself when it modifies that
+  // relationship.)
+  if (rec) { 
+    var childStatus = this.get('status');
+    if (childStatus & K.DIRTY) {
+      var parentStatus = rec.get('status');
+      if (parentStatus === K.READY_CLEAN) {
+        // Note:  storeDidChangeProperties() won't put it in the
+        //        changelog!
+        rec.get('store').recordDidChange(rec.constructor, null, rec.get('storeKey'), null, true);
+      }
+    }
+  }
+};
+ 
 /**
   @class
 
@@ -392,28 +414,11 @@ SC.Record = SC.Object.extend(
     
     // now loop through all aggregate properties and mark their related
     // record objects as dirty
-    var K = SC.Record;
     for(idx=0,len=aggregates.length;idx<len;++idx) {
       key = aggregates[idx];
       val = this.get(key);
       recs = SC.kindOf(val, SC.ManyArray) ? val : [val];
-      recs.forEach(function(rec) {
-        // If the child is dirty, then make sure the parent gets a dirty
-        // status.  (If the child is created or destroyed, there's no need,
-        // because the parent will dirty itself when it modifies that
-        // relationship.)
-        if (rec) { 
-          var childStatus = this.get('status');
-          if (childStatus & K.DIRTY) {
-            var parentStatus = rec.get('status');
-            if (parentStatus === K.READY_CLEAN) {
-              // Note:  storeDidChangeProperties() won't put it in the
-              //        changelog!
-              rec.get('store').recordDidChange(rec.constructor, null, rec.get('storeKey'), null, true);
-            }
-          }
-        }
-      }, this);
+      recs.forEach(notifyDidChangeIter, this);
     }
     
   },
@@ -1180,4 +1185,5 @@ require('models/record_attribute');
 require('models/single_attribute');
 require('models/many_attribute');
 require('models/fetched_attribute');
+require('models/child_attribute');
 

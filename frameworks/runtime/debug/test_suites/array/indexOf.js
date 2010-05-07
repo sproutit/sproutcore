@@ -6,7 +6,7 @@
 // ==========================================================================
 
 var SC = require('core'),
-    Ct = require('core_test');
+    Ct = require('core-test');
 require('debug/test_suites/array/base');
 
 SC.ArraySuite.define(function(T) {

@@ -14,12 +14,16 @@ require('data_sources/cascade');
 require('data_sources/data_source');
 require('data_sources/fixtures');
 
+require('models/child_attribute');
+require('models/child_record');
+require('models/children_attribute');
 require('models/fetched_attribute');
 require('models/many_attribute');
 require('models/record');
 require('models/record_attribute');
 require('models/single_attribute');
 
+require('system/child_array');
 require('system/many_array');
 require('system/nested_store');
 require('system/query');

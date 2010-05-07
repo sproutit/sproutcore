@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import core_test:qunit";
+"import core-test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 
 var first, second, third, binding1, binding2;

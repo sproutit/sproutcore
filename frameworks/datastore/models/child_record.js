@@ -23,7 +23,7 @@ SC.ChildRecord = SC.Record.extend(
   /**
    * This is a check to see if this is a ChildRecord
    */
-  isChildRecord: YES,
+  isChildRecord: true,
   
   /**
    * The type of the child record.

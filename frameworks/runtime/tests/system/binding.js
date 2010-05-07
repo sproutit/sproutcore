@@ -5,7 +5,7 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import core_test:qunit";
+"import core-test:qunit";
 var SC = require('index'); // load sproutcore/foundation
 var system = require('system' ,'default');
 
@@ -293,8 +293,8 @@ module("AND binding", {
   setup: function() {
     // temporarily set up two source objects in the SC namespace so we can
     // use property paths to access them
-    SC.testControllerA = SC.Object.create({ value: NO });
-    SC.testControllerB = SC.Object.create({ value: NO });
+    SC.testControllerA = SC.Object.create({ value: false });
+    SC.testControllerB = SC.Object.create({ value: false });
 
     toObject = SC.Object.create({
       value: null,
@@ -322,11 +322,11 @@ test("toObject.value should be YES if both sources are YES", function() {
 test("toObject.value should be NO if either source is NO", function() {
   SC.RunLoop.begin();
   SC.testControllerA.set('value', YES);
-  SC.testControllerB.set('value', NO);
+  SC.testControllerB.set('value', false);
   SC.RunLoop.end();
 
   SC.Binding.flushPendingChanges();
-  equals(toObject.get('value'), NO);
+  equals(toObject.get('value'), false);
 
   SC.RunLoop.begin();
   SC.testControllerA.set('value', YES);
@@ -337,12 +337,12 @@ test("toObject.value should be NO if either source is NO", function() {
   equals(toObject.get('value'), YES);
 
   SC.RunLoop.begin();
-  SC.testControllerA.set('value', NO);
+  SC.testControllerA.set('value', false);
   SC.testControllerB.set('value', YES);
   SC.RunLoop.end();
 
   SC.Binding.flushPendingChanges();
-  equals(toObject.get('value'), NO);
+  equals(toObject.get('value'), false);
 });
 
 module("OR binding", {
@@ -350,7 +350,7 @@ module("OR binding", {
   setup: function() {
     // temporarily set up two source objects in the SC namespace so we can
     // use property paths to access them
-    SC.testControllerA = SC.Object.create({ value: NO });
+    SC.testControllerA = SC.Object.create({ value: false });
     SC.testControllerB = SC.Object.create({ value: null });
 
     toObject = SC.Object.create({
@@ -378,7 +378,7 @@ test("toObject.value should be first value if first value is truthy", function()
 
 test("toObject.value should be second value if first is falsy", function() {
   SC.RunLoop.begin();
-  SC.testControllerA.set('value', NO);
+  SC.testControllerA.set('value', false);
   SC.testControllerB.set('value', 'second value');
   SC.RunLoop.end();
 

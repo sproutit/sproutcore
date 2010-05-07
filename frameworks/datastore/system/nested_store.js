@@ -327,7 +327,7 @@ SC.NestedStore = SC.Store.extend(
     much. 
   */
   writeDataHash: function(storeKey, hash, status) {
-    var locks = this.locks, didLock = NO, rev ;
+    var locks = this.locks, didLock = false, rev ;
 
     // Update our dataHash and/or status, depending on what was passed in.
     // Note that if no new hash was passed in, we'll lock the storeKey to
@@ -338,7 +338,7 @@ SC.NestedStore = SC.Store.extend(
     }
     else {
       this._lock(storeKey);
-      didLock = YES;
+      didLock = true;
     }
 
     if (status) {

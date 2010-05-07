@@ -5,15 +5,14 @@
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import core_test:qunit";
+"import core-test:qunit";
 var SC = require('index'); // load sproutcore/foundation
-var system = require('system', 'default');
 
 // An ObjectController will make a content object or an array of content objects 
 module("SC.objectForPropertyPath") ;
 
 test("should be able to resolve an object on the window", function() {
-  var myLocal = (system.global.myGlobal = { test: 'this '}) ;
+  var myLocal = (window.myGlobal = { test: 'this '}) ;
   
   same(myLocal, { test: 'this '}) ;
   same(window.myGlobal, { test: 'this '}) ;
@@ -21,7 +20,7 @@ test("should be able to resolve an object on the window", function() {
   // verify we can resolve our binding path
   same(SC.objectForPropertyPath('myGlobal'), { test: 'this '}, 'SC.objectForPropertyPath()') ;
   
-  system.global.myGlobal =null ;
+  window.myGlobal =null ;
 });
 
-run();
+plan.run();

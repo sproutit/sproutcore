@@ -165,7 +165,7 @@ SC.RunLoop = SC.Object.extend(/** @scope SC.RunLoop.prototype */ {
     @returns {Boolean} true if items were found in any queue, false otherwise
   */
   flushApplicationQueues: function() {
-    var hadContent = NO,
+    var hadContent = false,
         // execute any methods in the invokeQueue.
         queue = this._invokeQueue;
     if (queue && queue.targets > 0) {

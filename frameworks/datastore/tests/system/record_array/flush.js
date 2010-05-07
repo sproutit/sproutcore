@@ -1,10 +1,11 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2009 Apple Inc. and contributors.
-// License:   Licensed under MIT license (see license.js)
+// Copyright: Â©2006-2010 Apple Inc. and contributors.
+// License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
-"import core_test:qunit";
+"import core-test:qunit";
+
 var SC = require('index');
 
 // test core array-mapping methods for RecordArray
@@ -130,9 +131,6 @@ test("calling storeDidChangeStoreKeys() to remove a record", function() {
   equals(recs.get('length'), 0, 'should remove storeKey on flush()');
 });
 
-run();
-
-
 // ..........................................................
 // SPECIAL CASES
 // 
@@ -175,5 +173,5 @@ test("local query should notify changes", function() {
     same(recs.mapProperty('id'), ['foo', 'bar'], 'order of records should change');
 });
 
-
+plan.run();
 

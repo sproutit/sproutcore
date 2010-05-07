@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import core_test:qunit";
+"import core-test:qunit";
 var SC = require('index');
  
 var store, storeKey, rec1, rec2, rec3, rec4, rec5, MyApp, q;

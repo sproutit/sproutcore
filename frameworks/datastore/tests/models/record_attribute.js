@@ -4,7 +4,7 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-"import core_test:qunit";
+"import core-test:qunit";
 var SC = require('index');
 
 // test core array-mapping methods for RecordArray with RecordAttribute
@@ -64,7 +64,7 @@ module("SC.RecordAttribute core methods", {
       }),
       
       // test readONly
-      readOnly: SC.Record.attr(String, { isEditable: NO })
+      readOnly: SC.Record.attr(String, { isEditable: false })
       
     });
     

@@ -5,7 +5,6 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-var system = require('system', 'default');
 var SC, SproutCore, YES, NO;
 
 // ........................................
@@ -20,8 +19,8 @@ NO = false ;
 // prevent a console.log from blowing things up if we are on a browser that
 // does not support it -- only do when running on a browser platform
 var UNDEFINED = 'undefined';
-if (system.platform === 'tiki') { 
-  if (UNDEFINED === typeof console) console = system.console;
+if (UNDEFINED !== typeof window) { 
+  //if (UNDEFINED === typeof console) console = system.console;
   if (UNDEFINED === typeof sc_require) sc_require = function() {};
   if (UNDEFINED === typeof sc_resource) sc_resource = function() {} ;
 }
@@ -61,7 +60,7 @@ SC = SproutCore = {} ;
   @returns {Object} SC namespace
 */
 SC.global = function(key, value) {
-  system.global[key] = value;
+  window[key] = value;
   return SC ;
 };
 
@@ -73,7 +72,7 @@ SC.global = function(key, value) {
   @returns {Object} SC namespace
 */
 SC.global.remove = function(key) {
-  delete system.global[key];
+  delete window[key];
   return SC;
 };
 
@@ -696,7 +695,7 @@ SC.mixin(/** @scope SC */ {
 
     var loc, nextDotAt, key, max ;
 
-    if (!root) root = system.global ;
+    if (!root) root = window ;
 
     // faster method for strings
     if (SC.typeOf(path) === SC.T_STRING) {

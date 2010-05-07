@@ -34,21 +34,21 @@ config :bootstrap,
 config :runtime,    
   :required => :tiki,
   :debug_required => [],
-  :test_required => :core_test,
+  :test_required => 'core-test',
   :use_modules => true,
   :factory_format => :function
     
 config :datastore,
   :required       => [:tiki, :runtime],
   :debug_required => [],
-  :test_required  => :core_test,
+  :test_required  => 'core-test',
   :use_modules    => true,
   :factory_format => :function
   
 config :foundation,
   :required       => [:tiki, :runtime],
   :debug_required => [],
-  #:test_required  => :core_test,
+  #:test_required  => 'core-test',
   :use_modules    => false, # not yet ready for modules
   :factory_format => :function
 
@@ -66,7 +66,7 @@ config :mobile,
 config :sproutcore,
   :required       => [:tiki, :runtime, :datastore, :foundation, :desktop],
   :debug_reuqired => [],
-  :test_required  => :core_test,
+  :test_required  => 'core-test',
   :use_modules    => true,
   :factory_format => :function
   
@@ -84,7 +84,7 @@ end
 # CONFIGURE THEMES
 config :empty_theme, 
   :theme_name => 'empty-theme',
-  :test_required  => :core_test,
+  :test_required  => 'core-test',
   :debug_required => [],
   :required       => [],
   :use_modules    => true
@@ -92,7 +92,7 @@ config :empty_theme,
 config :iphone_theme, 
   :theme_name     => 'iphone-theme',
   :required       => [],
-  :test_required  => :core_test,
+  :test_required  => 'core-test',
   :debug_required => [],
   :required       => [:empty_theme],
   :use_modules    => true
@@ -100,7 +100,7 @@ config :iphone_theme,
 config :standard_theme, 
   :required => :empty_theme, 
   :theme_name => 'sc-theme',
-  :test_required  => :core_test,
+  :test_required  => 'core-test',
   :debug_required => [],
   :required       => [:empty_theme],
   :use_modules    => true

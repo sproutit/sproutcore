@@ -4,6 +4,9 @@
  * @author Evin Grano
  */
 
+"import core-test:qunit";
+var SC = require('index');
+ 
 // ..........................................................
 // Basic Set up needs to move to the setup and teardown
 // 

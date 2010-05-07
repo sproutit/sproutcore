@@ -6,7 +6,7 @@
 // ==========================================================================
 
 var SC = require('core'),
-    Ct = require('core_test');
+    Ct = require('core-test');
 
 /**
   Adds a new module of unit tests to verify that the passed object implements
