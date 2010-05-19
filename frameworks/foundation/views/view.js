@@ -947,7 +947,7 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     @returns {void}
   */
   prepareContext: function(context, firstTime) {
-    var mixins, len, idx, layerId, bgcolor, cursor;
+    var mixins, len, idx, layerId, bgcolor, cursor, parentCursor;
   
     // do some initial setup only needed at create time.
     if (firstTime) {
@@ -975,10 +975,15 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     cursor = this.get('cursor');
     if (!cursor && this.get('shouldInheritCursor')) {
       // If this view has no cursor and should inherit it from the parent, 
-      // then it sets its own cursor view.  This sets the cursor rather than 
-      // simply using the parent's cursor object so that its cursorless 
-      // childViews can also inherit it.
-      cursor = this.getPath('parentView.cursor');
+      // it inherits the cursor and saves to _inheritedCursor for posterity.
+      parentCursor = this.getPath('parentView.cursor');
+      if (!parentCursor) parentCursor = this.getPath('parentView._inheritedCursor');
+      if (parentCursor) {
+        this.set('_inheritedCursor', parentCursor);
+        cursor = parentCursor;
+      } else {
+        this.set('_inheritecCursor', null);
+      }
     }
 
     if (SC.typeOf(cursor) === SC.T_STRING) {
@@ -1138,6 +1143,12 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     @property {Boolean}
   */
   shouldInheritCursor: YES,
+  
+  /** @private
+    This property is used to store cursors inherited from parents so that
+    they may be inherited by children.
+  */
+  _inheritedCursor: null,
   
   // ..........................................................
   // LAYER LOCATION
