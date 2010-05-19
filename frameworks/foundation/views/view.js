@@ -982,7 +982,7 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
         this.set('_inheritedCursor', parentCursor);
         cursor = parentCursor;
       } else {
-        this.set('_inheritecCursor', null);
+        this.set('_inheritedCursor', null);
       }
     }
 
