@@ -31,6 +31,12 @@ SC.GridView = SC.ListView.extend(
     width of each item will be this value.
   */
   columnWidth: 64,
+  
+  /**
+    Set to YES if you don't want a row's items to stretch to fill the whole
+    row.  (Think text which is aligned to the left rather than justified.)
+  */
+  isFixedWidth: NO,
 
   /**
     The default example item view will render text-based items.
@@ -67,7 +73,7 @@ SC.GridView = SC.ListView.extend(
     var rowHeight = this.get('rowHeight') || 48,
         frameWidth = this.get('clippingFrame').width,
         itemsPerRow = this.get('itemsPerRow'),
-        columnWidth = Math.floor(frameWidth/itemsPerRow),
+        columnWidth = this.get('isFixedWidth') ? this.get('columnWidth') : Math.floor(frameWidth/itemsPerRow),
         row = Math.floor(contentIndex / itemsPerRow),
         col = contentIndex - (itemsPerRow*row) ;
     return { 
