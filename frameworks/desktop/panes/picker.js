@@ -547,6 +547,7 @@ SC.PickerPane = SC.PalettePane.extend({
   
   /** @private - click away picker. */
   modalPaneDidClick: function(evt) {
+    if (!this.get('isModal')) return YES; //Prevents the pane's surrounding divs from causing click-away behavior when they shouldn't.
     var f = this.get("frame");
     if(!this.clickInside(f, evt)) this.remove();
     return YES ; 
