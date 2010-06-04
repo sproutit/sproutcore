@@ -639,10 +639,10 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
   
   fieldDidBlur: function(evt) {
     this.commitEditing(evt);
-    
+    var pane = this.get("pane");
     // handle touch intercept
-    if (this.get("pane").get("usingTouchIntercept")) {
-      this.get("pane").showTouchIntercept();
+    if (pane && pane.get("usingTouchIntercept")) {
+      pane.showTouchIntercept();
     }
   },
   
