@@ -1094,6 +1094,19 @@ SC.Record.mixin( /** @scope SC.Record */ {
   },
   
   /**
+    Returns a SC.PolymorphicSingleAttribute that converts the underlying ID to
+    a number of types, dependent on a attribute on the record (the name of this
+    attribute is provided by the typeKey property).
+    
+    @param {Array} recordTypes the array of record types the object could be
+    @param {Hash} opts additional options
+    @returns {SC.PolymorphicSingleAttribute} created instance
+  */
+  toOneOf: function(recordTypes, opts) {
+    return SC.PolymorphicSingleAttribute.attr(recordTypes, opts);
+  },
+  
+  /**
     Returns all storeKeys mapped by Id for this record type.  This method is
     used mostly by the SC.Store and the Record to coordinate.  You will rarely
     need to call this method yourself.
