@@ -156,7 +156,7 @@ SC.SelectFieldView = SC.FieldView.extend(
         }
    
           // generate option elements.
-        objects.forEach(function(object) {
+        objects.forEach(function(object, index) {
         if (object) {
           // either get the name from the object or convert object to string.
           var name = nameKey ? (object.get ? object.get(nameKey) : object[nameKey]) : object.toString() ;
@@ -170,6 +170,11 @@ SC.SelectFieldView = SC.FieldView.extend(
           // get the value using the valueKey or the object if no valueKey.
           // then convert to a string or use _guid if one of available.
           var value = (valueKey) ? (object.get ? object.get(valueKey) : object[valueKey]) : object ;
+          // if there is no emptyName and no preselected value 
+          // then the value should be the value of the first element in the list
+          if (!emptyName && index === 0 && fieldValue === '***') {
+            this.set('value', value);
+          }
           if (value) value = (SC.guidFor(value)) ? SC.guidFor(value) : value.toString() ;
    
           // render HTML
@@ -272,8 +277,9 @@ SC.SelectFieldView = SC.FieldView.extend(
   },
   
   setFieldValue: function(newValue) {
-    if (SC.none(newValue)) { newValue = '' ; }
-    else {
+    if (SC.none(newValue)) { 
+      newValue = '***' ; 
+    } else {
       newValue = ((newValue) ? (SC.guidFor(newValue) ? SC.guidFor(newValue) : newValue.toString()) : null );
     }
     this.$input().val(newValue);
