@@ -762,7 +762,7 @@ SC.ScrollView = SC.View.extend(SC.Border, {
   // save adjustment and then invoke the actual scroll code later.  This will
   // keep the view feeling smooth.
   mouseWheel: function(evt) {
-    var deltaAdjust = (SC.browser.safari && SC.browser.version > 533.0) ? 120 : 1;
+    var deltaAdjust = (SC.browser.safari && parseInt(SC.browser.version, 10) >= 533.0) ? 120 : 1;
     
     this._scroll_wheelDeltaX += evt.wheelDeltaX / deltaAdjust;
     this._scroll_wheelDeltaY += evt.wheelDeltaY / deltaAdjust;
