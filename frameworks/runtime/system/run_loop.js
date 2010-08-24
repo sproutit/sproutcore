@@ -259,13 +259,14 @@ SC.RunLoop.isRunLoopInProgress = function() {
 };
 
 /**
-  Helper method executes the passed function inside of a runloop.  Normally
-  not needed but useful for testing.
-  
+  Executes a passed function in the context of a run loop.
+
+  If an exception is thrown during execution, we give an error catcher the
+  opportunity to handle it before allowing the exception to bubble again.
+
   @param {Function} callback callback to execute
   @param {Object} target context for callback
   @param {Boolean} if YES, does not start/end a new runloop if one is already running
-  @returns {SC} receiver
 */
 SC.run = function(callback, target, useExistingRunLoop) {
   if(useExistingRunLoop) {
@@ -274,9 +275,21 @@ SC.run = function(callback, target, useExistingRunLoop) {
     callback.call(target);
     if(!alreadyRunning) SC.RunLoop.end();
   } else {
-    SC.RunLoop.begin();
-    callback.call(target);
-    SC.RunLoop.end();
+    try {
+      SC.RunLoop.begin();
+      if (callback) callback.call(target);
+      SC.RunLoop.end();
+    } catch (e) {
+      if (SC.ExceptionHandler) {
+        SC.ExceptionHandler.handleException(e);
+      }
+
+      // Now that we've handled the exception, throw it again so the browser
+      // can deal with it (and potentially use it for debugging).
+      // (We don't throw it in IE because the user will see two errors)
+      if (!SC.browser.msie) {
+        throw e;
+      }
+    }
   }
 };
-

@@ -122,8 +122,10 @@ SC.Pane = SC.View.extend(SC.ResponderContext,
   computeParentDimensions: function(frame) {
     if(this.get('designer') && SC.suppressMain) return sc_super();
     
-    var wframe = this.get('currentWindowSize');
-    var wDim = {x: 0, y: 0, width: 1000, height: 1000};
+    var wframe = this.get('currentWindowSize'),
+        wDim = {x: 0, y: 0, width: 1000, height: 1000},
+        layout = this.get('layout');
+
     if (wframe){
       wDim.width = wframe.width;
       wDim.height = wframe.height;
@@ -138,18 +140,42 @@ SC.Pane = SC.View.extend(SC.ResponderContext,
     }
     // If all else fails then we need to Calculate it from the window size and DOM
     else {
+      var size, body, docElement;
+      if(!this._bod || !this._docElement){
+        body = document.body;
+        docElement = document.documentElement;
+        this._body=body;
+        this._docElement=docElement;
+      }else{
+        body = this._body;
+        docElement = this._docElement;
+      }
+      
       if (window.innerHeight) {
         wDim.width = window.innerWidth;
         wDim.height = window.innerHeight;
-      } else if (document.documentElement && document.documentElement.clientHeight) {
-        wDim.width = document.documentElement.clientWidth;
-        wDim.height = document.documentElement.clientHeight; 
-      } else if (document.body) {
-        wDim.width = document.body.clientWidth;
-        wDim.height = document.body.clientHeight;
+      } else if (docElement && docElement.clientHeight) {
+        wDim.width = docElement.clientWidth;
+        wDim.height = docElement.clientHeight; 
+      } else if (body) {
+        wDim.width = body.clientWidth;
+        wDim.height = body.clientHeight;
       }
       this.windowSizeDidChange(null, wDim);
-    }    
+    }
+
+
+    // If there is a minWidth or minHeight set on the pane, take that
+    // into account when calculating dimensions.
+  
+    if (layout.minHeight || layout.minWidth) {
+      if (layout.minHeight) {
+        wDim.height = Math.max(wDim.height, layout.minHeight);
+      }
+      if (layout.minWidth) {
+        wDim.width = Math.max(wDim.width, layout.minWidth);
+      }
+    }
     return wDim;
   },
     
@@ -210,13 +236,13 @@ SC.Pane = SC.View.extend(SC.ResponderContext,
       }
 
       if (!target) target = null;
-      target = target.tryToPerform(action, evt) ? target : null ;
+      else target = target.tryToPerform(action, evt) ? target : null ;
     }
 
     // if we don't have a default responder or no responders in the responder
     // chain handled the event, see if the pane itself implements the event
-    if (!target) {
-      target = this.tryToPerform(action, evt);
+    else if (!target && !(target = this.get('defaultResponder'))) {
+      target = this.tryToPerform(action, evt) ? this : null ;
     }
 
     return evt.mouseHandler || target ;
@@ -716,13 +742,14 @@ SC.Pane = SC.View.extend(SC.ResponderContext,
     if (this.get("hasTouchIntercept") && SC.platform.touch) {
       this.set("usingTouchIntercept", YES);
       var div = document.createElement("div");
-      div.style.position = "absolute";
-      div.style.left = "0px";
-      div.style.top = "0px";
-      div.style.right = "0px";
-      div.style.bottom = "0px";
-      div.style.webkitTransform = "translateZ(0px)";
-      div.style.zIndex = this.get("zIndex") + this.get("touchZ");
+      var divStyle = div.style;
+      divStyle.position = "absolute";
+      divStyle.left = "0px";
+      divStyle.top = "0px";
+      divStyle.right = "0px";
+      divStyle.bottom = "0px";
+      divStyle.webkitTransform = "translateZ(0px)";
+      divStyle.zIndex = this.get("zIndex") + this.get("touchZ");
       div.className = "touch-intercept";
       div.id = "touch-intercept-" + SC.guidFor(this);
       this._touchIntercept = div;

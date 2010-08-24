@@ -256,26 +256,24 @@ SC.Response = SC.Object.extend(
       var req = this.get('request');
       var source = req ? req.get('source') : null;
     
-      SC.RunLoop.begin();
-    
-      // invoke the source, giving a chance to fixup the reponse or (more 
-      // likely) cancel the request.
-      if (source && source.willReceive) source.willReceive(req, this);
-    
-      // invoke the callback.  note if the response was cancelled or not
-      callback.call(context, !this.get('isCancelled'));
-    
-      // if we weren't cancelled, then give the source first crack at handling
-      // the response.  if the source doesn't want listeners to be notified,
-      // it will cancel the response.
-      if (!this.get('isCancelled') && source && source.didReceive) {
-        source.didReceive(req, this);
-      }
+      SC.run(function() {
+        // invoke the source, giving a chance to fixup the reponse or (more 
+        // likely) cancel the request.
+        if (source && source.willReceive) source.willReceive(req, this);
 
-      // notify listeners if we weren't cancelled.
-      if (!this.get('isCancelled')) this.notify();
+        // invoke the callback.  note if the response was cancelled or not
+        callback.call(context, !this.get('isCancelled'));
 
-      SC.RunLoop.end();
+        // if we weren't cancelled, then give the source first crack at handling
+        // the response.  if the source doesn't want listeners to be notified,
+        // it will cancel the response.
+        if (!this.get('isCancelled') && source && source.didReceive) {
+          source.didReceive(req, this);
+        }
+
+        // notify listeners if we weren't cancelled.
+        if (!this.get('isCancelled')) this.notify();
+      }, this);
     }
     
     // no matter what, remove from inflight queue
@@ -457,7 +455,7 @@ SC.XHRResponse = SC.Response.extend({
     // configure async callback - differs per browser...
     async = !!this.getPath('request.isAsynchronous') ;
     if (async) {
-      if (!SC.browser.msie) {
+      if (!SC.browser.msie && !SC.browser.opera ) {
         SC.Event.add(rawRequest, 'readystatechange', this, 
                      this.finishRequest, rawRequest) ;
       } else {

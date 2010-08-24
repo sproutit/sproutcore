@@ -111,7 +111,7 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.DelegateSupport,
     var layout={}, pane, delLayout, paneElem, del;
 
     del = this._delegate = options.delegate ;
-    this.set('delegate', this._delegate);
+    this.set('delegate', del);
     
     // continue only if the delegate allows it
     if (!this.invokeDelegateMethod(del, 'inlineEditorShouldBeginEditing', this)) {
@@ -129,7 +129,7 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.DelegateSupport,
     this._optIsCollection = options.isCollection;
     this._exampleElement = options.exampleElement ;
 
-    if (!this._optframe || !this._delegate) {
+    if (!this._optframe || !del) {
       throw "At least frame and delegate options are required for inline editor";
     }
     
@@ -149,7 +149,7 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.DelegateSupport,
     
     // add to window.
     
-    pane = this._delegate.pane();
+    pane = del.get('pane');
 
     layout.height = this._optframe.height;
     layout.width=this._optframe.width;
@@ -178,8 +178,6 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.DelegateSupport,
    
     pane.appendChild(this);
     
-    del = this._delegate ;
-
     this._className = this.getDelegateProperty(del,"inlineEditorClassName");
     if(this._className && !this.hasClassName(this._className)) {
       this.setClassName(this._className,true);

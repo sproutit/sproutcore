@@ -683,15 +683,18 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
   }.property().cacheable(),
   
   _lastLayerId: null,
+
   /**
     Handles changes in the layer id.
   */
   layerIdDidChange: function() {
-    var layer = this.get("layer"), lid = this.get("layerId");
-    if (this.get("layerId") !== this._lastLayerId) {
+    var layer  = this.get("layer"),
+        lid    = this.get("layerId"),
+        lastId = this._lastLayerId;
+    if (lid !== lastId) {
       // if we had an earlier one, remove from view hash.
-      if (this._lastLayerId && SC.View.views[this._lastLayerId] === this) {
-        delete SC.View.views[this._lastLayerId];
+      if (lastId && SC.View.views[lastId] === this) {
+        delete SC.View.views[lastId];
       }
       
       // set the current one as the new old one
@@ -725,19 +728,12 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     // TODO: use code generation to only really do this check on IE
     if (SC.browser.msie && elem && elem.id !== layerId) elem = null;
     
-    // if browser supports querySelector use that.
-    if (!elem && parentLayer.querySelector) {
-      // TODO: make querySelector work on all platforms...
-      usedQuerySelector = YES;
-      elem = parentLayer.querySelector('#' + layerId);
-    }
-    
     // if no element was found the fast way, search down the parentLayer for
     // the element.  This code should not be invoked very often.  Usually a
     // DOM element will be discovered by the first method above.
     // This code uses a BFS algorithm as is expected to find the layer right 
     // below the parent.
-    if (!elem  &&  !usedQuerySelector) {
+    if (!elem) {
       elem = parentLayer.firstChild ;
       var q = [];
       q.push(parentLayer);
@@ -746,7 +742,6 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
         if (node.id===layerId) {
           return node;
         }
-
         childNodes = node.childNodes;
         for (i=0, ilen=childNodes.length;  i < ilen;  ++i) {
           q.push(childNodes[i]);
@@ -922,7 +917,8 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
   _notifyDidCreateLayer: function() {
     if (this.didCreateLayer) this.didCreateLayer() ;
     var mixins = this.didCreateLayerMixin, len, idx,
-        childViews = this.get('childViews');
+        childViews = this.get('childViews'),
+        childView;
     if (mixins) {
       len = mixins.length ;
       for (idx=0; idx<len; ++idx) mixins[idx].call(this) ;
@@ -930,8 +926,17 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     
     len = childViews.length ;
     for (idx=0; idx<len; ++idx) {
-      if (!childViews[idx]) continue;
-      childViews[idx]._notifyDidCreateLayer() ;
+      childView = childViews[idx];
+      if (!childView) continue;
+
+      // A parent view creating a layer might result in the creation of a
+      // child view's DOM node being created via a render context without
+      // createLayer() being invoked on the child.  In such cases, if anyone
+      // had requested 'layer' and it was cached as null, we need to
+      // invalidate it.
+      childView.notifyPropertyChange('layer');
+
+      childView._notifyDidCreateLayer() ;
     }
   },
   
@@ -1247,7 +1252,6 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
   */
   updateLayerLocationIfNeeded: function(force) {
     if (this.get('layerLocationNeedsUpdate')) {
-      this.set('layerLocationNeedsUpdate', NO) ;
       this.updateLayerLocation() ;
     }
     return this ;
@@ -1311,6 +1315,9 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     }
     
     parentNode = parentView = node = nextNode = null ; // avoid memory leaks
+
+    this.set('layerLocationNeedsUpdate', NO) ;
+
     return this ; 
   },
   
@@ -1899,7 +1906,7 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
   
   /**
     Converts a frame offset in the coordinates of another view system to the 
-    reciever's view.
+    receiver's view.
     
     Note that the convext of a view's frame is relative to the view's 
     parentFrame.  For example, if you want to convert the frame of view that
@@ -2061,7 +2068,9 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     // handle right aligned
     } else if (!SC.none(lR)) {
       if (SC.none(lW)) {
-        if (SC.isPercentage(lL)) f.width = dW - (dW*lR) ;
+        if (SC.isPercentage(lR)) {
+          f.width = dW - (dW*lR) ;
+        }
         else f.width = dW - lR ;
         f.x = 0 ;
       } else {
@@ -2247,7 +2256,7 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     @property {Rect}
   */
   contentClippingFrame: function() {
-    return this.get("clippingFrame");
+    return this.get('clippingFrame');
   }.property('clippingFrame').cacheable(),
 
   /** @private

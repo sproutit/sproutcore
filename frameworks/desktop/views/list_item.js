@@ -27,7 +27,6 @@ SC.LIST_ITEM_ACTION_EJECT = 'sc-list-item-cancel-eject';
   @since SproutCore 1.0
 */
 SC.ListItemView = SC.View.extend(
-    SC.StaticLayout,
     SC.Control,
 /** @scope SC.ListItemView.prototype */ {
   
@@ -367,8 +366,8 @@ SC.ListItemView = SC.View.extend(
   
   /** 
    Generates a label based on the content.  You can override this method to 
-   display your own type of icon if desired.
-   
+   render your own label if desired.
+
    @param {SC.RenderContext} context the render context
    @param {String} label the label to display, already HTML escaped.
    @returns {void}
@@ -390,9 +389,9 @@ SC.ListItemView = SC.View.extend(
   },
 
   /** 
-    Generates a right icon for the label based on the content.  This method will
-    only be called if the list item view has icons enabled.  You can override
-    this method to display your own type of icon if desired.
+    Generates a right icon for the label based on the content. This method
+    will only be called if the list item view has icons enabled. You can
+    override this method to display your own type of icon if desired.
     
     @param {SC.RenderContext} context the render context
     @param {String} icon a URL or class name.

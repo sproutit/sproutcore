@@ -441,23 +441,26 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
 
     }
     else {
+      var input= this.$input();
       if(!this.get('_supportsPlaceHolder')){
         var val = this.get('value');
         if((!val || (val && val.length===0))){
           if(this.get('hintON') && !this.get('isFirstResponder')){
             //console.log('hint on render');
             context.setClass('sc-hint', YES);
-            this.$input().val(hint);
+            input.val(hint);
           }else{
             // console.log('removing hint on render');
             context.setClass('sc-hint', NO);
-            this.$input().val('');
+            input.val('');
           }
         }
+      }else{
+        input.attr('placeholder', hint);
       }
       
       // Enable/disable the actual input/textarea as appropriate.
-      element = this.$input()[0];
+      element = input[0];
       if (element) {
         if (!this.get('isEnabled')) {
           element.disabled = 'true' ;
@@ -605,15 +608,15 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
   */
 
   _textField_fieldDidFocus: function(evt) {
-    SC.RunLoop.begin();
-    this.set('focused',YES);
-    this.fieldDidFocus(evt);
-    var val = this.get('value');
-    if(!this.get('_supportsPlaceHolder') && ((!val) || (val && val.length===0))){
-      // console.log('turn off hint');
-      this.set('hintON', NO);
-    }
-    SC.RunLoop.end();
+    SC.run(function() {
+      this.set('focused',YES);
+      this.fieldDidFocus(evt);
+      var val = this.get('value');
+      if(!this.get('_supportsPlaceHolder') && ((!val) || (val && val.length===0))){
+        // console.log('turn off hint');
+        this.set('hintON', NO);
+      }
+    }, this);
   },
 
   /**
@@ -621,18 +624,18 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
   */
 
   _textField_fieldDidBlur: function(evt) {
-    SC.RunLoop.begin();
-    this.set('focused',NO);
-    // passing the original event here instead that was potentially set from
-    // loosing the responder on the inline text editor so that we can
-    // use it for the delegate to end editing
-    this.fieldDidBlur(this._origEvent);
-    var val = this.get('value');
-    if(!this.get('_supportsPlaceHolder') && ((!val) || (val && val.length===0))){
-      // console.log('turn on hint');
-      this.set('hintON', YES);
-    }
-    SC.RunLoop.end();
+    SC.run(function() {
+      this.set('focused',NO);
+      // passing the original event here instead that was potentially set from
+      // loosing the responder on the inline text editor so that we can
+      // use it for the delegate to end editing
+      this.fieldDidBlur(this._origEvent);
+      var val = this.get('value');
+      if(!this.get('_supportsPlaceHolder') && ((!val) || (val && val.length===0))){
+        // console.log('turn on hint');
+        this.set('hintON', YES);
+      }
+    }, this);
   },
   
   fieldDidFocus: function(evt) {
@@ -669,9 +672,9 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
   
   _field_fieldValueDidChange: function(evt) {
     if(this.get('focused')){
-      SC.RunLoop.begin();
-      this.fieldValueDidChange(NO);
-      SC.RunLoop.end();  
+      SC.run(function() {
+        this.fieldValueDidChange(NO);        
+      }, this);
     }
   },
 

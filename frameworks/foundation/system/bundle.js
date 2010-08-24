@@ -59,7 +59,7 @@ SC.mixin(/** @scope SC */ {
           try { 
             lazyInfo[i]();
           }catch(e) {
-            console.log("SC.loadBundle(): Failted to lazily instatiate entry for  '%@'".fmt(bundleName));  
+            console.error("SC.loadBundle(): Failted to lazily instatiate entry for  '%@'".fmt(bundleName));  
           }
         }
         delete SC.LAZY_INSTANTIATION[bundleName];
@@ -87,9 +87,13 @@ SC.mixin(/** @scope SC */ {
     args.push(bundleName);
     
     var needsRunLoop = !!SC.RunLoop.currentRunLoop;
-    if (needsRunLoop) SC.RunLoop.begin() ;
-    m.apply(t, args) ;
-    if (needsRunLoop) SC.RunLoop.end() 
+    if (needsRunLoop) {
+      SC.run(function() {
+        m.apply(t, args) ;
+      });
+    } else {
+      m.apply(t, args) ;
+    }    
   },
   
   tryToLoadBundle: function(bundleName, target, method, args) {

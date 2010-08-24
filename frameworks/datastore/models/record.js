@@ -142,9 +142,9 @@ SC.Record = SC.Object.extend(
     if (this.get('status') & SC.Record.READY) return this._screc_isEditable;
     else return NO ;
   }.property('status').cacheable(),
-  
+
   _screc_isEditable: YES, // default
-  
+
   /**
     YES when the record's contents have been loaded for the first time.  You 
     can use this to quickly determine if the record is ready to display.
@@ -638,6 +638,26 @@ SC.Record = SC.Object.extend(
   //
   
   /** @private
+    Sets the key equal to value.
+
+    This version will first check to see if the property is an
+    SC.RecordAttribute, and if so, will ensure that its isEditable property
+    is YES before attempting to change the value.
+
+    @param key {String} the property to set
+    @param value {Object} the value to set or null.
+    @returns {SC.Record}
+  */
+  set: function(key, value) {
+    var func = this[key];
+
+    if (func && func.isProperty && func.get && !func.get('isEditable')) {
+      return this;
+    }
+    return sc_super();
+  },
+
+  /** @private
     Creates string representation of record, with status.
     
     @returns {String}
@@ -669,13 +689,15 @@ SC.Record = SC.Object.extend(
   },
   
   /**
-   * Registers a child record with this parent record.
-   *
-   * If the parent already knows about the child record, return the cached instance.  If not,
-   * create the child record instance and add it to the child record cache.
-   *
-   * @param {CoreOrion.ChildRecord} recordType The type of the child record to register.
-   * @param {Hash} hash The hash of attributes to apply to the child record.
+    Registers a child record with this parent record.
+
+    If the parent already knows about the child record, return the cached
+    instance. If not, create the child record instance and add it to the child
+    record cache.
+
+    @param {SC.ChildRecord} recordType The type of the child record to
+    register.
+    @param {Hash} hash The hash of attributes to apply to the child record.
    */
   registerChildRecord: function(recordType, hash) {
     var pm = recordType.primaryKey || 'childRecordKey';
@@ -687,45 +709,47 @@ SC.Record = SC.Object.extend(
     }
 
     if (SC.none(childRecord)) childRecord = this.createChildRecord(recordType, hash);
- 
+
     return childRecord;
   },
   
   /**
-   * Creates a new child record instance.
-   *
-   * @param {CoreOrion.ChildRecord} recordType The type of the child record to create.
-   * @param {Hash} hash The hash of attributes to apply to the child record. (may be null)
+    Creates a new child record instance.
+
+    @param {SC.ChildRecord} recordType The type of the child record to create.
+    @param {Hash} hash The hash of attributes to apply to the child record.
+    (may be null)
    */
   createChildRecord: function(childRecordType, hash) {
-    SC.RunLoop.begin();
-    // Generate the key used by the parent's child record manager.
-    var key = SC.Record._generateChildKey();
-    hash = hash || {}; // init if needed
-    var pm = childRecordType.primaryKey || 'childRecordKey';
-    var childKey = hash[pm];
-    hash[pm] = key;
-    
-    var store = this.get('store');
-    if (SC.none(store)) throw 'Error: during the creation of a child record: NO STORE ON PARENT!';
-    
-    var cr = store.createRecord(childRecordType, hash);
-    cr._parentRecord = this;
-    
-    // ID processing if necessary
-    if(this.generateIdForChild) this.generateIdForChild(cr);
-    
-    // Add the child record to the hash.
-    var crManager = this.get('childRecords');
-    if (SC.none(crManager)) {
-      //console.log('Creating Child Record Manager for (%@)'.fmt(SC.guidFor(this)));
-      crManager = SC.Object.create();
-      this.set('childRecords', crManager);
-    }
-    
-    crManager[key] = cr;
-    SC.RunLoop.end();
-    
+    var cr = null;
+    SC.run(function() {
+      // Generate the key used by the parent's child record manager.
+      var key = SC.Record._generateChildKey();
+      hash = hash || {}; // init if needed
+      var pm = childRecordType.primaryKey || 'childRecordKey';
+      var childKey = hash[pm];
+      hash[pm] = key;
+
+      var store = this.get('store');
+      if (SC.none(store)) throw 'Error: during the creation of a child record: NO STORE ON PARENT!';
+
+      cr = store.createRecord(childRecordType, hash);
+      cr._parentRecord = this;
+
+      // ID processing if necessary
+      if(this.generateIdForChild) this.generateIdForChild(cr);
+
+      // Add the child record to the hash.
+      var crManager = this.get('childRecords');
+      if (SC.none(crManager)) {
+        //console.log('Creating Child Record Manager for (%@)'.fmt(SC.guidFor(this)));
+        crManager = SC.Object.create();
+        this.set('childRecords', crManager);
+      }
+
+      crManager[key] = cr;
+    }, this);
+
     return cr;
   },
   
