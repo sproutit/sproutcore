@@ -1,0 +1,45 @@
+#sc-error-dialog-background {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.6);
+  z-index: 200;
+}
+
+#sc-error-dialog {
+  font-family: sans-serif;
+  width: 500px;
+  margin-left: -250px;
+  left: 50%;
+  top: 3em;
+  position: absolute;
+  border: 2px solid red;
+  color: red;
+  background: #fff;
+}
+
+#sc-error-dialog p {
+  margin: 1em;
+}
+
+#sc-error-dialog-header,
+#sc-error-dialog-reload-button {
+  background: red;
+  color: white;
+  padding: 0.5em 0.5em 0.5em 1em;
+  font-weight: bold;
+}
+
+#sc-error-dialog-exception {
+  font-family: monospace;
+}
+
+#sc-error-dialog-reload-button {
+  float: right;
+  margin: 0 1em 1em 0;
+  padding: 0.3em 1em;
+  cursor: pointer;
+}

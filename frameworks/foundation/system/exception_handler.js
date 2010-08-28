@@ -22,6 +22,14 @@
 */
 
 SC.ExceptionHandler = {
+  
+  /**
+    YES if an exception was thrown and the error dialog is visible.
+
+    @property {Boolean}
+  */
+  isShowingErrorDialog: NO,
+  
   /**
     Called when an exception is encountered by code executed using SC.run().
 
@@ -45,9 +53,8 @@ SC.ExceptionHandler = {
     var html = this._errorDialogHTMLForException(exception),
         node = document.createElement('div');
 
-    node.style.cssText = "left: 0px; right: 0px; top: 0px; bottom: 0px; position: absolute; background-color: white; background-color: rgba(255,255,255,0.6); z-index:100;";
+    node.id = "sc-error-dialog-background";
     node.innerHTML = html;
-
     document.body.appendChild(node);
 
     this.isShowingErrorDialog = YES;
@@ -59,27 +66,25 @@ SC.ExceptionHandler = {
     @param {Exception} exception the exception to display
     @returns {String}
   */
-  _errorDialogHTMLForException: function(exception) {
-    var html;
-
-    html = [
-'<div id="sc-error-dialog" style="position: absolute; width: 500px; left: 50%; top: 50%; margin-left: -250px; background-color: white; border: 1px solid black; font-family: Monaco, monospace; font-size: 9px; letter-spacing: 1px; padding: 10px">',
-  'An error has occurred which prevents the application from running:',
-  '<br><br>',
-  exception.message,
-  '<div id="sc-error-dialog-reload-button" onclick="window.location.reload();" style="float: right; font-family: Monaco, monospace; font-size: 9px; letter-spacing: 1px; border: 1px solid black; padding: 3px; clear: both; margin-top: 20px; cursor: pointer;">',
-  'Reload',
-  '</div>',
-'</div>'
+  _errorDialogHTMLForException: function(exception) {  
+    var html = [
+      '<div id="sc-error-dialog">',
+        '<div id="sc-error-dialog-header">',
+          '_SC.ExceptionHandler.Error'.loc(),
+        '</div>',
+        '<p id="sc-error-dialog-message">',
+          '_SC.ExceptionHandler.Message'.loc(),
+        '</p>',
+        '<p id="sc-error-dialog-exception">',
+          exception.message ? exception.message : exception,
+        '</p>',
+        '<div id="sc-error-dialog-reload-button" onclick="window.location.reload();">',
+          '_SC.ExceptionHandler.Reload'.loc(),
+        '</div>',
+      '</div>'
     ];
 
     return html.join('');
-  },
+  }
 
-  /**
-    YES if an exception was thrown and the error dialog is visible.
-
-    @property {Boolean}
-  */
-  isShowingErrorDialog: NO
 };
