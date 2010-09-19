@@ -61,18 +61,10 @@ SC.BaseTheme.renderers.Label = SC.Renderer.extend({
   update: function() {
     var cq = this.$();
     this.updateTitleRenderer();
-    if (this.didChange('text-align')) {
-      cq.css('text-align', this.textAlign);
-    }
-    if (this.didChange('font-weight')) {
-      cq.css('font-weight', this.fontWeight);
-    }
-    if (this.didChange('opacity')) {
-      cq.css('opacity', this.isEditing ? 0 : 1);
-    }
-    if (this.didChange('icon')) {
-      cq.setClass("icon", !!this.icon);
-    }
+    if (this.didChange('textAlign')) cq.css('text-align', this.textAlign);
+    if (this.didChange('fontWeight')) cq.css('font-weight', this.fontWeight);
+    if (this.didChange('opacity')) cq.css('opacity', this.isEditing ? 0 : 1);
+    if (this.didChange('icon')) cq.setClass('icon', !!this.icon);
     this.resetChanges();
     this.updateTitle();
     this.controlRenderer.update();
