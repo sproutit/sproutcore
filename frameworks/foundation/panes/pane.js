@@ -94,6 +94,8 @@ SC.Pane = SC.View.extend(SC.ResponderContext,
   */
   page: null,
   
+  baseTheme : "sc-base",
+  
   // .......................................................
   // ROOT RESPONDER SUPPORT
   //
@@ -218,12 +220,33 @@ SC.Pane = SC.View.extend(SC.ResponderContext,
     @returns {Object} object that handled the event
   */
   sendEvent: function(action, evt, target) {
-    var handler ;
+    var handler;
     
     // walk up the responder chain looking for a method to handle the event
     if (!target) target = this.get('firstResponder') ;
-    while(target && !target.tryToPerform(action, evt)) {
-
+    while(target) {
+      if (action === 'touchStart') {
+        // first, we must check that the target is not already touch responder
+        // if it is, we don't want to have "found" it; that kind of recursion is sure to
+        // cause really severe, and even worse, really odd bugs.
+        if (evt.touchResponder === target) {
+          target = null;
+          break;
+        }
+        
+        // now, only pass along if the target does not already have any touches, or is
+        // capable of accepting multitouch.
+        if (!target.get("hasTouch") || target.get("acceptsMultitouch")) {
+          if (target.tryToPerform("touchStart", evt)) break;
+        }
+      } else if (action === 'touchEnd' && !target.get("acceptsMultitouch")) {
+        if (!target.get("hasTouch")) {
+          if (target.tryToPerform("touchEnd", evt)) break;
+        }
+      } else {
+        if (target.tryToPerform(action, evt)) break;
+      }
+      
       // even if someone tries to fill in the nextResponder on the pane, stop
       // searching when we hit the pane.
       target = (target === this) ? null : target.get('nextResponder') ;
@@ -246,6 +269,79 @@ SC.Pane = SC.View.extend(SC.ResponderContext,
     }
 
     return evt.mouseHandler || target ;
+  },
+
+  /**
+    Attempts to send a touch event down the responder chain for this pane. If
+    you pass a target, this method will begin with the target and work up the
+    responder chain. Otherwise, it will begin with the current firstResponder
+    and walk up the chain looking for any responder that implements a handler
+    for the passed method and returns YES or SC.MIXED_STATE when executed.
+
+    This method differs from the sendEvent method by supporting views that
+    return SC.MIXED_STATE. In that case, the event will continue to bubble up
+    the chain until the end is reached or another view returns YES.
+
+    @param {String} action
+    @param {SC.Event} evt
+    @param {Object} target
+    @returns {Array} views an array of views that handled the event
+  */
+  sendTouchEvent: function(action, evt, target) {
+    var handler, response, exclusive = NO, ret = [] ;
+
+    // walk up the responder chain looking for a method to handle the event
+    if (!target) target = this.get('firstResponder') ;
+    while (target) {
+      if (target.respondsTo(action)) {
+        switch (target[action](evt)) {
+          case SC.MIXED_STATE:
+            // The view is interested in events but doesn't want exclusive
+            // control, so keep it in a list of interested views
+            ret.push(target);
+            break;
+          case YES:
+            // The view wants to respond to this event, so we'll stop looking
+            // and give it exclusive control
+            ret = [target];
+            target = null;
+            exclusive = YES;
+            continue;
+        }
+      }
+
+      // even if someone tries to fill in the nextResponder on the pane, stop
+      // searching when we hit the pane.
+      target = (target === this) ? null : target.get('nextResponder') ;
+    }
+
+    // if no handler was found in the responder chain, try the default
+    if (!exclusive && (target = this.get('defaultResponder'))) {
+      if (typeof target === SC.T_STRING) {
+        target = SC.objectForPropertyPath(target);
+      }
+
+      if (target) {
+        // Make sure we merge the return arrays instead of clobbering
+        // our earlier results
+        if (target.isResponderContext) {
+          ret = ret.concat(target.sendTouchAction(action, this, evt));
+        } else {
+          if (target.respondsTo(action)) response = target[action](evt);
+
+          switch (response) {
+            case SC.MIXED_STATE:
+              ret.push(target);
+              break;
+            case YES:
+              ret = [target];
+          }
+        }
+      }
+    }
+
+    target = null;
+    return ret ;
   },
 
   performKeyEquivalent: function(keystring, evt) {
@@ -392,7 +488,7 @@ SC.Pane = SC.View.extend(SC.ResponderContext,
     var nextValidKeyView;
 
     // Handle tab key presses if we don't have a first responder already
-    if (evt.which === 9 && !this.get('firstResponder')) {
+    if ((evt.which === 9 || (SC.browser.mozilla && evt.keyCode ===9)) && !this.get('firstResponder')) {
       // Cycle forwards by default, backwards if the shift key is held
       if (evt.shiftKey) {
         nextValidKeyView = this.get('previousValidKeyView');

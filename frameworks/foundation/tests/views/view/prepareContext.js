@@ -1,6 +1,6 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
-// Copyright: �2006-2010 Apple Inc. and contributors.
+// Copyright: 2006-2009 Apple Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -19,12 +19,21 @@ test("populates context with layerId & classNames from view if firstTime", funct
   view.prepareContext(context, YES);
   equals(context.id(), 'foo', 'did set id');
   ok(context.hasClass('bar'), 'did set class names');
-  
-  // test w/o firstTime
-  context = view.renderContext();
+});
+
+test("check that testing without first time does not render to a context (no render needed)", function() {
+  var view = SC.View.create({
+    layerId: "foo", 
+    classNames: ["bar"],
+    createRenderer: function(t) {  return undefined; }
+  });
+  var context = view.renderContext();
   view.prepareContext(context, NO);
+  
+  // updating of view settings are now handled through CoreQuery, never
+  // touching rendercontext, in the function updateViewSettings.
   ok(context.id() !== 'foo', 'did not set id');
-  ok(context.hasClass('bar'), 'did set class name');
+  ok(!context.hasClass('bar'), 'did not set class name');
 });
 
 test("invokes renderLayout if first time", function() {

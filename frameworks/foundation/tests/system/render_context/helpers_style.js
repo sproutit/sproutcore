@@ -52,9 +52,8 @@ test("extracts styles from element on first retrieval", function() {
   
   var result = context.styles();
   
-  if(SC.browser.msie) same(result, { height: '20px', color: 'black', height: '20px', borderTop: 'hotpink 1px solid', WebkitColumnCount: '3' }, 'extracted style. This is failing in IE8 because it return styles like cOLOR.');
-  else if(SC.browser.mozilla) same(result, { color: 'black', height: '20px', borderTop: '1px solid hotpink' }, 'extracted style. This is failing in IE8 because it return styles like cOLOR.');
-  else same(result, { color: 'black', height: '20px', borderTop: '1px solid hotpink', WebkitColumnCount: '3' }, 'extracted style. This is failing in IE8 because it return styles like cOLOR.');
+  
+  same(result, { color: 'black', height: '20px', borderTop: '1px solid hotpink', WebkitColumnCount: '3' }, 'extracted style. This is failing in IE8 because it return styles like cOLOR.');
   
   equals(context.styles(), result, "should reuse same instance thereafter");
 });
@@ -97,5 +96,14 @@ test("should assign all styles if a hash is passed", function() {
 
 test("css() should be an alias for addStyle()", function() {
   equals(SC.RenderContext.fn.css, SC.RenderContext.fn.addStyle, 'methods');
+});
+
+test("addStyle should remove properties that are part of combo properties", function(){
+  SC.COMBO_STYLES = { foo: 'fooSub'.w() };
+  context.styles({ foo: 'foo', fooSub: 'bar' });
+  equals(context.styles().fooSub, 'bar', 'proper starting values');
+  context.addStyle('foo', 'bar');
+  equals(context.styles().foo, 'bar', 'foo has new value');
+  equals(context.styles().fooSub, undefined, 'fooSub has no value');
 });
 

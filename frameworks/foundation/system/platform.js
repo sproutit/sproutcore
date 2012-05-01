@@ -13,7 +13,6 @@
   and events are supported by the browser, allowing you to create much more
   robust apps.
 */
-
 SC.platform = {
   /**
     YES if the current device supports touch events, NO otherwise.
@@ -27,6 +26,10 @@ SC.platform = {
   
   bounceOnScroll: (/iPhone|iPad|iPod/).test(navigator.platform),
   pinchToZoom: (/iPhone|iPad|iPod/).test(navigator.platform),
+
+  input: {
+    placeholder: (function() { return 'placeholder' in document.createElement('input'); })()
+  },
 
   /**
     A hash that contains properties that indicate support for new HTML5

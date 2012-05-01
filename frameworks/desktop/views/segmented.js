@@ -196,7 +196,16 @@ SC.SegmentedView = SC.View.extend(SC.Control,
       // if the item is a string, build the array using defaults...
       itemType = SC.typeOf(item);
       if (itemType === SC.T_STRING) {
-        cur = [item.humanize().titleize(), item, YES, null, null,  null, idx] ;
+        cur = {
+          title: item.humanize().titleize(),
+          value: item,
+          isEnabled: YES,
+          icon: null,
+          width: null,
+          toolTip: null,
+          index: idx
+        };
+        // cur = [item.humanize().titleize(), item, YES, null, null,  null, idx] ;
         
       // if the item is not an array, try to use the itemKeys.
       } else if (itemType !== SC.T_ARRAY) {
@@ -207,23 +216,33 @@ SC.SegmentedView = SC.View.extend(SC.Control,
         
         // now loop through the keys and try to get the values on the item
         cur = keys.map(fetchItem, item);
-        cur[cur.length] = idx; // save current index
+        
+        // create the actual item
+        cur = {
+          title: cur[0],
+          value: cur[1],
+          isEnabled: cur[2],
+          icon: cur[3],
+          width: cur[4],
+          toolTip: cur[5],
+          index: idx
+        };
         
         // special case 1...if title key is null, try to make into string
-        if (!keys[0] && item.toString) cur[0] = item.toString(); 
+        if (!keys[0] && item.toString) cur.title = item.toString(); 
         
         // special case 2...if value key is null, use item itself
-        if (!keys[1]) cur[1] = item;
+        if (!keys[1]) cur.value = item;
         
         // special case 3...if isEnabled is null, default to yes.
-        if (!keys[2]) cur[2] = YES ; 
+        if (!keys[2]) cur.isEnabled = YES ; 
       }
       
       // finally, be sure to loc the title if needed
-      if (loc && cur[0]) cur[0] = cur[0].loc();
+      if (loc && cur.title) cur.title = cur.title.loc();
 
       // finally, be sure to loc the toolTip if needed
-      if (loc && cur[5] && SC.typeOf(cur[5]) === SC.T_STRING) cur[5] = cur[5].loc();
+      if (loc && cur.toolTip && SC.typeOf(cur.toolTip) === SC.T_STRING) cur.toolTip = cur.toolTip.loc();
       
       // add to return array
       ret[ret.length] = cur;
@@ -266,110 +285,34 @@ SC.SegmentedView = SC.View.extend(SC.Control,
   
   displayProperties: ['displayItems', 'value', 'activeIndex'],
   
-  
-  render: function(context, firstTime) { 
-    
-    // collect some data 
-    var items = this.get('displayItems');
-    
-    var theme = this.get('theme');
-    if (theme) context.addClass(theme);
-    if (firstTime || this.get('renderLikeFirstTime')) {
-      this._seg_displayItems = items; // save for future
-      this.renderDisplayItems(context, items) ;
-      context.addStyle('text-align', this.get('align'));
-      this.set('renderLikeFirstTime',NO);
-    }else{
-    // update selection and active state
-      var activeIndex = this.get('activeIndex'),
-          value = this.get('value'),
-          isArray = SC.isArray(value);
-      if (isArray && value.get('length')===1) {
-        value = value.objectAt(0); isArray = NO ;
-      }
-      var names = {}, // reuse  
-          loc = items.length, cq = this.$('.sc-segment'), item;
-      while(--loc>=0) {
-        item = items[loc];
-        names.sel = isArray ? (value.indexOf(item[1])>=0) : (item[1]===value);
-        names.active = (activeIndex === loc);
-        names.disabled = !item[2];
-        SC.$(cq[loc]).setClass(names);
-      }
-      names = items = value = items = null; // cleanup
-    }
+  createRenderer: function(theme) {
+    return theme.segmented();
   },
   
-  /**
-    Actually generates the segment HTML for the display items.  This method 
-    is called the first time a view is constructed and any time the display
-    items change thereafter.  This will construct the HTML but will not set
-    any "transient" states such as the global isEnabled property or selection.
-  */
-  renderDisplayItems: function(context, items) {
-    var value       = this.get('value'),
-        isArray     = SC.isArray(value),
-        activeIndex = this.get('activeIndex'),
-        len         = items.length,
-        title, icon, url, className, ic, item, toolTip, width, i, stylesHash,
-        classArray;
-
-    for(i=0; i< len; i++){
-      ic = context.begin('a').attr('role', 'button');
-      item=items[i];
-      title = item[0]; 
-      icon = item[3];
-      toolTip = item[5];
+  updateRenderer: function(r) {
+    var items = this.get('displayItems'), value = this.get('value'), isArray = SC.isArray(value),
+        activeIndex = this.get("activeIndex"), item;
+    for (var idx = 0, len = items.length; idx < len; idx++) {
+      item = items[idx];
       
-      stylesHash = {};
-      classArray = [];
-
-      if (this.get('layoutDirection') == SC.LAYOUT_HORIZONTAL) {
-        stylesHash['display'] = 'inline-block' ;
-      }
-
-      classArray.push('sc-segment');
+      // change active
+      if (activeIndex == idx) item.isActive = YES;
+      else item.isActive = NO;
       
-      if(!item[2]){
-        classArray.push('disabled');
+      // chance selection
+      if (isArray ? value.indexOf(item.value) : value === item.value) {
+        item.isSelected = YES;
       }
-      if(i===0){
-        classArray.push('sc-first-segment');
-      }
-      if(i===(len-1)){
-        classArray.push('sc-last-segment');
-      }
-      if(i!==0 && i!==(len-1)){
-        classArray.push('sc-middle-segment');
-      }      
-      if( isArray ? (value.indexOf(item[1])>=0) : (item[1]===value)){
-        classArray.push('sel');
-      }
-      if(activeIndex === i) {
-        classArray.push('active') ;
-      }
-      if(item[4]){
-        width=item[4];
-        stylesHash['width'] = width+'px';
-      }
-      ic.addClass(classArray);
-      ic.addStyle(stylesHash);
-      if(toolTip) {
-        ic.attr('title', toolTip) ;
-      }
-
-      if (icon) {
-        url = (icon.indexOf('/')>=0) ? icon : SC.BLANK_IMAGE_URL;
-        className = (url === icon) ? '' : icon ;
-        icon = '<img src="'+url+'" alt="" class="icon '+className+'" />';
-      } else {
-        icon = '';
-      }
-      ic.push('<span class="sc-button-inner"><label class="sc-button-label">',
-              icon+title, '</label></span>');
-      ic.end();
-    }   
-  },  
+      else item.isSelected = NO;
+    }
+    
+    // set the attributes
+    r.attr({
+      segments: items,
+      align: this.get('align'),
+      layoutDirection: this.get('layoutDirection')
+    });
+  },
   
   // ..........................................................
   // EVENT HANDLING
@@ -380,46 +323,13 @@ SC.SegmentedView = SC.View.extend(SC.Control,
     event occurred.
   */
   displayItemIndexForEvent: function(evt) {
-    return this.displayItemIndexForPosition(evt.pageX, evt.pageY);
-  },
-  
-  /**
-    Determines an item index based on a position. The position does not have to be within the view's
-    bounding rectangle. If no item is at that position, this will return -1.
-    
-    NOTE: Eventually, this sort of function should be implemented in a renderer.
-  */
-  displayItemIndexForPosition: function(pageX, pageY) {
-    // find the segments
-    var segments = this.$('.sc-segment'), len = segments.length, idx, segment, r;
-    
-    // loop through them (yes, this comment is mostly because it looks nice in TextMate)
-    for (idx = 0; idx < len; idx++) {
-      // get the segment
-      segment = segments[idx];
-      
-      // get its rectangle
-      r = segment.getBoundingClientRect();
-      
-      // based on orientation, check the position left-to-right or up-to-down.
-      if (this.get('layoutDirection') == SC.LAYOUT_VERTICAL) {
-        // if it fits, return it right away
-        if (pageY > r.top && pageY < r.bottom) return idx;
-      }
-      else {
-        // if it fits, return it right away.
-        if (pageX > r.left && pageX < r.right) return idx;
-      }
-    }
-    
-    // if we didn't find anything, return the old standard -1 for "not found."
-    return -1;
+    if (this.renderer) return this.renderer.indexForEvent(evt);
   },
   
   keyDown: function(evt) {
     // handle tab key
     var i, item, items, len, value, isArray;
-    if (evt.which === 9) {
+    if (evt.which === 9 || evt.keyCode === 9) {
       var view = evt.shiftKey ? this.get('previousValidKeyView') : this.get('nextValidKeyView');
       if(view) view.becomeFirstResponder();
       else evt.allowDefault();
@@ -433,7 +343,7 @@ SC.SegmentedView = SC.View.extend(SC.Control,
       if (evt.which === 39 || evt.which === 40) {  
         for(i=0; i< len-1; i++){
           item=items[i];
-          if( isArray ? (value.indexOf(item[1])>=0) : (item[1]===value)){
+          if( isArray ? (value.indexOf(item.value)>=0) : (item.value===value)){
             this.triggerItemAtIndex(i+1);
           }
         }
@@ -442,7 +352,7 @@ SC.SegmentedView = SC.View.extend(SC.Control,
       else if (evt.which === 37 || evt.which === 38) {
         for(i=1; i< len; i++){
           item=items[i];
-          if( isArray ? (value.indexOf(item[1])>=0) : (item[1]===value)){
+          if( isArray ? (value.indexOf(item.value)>=0) : (item.value===value)){
             this.triggerItemAtIndex(i-1);
           }
         }
@@ -572,14 +482,14 @@ SC.SegmentedView = SC.View.extend(SC.Control,
         item  = items.objectAt(idx),
         sel, value, val, empty, mult;
         
-    if (!item[2]) return this; // nothing to do!
+    if (!item.isEnabled) return this; // nothing to do!
 
     empty = this.get('allowsEmptySelection');
     mult = this.get('allowsMultipleSelection');
     
     
     // get new value... bail if not enabled. Also save original for later.
-    sel = item[1];
+    sel = item.value;
     value = val = this.get('value') ;
     if (!SC.isArray(value)) value = [value]; // force to array
     
@@ -622,7 +532,7 @@ SC.SegmentedView = SC.View.extend(SC.Control,
         action, target = null,
         resp = this.getPath('pane.rootResponder');
 
-    if (actionKey && (item = this.get('items').objectAt(item[6]))) {
+    if (actionKey && (item = this.get('items').objectAt(item.index))) {
       // get the source item from the item array.  use the index stored...
       action = item.get ? item.get(actionKey) : item[actionKey];
       if (targetKey) {

@@ -8,10 +8,6 @@
 sc_require('views/view') ;
 sc_require('mixins/control') ;
 
-SC.ALIGN_LEFT = 'left';
-SC.ALIGN_RIGHT = 'right';
-SC.ALIGN_CENTER = 'center';
-
 SC.REGULAR_WEIGHT = 'normal';
 SC.BOLD_WEIGHT = 'bold';
 
@@ -145,12 +141,9 @@ SC.LabelView = SC.View.extend(SC.Control,
     
     // 4. Localize
     if (value && this.getDelegateProperty('localize', this.displayDelegate)) value = value.loc() ;
-
-    // 5. escapeHTML if needed
-    if (this.get('escapeHTML')) value = SC.RenderContext.escapeHTML(value);
-    
+        
     return value ;
-  }.property('value', 'localize', 'formatter', 'escapeHTML').cacheable(),
+  }.property('value', 'localize', 'formatter').cacheable(),
   
   
   /**
@@ -162,9 +155,8 @@ SC.LabelView = SC.View.extend(SC.Control,
   */
   hintValue: function() {
     var hintVal = this.get('hint');
-    if (this.get('escapeHTML')) hintVal = SC.RenderContext.escapeHTML(hintVal);
     return hintVal ;
-  }.property('hint', 'escapeHTML').cacheable(),
+  }.property('hint').cacheable(),
   
   /**
     Enables editing using the inline editor.
@@ -247,6 +239,13 @@ SC.LabelView = SC.View.extend(SC.Control,
   },
 
   /** @private
+    Allow editing.
+  */
+  inlineEditorShouldBeginEditing: function(inlineEditor) {
+    return YES ;
+  },
+  
+  /** @private
     Set editing to true so edits will no longer be allowed.
   */
   inlineEditorWillBeginEditing: function(inlineEditor) {
@@ -286,54 +285,23 @@ SC.LabelView = SC.View.extend(SC.Control,
     this.set('isEditing', NO) ;
   },
 
-  displayProperties: 'displayValue textAlign fontWeight icon'.w(),
+  displayProperties: 'displayValue textAlign fontWeight icon escapeHTML'.w(),
   
   _TEMPORARY_CLASS_HASH: {},
   
-  render: function(context, firstTime) {
-    var value = this.get('displayValue'),
-        icon = this.get('icon'),
-        hint = this.get('hintValue'),
-        classes, stylesHash, text,
-        iconChanged = false, textChanged = false;
-    
-    if (icon) {
-      var url = (icon.indexOf('/')>=0) ? icon : SC.BLANK_IMAGE_URL,
-          className = (url === icon) ? '' : icon ;
-      icon = '<img src="'+url+'" alt="" class="icon '+className+'" />';
-      if(icon!==this._iconCache) {
-        this._iconCache=icon;
-        iconChanged = true;
-      }
-    }
-    
-    if (hint && (!value || value === '')) {
-      text = '<span class="sc-hint">'+hint+'</span>';
-    }else{
-      text = value;
-    }
-    if(text!==this._textCache) {
-      this._textCache=text;
-      textChanged = true;
-    }
-        
-    if(firstTime || textChanged || iconChanged){
-      context.push(icon, text);
-    }
-    
-    // and setup alignment and font-weight on styles
-    stylesHash = { 
-      'text-align': this.get('textAlign'), 
-      'font-weight': this.get('fontWeight')
-    };
-           
-    // if we are editing, set the opacity to 0
-    if (this.get('isEditing')) stylesHash['opacity']=0;
-    context.addStyle(stylesHash);
-    
-    classes = this._TEMPORARY_CLASS_HASH;
-    classes.icon = !!this.get('icon');
-    context.setClass(classes);
-  }
+  createRenderer: function(t) {
+    return t.label();
+  },
   
+  updateRenderer: function(r) {
+    r.attr({
+      "value": this.get("displayValue"),
+      "icon": this.get("icon"),
+      "hint": this.get("hint"),
+      "escapeHTML": this.get("escapeHTML"),
+      "isEditing": this.get("isEditing"),
+      "textAlign": this.get("textAlign"),
+      "fontWeight": this.get("fontWeight")
+    });
+  }  
 });

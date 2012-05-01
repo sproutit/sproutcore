@@ -42,6 +42,48 @@ test("Test different moused states", function() {
   equals(b.get('value'), b.get('toggleOffValue'), "the value should be the same as the toggle value");
 });
 
+test("Actions should be sent up the responder chain", function() {
+  var timeout = NO;
+  
+  // create a pane to test with. It has a child view, and under that, a button.
+  // the button sends an action up to its parent. We hope. :)
+  var pane = SC.Pane.create({
+    childViews: "v".w(),
+    v: SC.View.extend({
+      methodOnParent: function() {
+        // schedule cleanup
+        setTimeout(function() {
+          clearTimeout(timeout);
+          start();
+          
+          pane.remove();
+          ok(YES, "method on parent should have been called");
+        }, 1);
+      },
+      childViews: "b".w(),
+      b: SC.ButtonView.extend({
+        action: "methodOnParent"
+      })
+    }),
+    
+    rootResponder: SC.RootResponder.responder
+  });
+  
+  // the pane has to be in DOM for this to work, apparently.
+  pane.append();
+  
+  // use async API
+  stop();
+  
+  timeout = setTimeout(function() {
+    start();
+    ok(false, "Timeout.");
+    pane.remove();
+  }, 1000);
+  
+  pane.v.b._action();  
+
+});
 
 module("SC.ButtonView#actions - SC.HOLD_BEHAVIOR", {
   setup: function() {

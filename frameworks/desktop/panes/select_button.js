@@ -223,7 +223,9 @@ SC.SelectButtonView = SC.ButtonView.extend(
   SELECT_BUTTON_SPRITE_WIDTH: 28,
 
   /**
-    Binds the select button's active state to the visibility of its menu.
+    Binds the button's selection state to the menu's visibility.
+
+    @private
   */
   isActiveBinding: '*menu.isVisibleInWindow',
 
@@ -764,6 +766,7 @@ SC.SelectButtonView = SC.ButtonView.extend(
 
     // Reset state.
     this._isMouseDown = NO;
+    this.set('isActive', NO);
     return YES;
   },
 

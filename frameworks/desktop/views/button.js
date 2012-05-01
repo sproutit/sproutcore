@@ -34,6 +34,12 @@ SC.ButtonView = SC.View.extend(SC.Control, SC.Button, SC.StaticLayout,
   */
   tagName: 'div',
 
+  ariaRole: 'button',
+  /**
+    ButtonView's renderers should be smart enough to...
+  */
+  controlSize: SC.REGULAR_CONTROL_SIZE,
+
   /**
     Class names that will be applied to this view
     
@@ -42,6 +48,7 @@ SC.ButtonView = SC.View.extend(SC.Control, SC.Button, SC.StaticLayout,
   classNames: ['sc-button-view'],
   
   /**
+    This property used to be called theme. We changed it now 
     optionally set this to the theme you want this button to have.  
     
     This is used to determine the type of button this is.  You generally 
@@ -67,6 +74,8 @@ SC.ButtonView = SC.View.extend(SC.Control, SC.Button, SC.StaticLayout,
       true no matter the previous value.
     - *SC.TOGGLE_OFF_BEHAVIOR* Pressing the button will set the current state to 
       false no matter the previous value.
+    - *SC.HOLD_BEHAVIOR* Pressing the button will cause the action to repeat at a
+      regular interval specifed by 'holdInterval'
       
     @property {String}
   */
@@ -216,7 +225,25 @@ SC.ButtonView = SC.View.extend(SC.Control, SC.Button, SC.StaticLayout,
 
   /** @private - save keyEquivalent for later use */
   init: function() {
+    // figure out if we have to do deprecated API
+    // Note: We do this before sc_super, because SC.View has to determine whether we are using render() first or not.
+    if (this.renderTitle !== SC.Button.renderTitle || this.render !== SC.View.prototype.render) {
+      // @if(debug)
+      if (this.renderTitle !== SC.Button.renderTitle && !SC.ButtonView.hasGivenDeprecationWarning) {
+        console.warn("Use of renderTitle by ButtonViews has been deprecated. Use renderers instead.");
+        SC.ButtonView.hasGivenDeprecationWarning = YES;
+      }
+      // @end
+      
+      if (this.render === SC.View.prototype.render) {
+        this.render = this._DEPRECATED_render;
+      } else if (this.render.base === SC.View.prototype.render) {
+        this.render.base = this._DEPRECATED_render;
+      }
+    }
+
     sc_super();
+  
     
     //cache the key equivalent
     if(this.get("keyEquivalent")) this._defaultKeyEquivalent = this.get("keyEquivalent"); 
@@ -237,8 +264,39 @@ SC.ButtonView = SC.View.extend(SC.Control, SC.Button, SC.StaticLayout,
   */ 
   
   renderStyle: 'renderDefault', //SUPPORTED DEFAULT, IMAGE
-
-  render: function(context, firstTime) {
+  
+  /**
+    Creates the button view's renderer.
+  */
+  createRenderer: function(theme) {
+    var ret, style = this.get('renderStyle');
+    if (style==="renderDefault") ret = theme.button();
+    if (style==="renderImage") ret = theme.imageButton();
+    this.updateRenderer(ret); // updating looks _exactly_ like normal stuff for us.
+    return ret;
+  },
+  
+  updateRenderer: function(r) {
+    var toolTip = this.get("toolTip");
+    if (toolTip && this.get("localize")) toolTip = toolTip.loc();
+    
+    r.attr({
+      toolTip: toolTip,
+      isAnchor: this.get("tagName") === 'a',
+      href: this.get("href"),
+      isDefault: this.get('isDefault'),
+      isCancel: this.get('isCancel'),
+      icon: this.get('icon'),
+      supportFocusRing: this.get("supportFocusRing"),
+      titleMinWidth: this.get('titleMinWidth'),
+      
+      title: this.get("displayTitle"),
+      escapeHTML: this.get("escapeHTML"),
+      needsEllipsis: this.get("needsEllipsis")
+    });
+  },
+  
+  _DEPRECATED_render: function(context, firstTime) {
     // add href attr if tagName is anchor...
     var href, toolTip, classes, theme;
     if (this.get('tagName') === 'a') {
@@ -304,6 +362,8 @@ SC.ButtonView = SC.View.extend(SC.Control, SC.Button, SC.StaticLayout,
     else context.push("<div class='img'></div>");
   },
   
+  
+  
   /** @private {String} used to store a previously defined key equiv */
   _defaultKeyEquivalent: null,
   
@@ -346,7 +406,7 @@ SC.ButtonView = SC.View.extend(SC.Control, SC.Button, SC.StaticLayout,
       this._isFocused = YES ;
       this.becomeFirstResponder();
       if (this.get('isVisibleInWindow')) {
-        this.$()[0].focus();
+        if (this.renderer && this.renderer.focus) this.renderer.focus();
       }
     }
 
@@ -381,7 +441,7 @@ SC.ButtonView = SC.View.extend(SC.Control, SC.Button, SC.StaticLayout,
     this._isMouseDown = false;
 
     if (this.get('buttonBehavior') !== SC.HOLD_BEHAVIOR) {
-      var inside = this.$().within(evt.target) ;
+      var inside = this.renderer.causedEvent(evt) ;
       if (inside && this.get('isEnabled')) this._action(evt) ;
     }
 
@@ -428,9 +488,11 @@ SC.ButtonView = SC.View.extend(SC.Control, SC.Button, SC.StaticLayout,
     this.set('isActive', NO); // track independently in case isEnabled has changed
 
     if (this.get('buttonBehavior') !== SC.HOLD_BEHAVIOR) {
-      if (this.touchIsInBoundary(touch)) this._action();
+      if (this.touchIsInBoundary(touch) && this.get('isEnabled')) {
+        this._action();
+      }
     }
-    
+
     touch.preventDefault();
     return YES ;
   },
@@ -439,7 +501,7 @@ SC.ButtonView = SC.View.extend(SC.Control, SC.Button, SC.StaticLayout,
   /** @private */
   keyDown: function(evt) {
     // handle tab key
-    if (evt.which === 9) {
+    if (evt.which === 9 || evt.keyCode === 9) {
       var view = evt.shiftKey ? this.get('previousValidKeyView') : this.get('nextValidKeyView');
       if(view) view.becomeFirstResponder();
       else evt.allowDefault();
@@ -506,7 +568,7 @@ SC.ButtonView = SC.View.extend(SC.Control, SC.Button, SC.StaticLayout,
       } else {
         if (rootResponder) {
           // newer action method + optional target syntax...
-          rootResponder.sendAction(action, target, this, this.get('pane'));
+          this.getPath('pane.rootResponder').sendAction(action, target, this, this.get('pane'), null, this);
         }
       }
     }
@@ -560,8 +622,7 @@ SC.ButtonView = SC.View.extend(SC.Control, SC.Button, SC.StaticLayout,
       this._isFocused = YES ;
       this.becomeFirstResponder();
       if (this.get('isVisibleInWindow')) {
-        var elem=this.$()[0];
-        if (elem) elem.focus();
+        if (this.renderer && this.renderer.focus) this.renderer.focus();
       }
     }
   },
@@ -617,3 +678,4 @@ SC.ButtonView.CLICK_AND_HOLD_DELAY = SC.browser.msie ? 600 : 300;
 
 SC.REGULAR_BUTTON_HEIGHT=24;
 
+SC.ButtonView.hasGivenDeprecationWarning = NO;

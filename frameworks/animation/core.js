@@ -61,8 +61,8 @@ SC.Animatable = {
   },
 
   // properties that adjust should relay to style
-  _styleProperties: [ "opacity", "display", "transform" ],
-  _layoutStyles: 'width height top bottom marginLeft marginTop left right zIndex minWidth maxWidth minHeight maxHeight centerX centerY'.w(),
+  _styleProperties: [ "display", "transform" ],
+  _layoutStyles: 'width height top bottom marginLeft marginTop left right zIndex minWidth maxWidth minHeight maxHeight centerX centerY opacity'.w(),
 
   // we cache this dictionary so we don't generate a new one each time we make
   // a new animation. It is used so we can start the animations in order—
@@ -83,7 +83,13 @@ SC.Animatable = {
     
     this._animatable_original_willRemoveFromParent = this.willRemoveFromParent || function(){};
     this.willRemoveFromParent = this._animatable_will_remove_from_parent;
-    
+
+    this._animatable_original_hasAcceleratedLayer = this.hasAcceleratedLayer || function(){};
+    this.hasAcceleratedLayer = this._animatable_hasAcceleratedLayer;
+
+    this._animatable_original_animate = this.animate || function(){};
+    this.animate = this._animatable_animate;
+
     // auto observers do not work when mixed in live, so make sure we do a manual observer
     this.addObserver("style", this, "styleDidChange");
 
@@ -116,7 +122,8 @@ SC.Animatable = {
     this._animators = {}; // keyAnimated => object describing it.
     this._animatableSetCSS = "";
     this._last_transition_css = ""; // to keep from re-setting unnecessarily
-    this._disableAnimation = 0; // calls to disableAnimation add one; enableAnimation remove one.
+    // Setting this conditionally allows us to disableAnimation in the init method, before initMixin gets called
+    if (this._disableAnimation === undefined) this._disableAnimation = 0; // calls to disableAnimation add one; enableAnimation remove one.
     this._transitionCallbacks = {}; // define callback set
     
     // alert if layer already created
@@ -156,7 +163,9 @@ SC.Animatable = {
   If you call disable twice, you need two enables to start it. Three times, you need
   three enables.
   */
-  disableAnimation: function() { 
+  disableAnimation: function() {
+    // This fallback is necessary if disableAnimation is called in the init method before initMixin is called
+    if (this._disableAnimation === undefined) this._disableAnimation = 0;
     this._disableAnimation++;
   },
   
@@ -223,13 +232,26 @@ SC.Animatable = {
     return this;
   },
 
+  /**
+    Don't interfere with the built-in animate method.
+  */
+  _animatable_animate: function(){
+    this.disableAnimation();
+    var ret = this._animatable_original_animate.apply(this, arguments);
+    this.enableAnimation();
+    return ret;
+  },
 
   transitionEnd: function(evt){
     SC.run(function() {
       var propertyName = evt.originalEvent.propertyName,
           callback = this._transitionCallbacks[propertyName];
 
-      if(callback) SC.Animatable.runCallback(callback);
+      // only callback is animation is not disabled; assume if anim was 
+      // disabled we already invoked the callback..
+      if(callback && this._disableAnimation<=0) {
+        SC.Animatable.runCallback(callback);
+      }
     }, this);
   },
 
@@ -344,7 +366,7 @@ SC.Animatable = {
     top and left transitions have the same duration.
     Not cacheable since transitions may be updated without using a setter.
   */
-  hasAcceleratedLayer: function(){
+  _animatable_hasAcceleratedLayer: function(){
     var leftDuration = this.transitions['left'] && this.transitions['left'].duration,
         topDuration = this.transitions['top'] && this.transitions['top'].duration;
 
@@ -353,7 +375,7 @@ SC.Animatable = {
     } else if ((topDuration || leftDuration) && !SC.platform.supportsCSSTransitions) {
       return NO;
     } else {
-      return sc_super();
+      return this._animatable_original_hasAcceleratedLayer();
     }
   }.property('wantsAcceleratedLayer', 'transitions'),
 
@@ -379,13 +401,15 @@ SC.Animatable = {
 
       var nT = newStyle['top'],
           nB = newStyle['bottom'],
+          nH = newStyle['height'],
           nL = newStyle['left'],
-          nR = newStyle['right'];
+          nR = newStyle['right'],
+          nW = newStyle['width'];
 
       // NOTE: This needs to match exactly the conditions in layoutStyles
       if (
-        (SC.empty(nT) || (!SC.isPercentage(nT) && SC.empty(nB))) &&
-        (SC.empty(nL) || (!SC.isPercentage(nL) && SC.empty(nR)))
+        (SC.empty(nT) || (!SC.isPercentage(nT) && !SC.empty(nH))) &&
+        (SC.empty(nL) || (!SC.isPercentage(nL) && !SC.empty(nW)))
       ) {
         specialTransform = YES;
         this._useSpecialCaseTransform = YES;
@@ -613,13 +637,6 @@ SC.Animatable = {
 
   },
 
-  _style_opacity_helper: function(style, key, props)
-  {
-    style["opacity"] = props["opacity"];
-    style["mozOpacity"] = props["opacity"]; // older Firefox?
-    style["filter"] = "alpha(opacity=" + props["opacity"] * 100 + ")";
-  },
-
   /**
   @private
   Adjusts display and queues a change for the other properties.
@@ -679,7 +696,6 @@ SC.Animatable = {
   _animatableApplyNonDisplayStyles: function(){
     var layer = this.layer, styles = this.holder._animatableCurrentStyle; // this == timer
     var styleHelpers = {
-      opacity: this.holder._style_opacity_helper
       // more to be added here...
     };
 
@@ -701,7 +717,10 @@ SC.Animatable = {
       else if (styleHelpers[i]) styleHelpers[i](style, i, styles);
       else style[i] = styles[i];
     }
-    
+
+    // apply transform
+    if (!SC.empty(transform)) style[SC.platform.cssPrefix+"Transform"] = transform;
+
     // don't want to set because we don't want updateLayout... again.
     if (updateLayout) {
       var prev = this.holder.layout;
@@ -944,7 +963,6 @@ SC.Animatable = {
     if (this.property == "opacity")
     {
       this.style["zoom"] = 1;
-      this.style["filter"] = "alpha(opacity=" + Math.round(value * 20) * 5 + ")";
     }
 
     if (t < e) SC.Animatable.addTimer(this);

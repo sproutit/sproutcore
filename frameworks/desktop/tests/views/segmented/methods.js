@@ -32,12 +32,32 @@ module("SC.SegmentedView", {
     
     view = pane.childViews[0];
     
+    var boundingRect = function(segment){
+      var r;
+      if (segment.getBoundingClientRect) {
+        r = segment.getBoundingClientRect();
+      }else{
+        r = {};
+        var ret   = SC.viewportOffset(segment); // get x & y
+        var cq = SC.$(segment);
+        r.top = ret.y;
+        r.left = ret.x;
+        r.bottom = ret.y + cq.outerHeight();
+        r.right = ret.x + cq.outerWidth();
+      }
+      
+      return r;
+    };
+    
+    
     elem = view.get('layer').childNodes[0];
-    rect1 = elem.getBoundingClientRect();
+    rect1 = boundingRect(elem);
     elem = view.get('layer').childNodes[1];
-    rect2 = elem.getBoundingClientRect();
+    rect2 = boundingRect(elem);
     elem = view.get('layer').childNodes[2];
-    rect3 = elem.getBoundingClientRect();
+    rect3 = boundingRect(elem);
+    
+    
   }, 
   
   teardown: function() {
@@ -53,13 +73,13 @@ test("Check that properties are mapped correctly", function() {
     SC.RunLoop.end();
     equals(view.get('value'), "Item2", "the second item should be selected.");
     var items=view.displayItems();
-    equals(items[0][0], "Item1", 'Computed properties should match');
-    equals(items[0][1], "Item1", 'Computed properties should match');
-    equals(items[0][2], true, 'Computed properties should match');
-    equals(items[0][3], iconURL, 'Computed properties should match');
-    equals(items[0][4], null, 'Computed properties should match');
-    equals(items[0][5], null, 'Computed properties should match');
-    equals(items[0][6], 0, 'Computed properties should match');
+    equals(items[0].title, "Item1", 'Computed properties should match');
+    equals(items[0].value, "Item1", 'Computed properties should match');
+    equals(items[0].isEnabled, true, 'Computed properties should match');
+    equals(items[0].icon, iconURL, 'Computed properties should match');
+    equals(items[0].width, null, 'Computed properties should match');
+    equals(items[0].toolTip, null, 'Computed properties should match');
+    equals(items[0].index, 0, 'Computed properties should match');
     
     var firstItemEvent = SC.Event.simulateEvent(elem, 'mousedown', { pageX: rect1.left + 1, pageY: rect1.top + 1 });
     view.mouseDown(firstItemEvent);

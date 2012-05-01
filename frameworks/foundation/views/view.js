@@ -9,6 +9,7 @@ sc_require('system/browser');
 sc_require('system/event');
 sc_require('system/cursor');
 sc_require('system/responder') ;
+sc_require('system/theme');
 
 sc_require('mixins/string') ;
 
@@ -86,9 +87,49 @@ SC.CONTEXT_MENU_ENABLED = YES;
 */
 SC.TABBING_ONLY_INSIDE_DOCUMENT = YES;
 
+/**
+  Tells the property (when fetched with themed()) to get its value from the renderer (if any).
+*/
+SC.FROM_THEME = "__FROM_THEME__"; // doesn't really matter what it is, so long as it is unique. Readability is a plus.
+
 /** @private - custom array used for child views */
 SC.EMPTY_CHILD_VIEWS_ARRAY = [];
 SC.EMPTY_CHILD_VIEWS_ARRAY.needsClone = YES;
+
+/**
+  Map to CSS Transforms
+*/
+
+SC.CSS_TRANSFORM_MAP = {
+  rotate: function(val){
+    return null;
+  },
+
+  rotateX: function(val){
+    if (SC.typeOf(val) === SC.T_NUMBER || val === 0) val += 'deg';
+    return 'rotateX('+val+')';
+  },
+
+  rotateY: function(val){
+    if (SC.typeOf(val) === SC.T_NUMBER || val === 0) val += 'deg';
+    return 'rotateY('+val+')';
+  },
+
+  rotateZ: function(val){
+    if (SC.typeOf(val) === SC.T_NUMBER || val === 0) val += 'deg';
+    return 'rotateZ('+val+')';
+  },
+
+  scale: function(val){
+    if (SC.typeOf(val) === SC.T_ARRAY) val = val.join(', ');
+    return 'scale('+val+')';
+  }
+};
+
+/**
+  Properties that can be animated
+*/
+SC.ANIMATABLE_PROPERTIES = ["top", "left", "bottom", "right", "width", "height", "centerX", "centerY", "opacity", "scale", "rotate", "rotateX", "rotateY", "rotateZ"];
 
 /** 
   @class
@@ -145,7 +186,7 @@ SC.EMPTY_CHILD_VIEWS_ARRAY.needsClone = YES;
 SC.View = SC.Responder.extend(SC.DelegateSupport,
 /** @scope SC.View.prototype */ {
   
-  concatenatedProperties: 'outlets displayProperties layoutProperties classNames renderMixin didCreateLayerMixin willDestroyLayerMixin'.w(),
+  concatenatedProperties: 'outlets displayProperties layoutProperties classNames renderMixin didCreateLayerMixin willDestroyLayerMixin createRendererMixin updateRendererMixin'.w(),
   
   /** 
     The current pane. 
@@ -192,13 +233,183 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
   backgroundColor: null,
   
   /**
-    Activates use of brower's static layout.  You can apply this mixin and
-    still use absolute positioning.  To activate static positioning, set this
+    Activates use of brower's static layout. To activate, set this
     property to YES.
 
     @property {Boolean}
   */
   useStaticLayout: NO,  
+  
+  // ..........................................................
+  // THEME SUPPORT
+  // 
+  
+  _baseThemeName: false,
+  
+  /**
+    The base theme to start from; the "theme" property looks in this theme.
+    baseTheme is inherited from parent's theme property.
+  */
+  baseTheme: null,
+  
+  /**
+    This sets the base theme 
+  */
+  _baseThemeProperty: function(key, value) {
+    if (SC.typeOf(value) === SC.T_STRING) {
+      this.set("_baseThemeName", value);
+    }
+    
+    // find the base theme by name if we have a name.
+    if (this.get("_baseThemeName")) {
+      var theme = SC.Theme.find(this.get("_baseThemeName"));
+      if (theme) return theme;
+    }
+    
+    // otherwise, return parent's theme.
+    var parent = this.get("parentView");
+    if (parent) return parent.get("theme");
+    
+    return SC.Theme.find("sc-base");
+  }.property().cacheable(),
+  
+  
+  _last_theme: null, // used to determine if theme has changed since last time the property was evaluated.
+  _themeName: false,
+  
+  // baseTheme is a "property"; since it gets set after extension of the view,
+  // we need an observer in addition to it to actually do notifications.
+  _baseThemeDidChange: function() {
+    this.notifyPropertyChange("theme");
+  }.observes("baseTheme"),
+  
+  _themeProperty: function(key, value) {
+    // if it is a string, set theme name
+    if (SC.typeOf(value) === SC.T_STRING) {
+      this.set("_themeName", value);
+    }
+    
+    // get the base theme
+    var base = this.get("baseTheme");
+    
+    // find theme, if possible
+    if (this.get("_themeName")) {
+      // Note: theme instance "find" function will search every parent
+      // _except_ global (which is not a parent)
+      var theme;
+      if (base) {
+        theme = base.find(this.get("_themeName"));
+        if (theme) return theme;
+      }
+      
+      theme = SC.Theme.find(this.get("_themeName"));
+      if (theme) return theme;
+    }
+    
+    // can't find anything, return base.
+    return base;
+  }.property().cacheable(),
+  
+  _notifyThemeDidChange: function() {
+    var len, idx, childViews = this.get("childViews");
+    len = childViews.length;
+    for (idx = 0; idx < len; idx++){
+      childViews[idx].notifyPropertyChange("baseTheme");
+      childViews[idx].notifyPropertyChange("theme");
+    }
+  },
+  
+  /**
+    The current theme. You may only set this to a string, and during runtime, the value
+    (from get()) will always be a theme object or null.
+  */
+  theme: null,
+  
+  /**
+    Detects when the theme changes. Replaces the layer if necessary.
+  */
+  _themeDidChange: function() {
+    var theme = this.get("theme");
+    if (theme === this._last_theme) return;
+    this._last_theme = theme;
+    
+    // replace the layer
+    if (this.get("layer")) this.replaceLayer();
+    
+    // notify child views
+    if (this._hasCreatedChildViews) this._notifyThemeDidChange();
+    
+    // and now, regenerate renderer
+    this._generateRenderer();
+  }.observes("theme"),
+  
+  /**
+    Like "get", but if the value is SC.FROM_THEME, it will find the value from the view's
+    renderer, if any; if none, then it will look for <property>Default and return that.
+  */
+  themed: function(property) {
+    var val = this.get(property);
+    if (val === SC.FROM_THEME) {
+      if (this.renderer) return this.renderer[property];
+      else return this.get(property + "Default");
+    }
+    return val;
+  },
+  
+  /**
+    @private
+    Generates the view's renderer (calling _destroyRenderer on any old ones if needed).
+  */
+  _generateRenderer: function() {
+    var theme = this.get("theme"); // renderers need a theme
+    
+    // reset the renderer (the theme changed, hello!)
+    this._destroyRenderer();
+    
+    // now, if we do have a theme, we can try to create the renderer.
+    if (theme && theme.isTheme) {
+      this._viewRenderer = theme.view();
+      
+      if (this.createRenderer) {
+        this.renderer = this.createRenderer(theme);
+
+        // the renderer was not necessarily successfully created.
+        if (this.renderer) {
+          var mixins, idx, len;
+          this.renderer.contentProvider = this; // set renderer's content provider to this (it will call renderContent, etc. as needed)
+          if (mixins = this.createRendererMixin) {
+            len = mixins.length;
+            for (idx = 0; idx < len; idx++) mixins[idx].call(this, theme);
+          }
+        }
+      }
+    }
+    
+    // update!
+    this._updateViewRenderer();
+    this._updateRenderer();
+  },
+  
+  /**
+    @private
+    Updates the view's renderer, if one exists, calling all mixins to renderer as well.
+  */
+  _updateRenderer: function() {
+    var mixins, idx, len;
+    if (this.renderer){
+      this.updateRenderer(this.renderer);
+      if (mixins = this.updateRendererMixin) {
+        len = mixins.length;
+        for (idx = 0; idx < len; idx++) mixins[idx].call(this, this.renderer);
+      }
+    }
+  },
+  
+  _destroyRenderer: function() {
+    if (!this.renderer) return;
+    this.renderer.destroy();
+    this.renderer = null;    
+  },
   
   // ..........................................................
   // IS ENABLED SUPPORT
@@ -247,6 +458,25 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     }
   }.observes('isEnabled'),
 
+  // ..........................................................
+  // MULTITOUCH SUPPORT
+  //
+  /**
+    Set to YES if you want to receive touch events for each distinct touch (rather than only
+    the first touch start and last touch end).
+  */
+  acceptsMultitouch: NO,
+  
+  /**
+    Is YES if the view is currently being touched. NO otherwise.
+  */
+  hasTouch: NO,
+  
+  /**
+    Whether to route touch events to mouse events (defaults to YES)
+  */
+  routeTouch: YES,
+  
   // ..........................................................
   // IS VISIBLE IN WINDOW SUPPORT
   // 
@@ -568,6 +798,8 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
   parentViewDidChange: function() {
     this.recomputeIsVisibleInWindow() ;
     
+    this.resetBuildState();
+    this.notifyPropertyChange("baseTheme");
     this.set('layerLocationNeedsUpdate', YES) ;
     this.invokeOnce(this.updateLayerLocationIfNeeded) ;
     
@@ -848,16 +1080,38 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     do not want your render() method called when updating a layer, then you
     should override this method instead.
     
+    @param optionalContext provided only for backwards-compatibility.
+    
     @returns {SC.View} receiver 
   */
-  updateLayer: function() {
-    var context = this.renderContext(this.get('layer')) ;
-    this.prepareContext(context, NO) ;
-    context.update() ;
-    if (context._innerHTMLReplaced) {
-      var pane = this.get('pane');
-      if(pane && pane.get('isPaneAttached')) {
-        this._notifyDidAppendToDocument();
+  updateLayer: function(optionalContext) {
+    var mixins, idx, len, renderer = this.renderer, viewRenderer = this._viewRenderer;
+
+    
+    // make sure to update any renderers
+    this._updateRenderer();
+    
+    // Now, update using renderer if possible; render() otherwise
+    if (!this._useRenderFirst && this.createRenderer) {
+      this.updateViewSettings();
+      if (renderer) renderer.update();
+    } else {
+      var context = optionalContext || this.renderContext(this.get('layer')) ;
+      
+      this.renderViewSettings(context, NO);
+      this.render(context, NO) ;
+      
+      if (mixins = this.renderMixin) {
+        len = mixins.length;
+        for(idx=0; idx<len; ++idx) mixins[idx].call(this, context, NO) ;
+      }
+      
+      context.update() ;
+      if (context._innerHTMLReplaced) {
+        var pane = this.get('pane');
+        if(pane && pane.get('isPaneAttached')) {
+          this._notifyDidAppendToDocument();
+        }
       }
     }
 
@@ -901,7 +1155,7 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     var context = this.renderContext(this.get('tagName')) ;
     
     // now prepare the content like normal.
-    this.prepareContext(context, YES) ;
+    this.renderToContext(context) ;
     this.set('layer', context.element()) ;
     
     // now notify the view and its child views..
@@ -915,7 +1169,20 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     invokes the same on all child views.
   */
   _notifyDidCreateLayer: function() {
+    // notify, not just the view, but also the view renderers
+    this.notifyPropertyChange("layer");
+    this._viewRenderer.attachLayer(this);
+    if (this.renderer) this.renderer.attachLayer(this);
     if (this.didCreateLayer) this.didCreateLayer() ;
+
+    // Animation prep
+    if (SC.platform.supportsCSSTransitions) {
+      this.resetAnimation();
+      SC.Event.add(this.get('layer'), SC.platform.cssPrefix+"TransitionEnd", this, this._scv_animationEnd);
+      SC.Event.add(this.get('layer'), "transitionEnd", this, this._scv_animationEnd);
+    }
+
+    // and notify others
     var mixins = this.didCreateLayerMixin, len, idx,
         childViews = this.get('childViews'),
         childView;
@@ -961,9 +1228,25 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
   destroyLayer: function() {
     var layer = this.get('layer') ;
     if (layer) {
+
+      // Teardown animations
+      if (SC.platform.supportsCSSTransitions) {
+        SC.Event.remove(this.get('layer'), SC.platform.cssPrefix+"TransitionEnd", this, this._scv_animationEnd);
+        SC.Event.remove(this.get('layer'), "transitionEnd", this, this._scv_animationEnd);
+      }
+
       // Now notify the view and its child views.  It will also set the
       // layer property to null.
       this._notifyWillDestroyLayer() ;
+      
+      if (this._viewRenderer) {
+        this._viewRenderer.detachLayer();
+      }
+      
+      // tell the renderer the layer has gone away
+      if (this.renderer) {
+        this.renderer.detachLayer();
+      }
       
       // do final cleanup
       if (layer.parentNode) layer.parentNode.removeChild(layer) ;
@@ -1003,46 +1286,85 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     this.set('layer', null) ;
   },
   
+  
+  isLayerProvider: YES,
   /**
-    Invoked by createLayer() and updateLayer() to actually render a context.
-    This method calls the render() method on your view along with any 
-    renderMixin() methods supplied by mixins you might have added.
-    
-    You should not override this method directly.  However, you might call
-    this method if you choose to override updateLayer() or createLayer().
-    
-    @param {SC.RenderContext} context the render context
-    @param {Boolean} firstTime YES if this is creating a layer
-    @returns {void}
+    @private (semi)
+    Returns the layer. Meant only for use from renderers and such—this is a layer provider function.
   */
-  prepareContext: function(context, firstTime) {
-    var mixins, len, idx, layerId, bgcolor, cursor, classNames;
+  getLayer: function() {
+    return this.get("layer");
+  },
   
-    // do some initial setup only needed at create time.
-    if (firstTime) {
-      // TODO: seems like things will break later if SC.guidFor(this) is used
-  
-      layerId = this.layerId ? this.get('layerId') : SC.guidFor(this) ;
-      context.id(layerId).classNames(this.get('classNames'), YES) ;
-      this.renderLayout(context, firstTime) ;
-    }else{
-      context.resetClassNames();
-      context.classNames(this.get('classNames'), YES);  
+  /**
+    @private
+    
+    Renders to a context.
+    Rendering only happens for the initial rendering. Further updates happen in updateLayer,
+    and are not done to contexts, but to layers.
+    
+    Both renderToContext and updateLayer will call render(context, firstTime) as needed
+    to maintain backwards compatibility, but prefer calling createRenderer.
+    
+    Note: You should not generally override nor directly call this method. This method is only
+    called by createLayer to set up the layer initially, and by renderChildViews, to write to
+    a context.
+    
+    @param {SC.RenderContext} context the render context.
+    @param {Boolean} firstTime Provided for compatibility when rendering legacy views only.
+  */
+  renderToContext: function(context, firstTime) {
+    var mixins, idx, len;
+    
+    this.beginPropertyChanges() ;
+    this.set('layerNeedsUpdate', NO) ;
+    
+    this.renderViewSettings(context, YES);
+    
+    /* Now, the actual rendering, which will use a renderer if possible */
+    // the renderer will have been created when the theme was found; if it is around,
+    // we just need to ensure it is up-to-date
+    if (this.createRenderer) {
+      // our private version does mixins too! Yay!
+      this._updateRenderer();
     }
+    
+    if (!this._useRenderFirst && this.createRenderer) {
+      if (this.renderer) this.renderer.render(context);
+    } else {
+      if (SC.none(firstTime)) firstTime = YES;
+      
+      this.render(context, firstTime);
+      if (mixins = this.renderMixin) {
+        len = mixins.length;
+        for(idx=0; idx<len; ++idx) mixins[idx].call(this, context, firstTime) ;
+      }
+    }
+    
+    this.endPropertyChanges() ;
+  },
   
-    // do some standard setup...
-    classNames = [];
-    if (this.get('isTextSelectable')) classNames.push('allow-select') ;
-    if (!this.get('isEnabled')) classNames.push('disabled') ;
-    if (!this.get('isVisible')) classNames.push('hidden') ;
-    if (this.get('isFirstResponder')) classNames.push('focus');
-    if (this.get('useStaticLayout')) classNames.push('sc-static-layout');
-  
-    bgcolor = this.get('backgroundColor');
-    if (bgcolor) context.addStyle('backgroundColor', bgcolor);
-  
-    // Sets cursor class, if present.
-    cursor = this.get('cursor');
+  /**
+    @private
+    Updates the properties of the renderer used for the view
+  */
+  _updateViewRenderer: function() {
+    if (!this._viewRenderer) return;
+    
+    var classNames = this.get('classNames');
+    if (this.get('theme')) {
+      classNames = classNames.concat(this.get("theme").classNames);
+    }
+    
+    // for backwards compatibility, make sure we push the theme name if it is not there already. This
+    // is extremely questionable, but necessary at least for buttons. We maybe want to move this just
+    // to such at some point.
+    // TODO: consider
+    // SC2.0: this should go away.
+    if (this._themeName && classNames.indexOf(this._themeName) < 0) classNames.push(this._themeName);
+    
+    // get cursor:
+    var cursor = this.get("cursor");
     if (!cursor && this.get('shouldInheritCursor')) {
       // If this view has no cursor and should inherit it from the parent, 
       // then it sets its own cursor view.  This sets the cursor rather than 
@@ -1050,26 +1372,76 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
       // childViews can also inherit it.
       cursor = this.getPath('parentView.cursor');
     }
+    
+    
 
-    if (SC.typeOf(cursor) === SC.T_STRING) {
-      cursor = SC.objectForPropertyPath(cursor);
-    }
-    
-    if (cursor instanceof SC.Cursor) {
-      classNames.push(cursor.get('className')) ;
-    }
-    
-    // Doing a single call to 'addClass' is faster than multiple.
-    context.addClass(classNames);
+    this._scv_willRenderAnimations();
+
+    this._viewRenderer.attr({
+      layerId: this.layerId ? this.get('layerId') : SC.guidFor(this),
+      classNames: classNames,
+      backgroundColor: this.get('backgroundColor'),
+      role: this.get('ariaRole'),
+      cursor: cursor,
+      isTextSelectable: this.get('isTextSelectable'),
+      isEnabled: this.get('isEnabled'),
+      isVisible: this.get('isVisible'),
+      isFirstResponder: this.get('isFirstResponder'),
+      hasStaticLayout: this.get('useStaticLayout')
+    });
+  },
   
-    this.beginPropertyChanges() ;
-    this.set('layerNeedsUpdate', NO) ;
-    this.render(context, firstTime) ;
-    if (mixins = this.renderMixin) {
-      len = mixins.length;
-      for(idx=0; idx<len; ++idx) mixins[idx].call(this, context, firstTime) ;
+  /**
+    @private
+    Renders view settings (class names and id, for instance) to the context.
+    
+    firstTime is provided because we have a case in which renderViewSettings may be called when !firstTime,
+    so that we can set things on the context (because other things are going through the context,
+    due to the use of a render() function in the derived class that uses context).
+    
+    If !firstTime, we don't actually have to update layout (updateLayout handles it).
+  */
+  renderViewSettings: function(context, firstTime) {
+    if (SC.none(firstTime)) firstTime = YES;
+    
+    this._updateViewRenderer();
+    this._viewRenderer.render(context);
+    
+    if (firstTime) this.renderLayout(context, YES);
+  },
+  
+  /**
+    @private
+    Updates view settings on the context (including class names).
+  */
+  updateViewSettings: function() {
+    this._updateViewRenderer();
+    this._viewRenderer.update();
+  },
+  
+  /**
+  @private
+  
+    Invoked by createLayer() and updateLayer() to actually render a context.
+    This method calls the render() method on your view along with any 
+    renderMixin() methods supplied by mixins you might have added.
+    
+    You should not override this method directly. Nor should you call it. It is OLD.
+    
+    @param {SC.RenderContext} context the render context
+    @param {Boolean} firstTime YES if this is creating a layer
+    @returns {void}
+  */
+  prepareContext: function(context, firstTime) {
+    // eventually, firstTime will be removed because it is ugly.
+    // for now, we will sense whether we are doing things the ugly way or not.
+    // if ugly, we will allow updates through.
+    if (SC.none(firstTime)) firstTime = YES; // the GOOD code path :)
+    if (firstTime) {
+      this.renderToContext(context);
+    } else {
+      this.updateLayer(context);
     }
-    this.endPropertyChanges() ;
   },
   
   /**
@@ -1078,21 +1450,62 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     walk down the childView chain, rendering all of the children in a nested
     way.
     
+    If a context is provided, it is always assumed to be firstTime.
+    
+    @deprecated In SproutCore 1.1. Use renderContent and updateContent explicitly instead.
     @param {SC.RenderContext} context the context
     @param {Boolean} firstName true if the layer is being created
     @returns {SC.RenderContext} the render context
-    @test in render
+    @test in render and renderer
   */
   renderChildViews: function(context, firstTime) {
+    if (firstTime || context) {
+      // we pass along firstTime for compatibility. Some older (less wise) views may
+      // think it will work. Well, it wouldn't, but we'll make it work.
+      this.renderContent(context, firstTime);
+    } else {
+      this.updateContent(context);
+    }
+    return context;
+  },
+  
+  /**
+    @private
+    Views are content suppliers for renderers. That is, views pass themselves to renderers
+    for renderers' "content" properties. Content providers have two functions: renderContent and updateContent.
+    This is the first of those.
+    
+    @param {SC.RenderContext} context
+    @param {Boolean} firstTime For compatibility (do not use; if not first time, call updateContent).
+  */
+  renderContent: function(context, firstTime) {
     var cv = this.get('childViews'), len = cv.length, idx, view ;
     for (idx=0; idx<len; ++idx) {
       view = cv[idx] ;
       if (!view) continue;
       context = context.begin(view.get('tagName')) ;
-      view.prepareContext(context, firstTime) ;
+      view.renderToContext(context, firstTime);
       context = context.end() ;
     }
-    return context ;  
+  },
+  
+  /**
+    @private
+    Views are content suppliers for renderers. That is, views pass themselves to renderers
+    for renderers' "content" properties. Content providers have two functions: renderContent and updateContent.
+    This is the first of those.
+    
+    For old-style rendering, the render context created by the parent renderer is passed along
+    as well.
+  */
+  updateContent: function(optionalContext) {
+    var cv = this.get('childViews'), len = cv.length, idx, view ;
+    for (idx=0; idx<len; ++idx) {
+      view = cv[idx] ;
+      if (!view) continue;
+      
+      view.updateLayer(optionalContext);
+    }
   },
   
   /**
@@ -1114,9 +1527,18 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     @param {SC.RenderContext} context the render context
     @param {Boolean} firstTime YES if this is creating a layer
     @returns {void}
-  */
+  */   
   render: function(context, firstTime) {
-    if (firstTime) this.renderChildViews(context, firstTime) ;
+    var renderer = this.renderer;
+    if (this.createRenderer && renderer) {
+      if (firstTime) { 
+        renderer.render(context);
+      } else {
+        renderer.update();
+      }
+    } else {
+      if (firstTime) this.renderChildViews(context, firstTime);
+    }
   },
   
   
@@ -1159,6 +1581,8 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     @property {String}
   */
   tagName: 'div',
+  
+  ariaRole: null,
   
   /**
     Standard CSS class names to apply to the view's outer element.  This 
@@ -1570,15 +1994,42 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     var parentView, path, root, idx, len, lp, dp ;
     
     sc_super() ;
-
-    // Register this view for event handling
-    SC.View.views[this.get('layerId')] = this ;
-
+    
+    // set up theme
+    var baseTheme = this.baseTheme;
+    this.baseTheme = this._baseThemeProperty;
+    this.set("baseTheme", baseTheme);
+    
+    var theme = this.theme;
+    this.theme = this._themeProperty;
+    this.set("theme", theme);
+    
+    // find render path (to be removed in SC 2.0?)
+    var renderAge = -1, rendererAge = -1, currentAge = 0, c = this.constructor;
+    while (c && c.prototype.render) {
+      if (renderAge < 0 && c.prototype.render !== this.render) renderAge = currentAge;
+      if (rendererAge < 0 && c.prototype.createRenderer !== this.createRenderer) rendererAge = currentAge;
+      if (rendererAge >= 0 && renderAge >= 0) break;
+      currentAge = currentAge + 1;
+      c = c.superclass;
+    }
+    
+    // which one?
+    if (renderAge < rendererAge && renderAge >= 0) {
+      this._useRenderFirst = YES;
+    } else {
+      this._useRenderFirst = NO;
+    }
+    
+    // register for event handling
+    SC.View.views[this.get('layerId')] = this;
+    
     var childViews = this.get('childViews');
     
     // setup child views.  be sure to clone the child views array first
     this.childViews = childViews ? childViews.slice() : [] ;
     this.createChildViews() ; // setup child Views
+    this._hasCreatedChildViews = YES;
     
     // register display property observers ..
     // TODO: Optimize into class setup 
@@ -1828,7 +2279,218 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     
     return this ;
   },
-  
+
+
+  /**
+    Animate a given property using CSS animations.
+
+    Takes a key, value and either a duration, or a hash of options.
+    The options hash has the following parameters
+      - duration: Duration of animation in seconds
+      - callback: Callback method to run when animation completes
+      - timing: Animation timing function
+
+    @param {String|Hash} key
+    @param {Object} value
+    @params {Number|Hash} duration or options
+    @returns {SC.View} receiver
+  */
+  animate: function(keyOrHash, valueOrOptions, optionsOrCallback, callback) {
+    var hash, options;
+
+    if (SC.typeOf(keyOrHash) === SC.T_HASH) {
+      hash = keyOrHash;
+      options = valueOrOptions;
+      callback = optionsOrCallback;
+    } else {
+      hash = {};
+      hash[keyOrHash] = valueOrOptions;
+      options = optionsOrCallback;
+    }
+
+    if (SC.typeOf(options) === SC.T_NUMBER) {
+      options = { duration: options };
+    } else if (SC.typeOf(options) !== SC.T_HASH) {
+      throw "Must provide options hash or duration!";
+    }
+
+    if (callback) options.callback = callback;
+
+
+    var layout = SC.clone(this.get('layout')), didChange = NO, value, cur, animValue, curAnim, key;
+    
+    for(key in hash) {
+      if (!hash.hasOwnProperty(key)) continue;
+      value = hash[key];
+      cur = layout[key];
+
+      if (SC.ANIMATABLE_PROPERTIES.contains(key)) {
+        curAnim = layout['animate'+key.capitalize()];
+        
+        if (value === null || value === undefined) {
+          throw "Can only animate to an actual value!";
+        } else {
+          if (cur !== value) didChange = YES;
+
+          // FIXME: We should check more than duration
+          // Also, will we allow people to just set a number instead of a hash? If so, we have to account for that.
+          if (curAnim && curAnim.duration !== options.duration) didChange = YES ;
+
+          layout[key] = value ;
+          
+          // I'm pretty sure we want to be cloning this because we may be applying it
+          // to multiple properties which can be edited independently
+          layout['animate'+key.capitalize()] = SC.clone(options);
+        }
+      } else {
+        if (cur !== value) didChange = YES;
+        layout[key] = value;
+      }
+    }
+
+    // now set adjusted layout
+    if (didChange) this.set('layout', layout) ;
+    
+    return this ;
+  },
+
+  /**
+  Resets animation, stopping all existing animations.
+  */
+  resetAnimation: function() {
+    var layout = this.get('layout'), didChange = NO, key;
+    for (key in layout) {
+      if (key.substring(0,7) === 'animate') {
+        didChange = YES;
+        delete layout[key];
+      }
+    }
+    if (didChange) {
+      this.set('layout', layout);
+      this.notifyPropertyChange('layout');
+    }
+    return this;
+  },
+
+  _scv_willRenderAnimations: function(){
+    var key, callback;
+
+    if (SC.platform.supportsCSSTransitions) {
+      var layer = this.get('layer'),
+          currentStyle = layer ? layer.style : null,
+          newStyle = this.get('layoutStyle'),
+          transitionStyle = newStyle[SC.platform.domCSSPrefix+"Transition"],
+          layout = this.get('layout'),
+          idx;
+
+      // Handle existing animations
+      if (this._activeAnimations) {
+        for(key in this._activeAnimations){
+          // TODO: Check for more than duration
+          if (
+            newStyle[key] !== (currentStyle ? currentStyle[key] : null) ||
+            !this._pendingAnimations || !this._pendingAnimations[key] ||
+            this._activeAnimations[key].duration !== this._pendingAnimations[key].duration
+          ) {
+            callback = this._activeAnimations[key].callback;
+            if (callback) {
+              if (this._animatedTransforms && this._animatedTransforms.length > 0) {
+                for (idx=0; idx < this._animatedTransforms.length; idx++) {
+                  this._scv_runAnimationCallback(callback, null, this._animatedTransforms[idx], YES);
+                }
+                this._animatedTransforms = null;
+              } else {
+                this._scv_runAnimationCallback(callback, null, key, YES);
+              }
+            }
+
+            this._scv_removeAnimationFromLayout(key, YES);
+          }
+        }
+      }
+
+      this._activeAnimations = this._pendingAnimations;
+      this._pendingAnimations = null;
+    } else {
+      // Transitions not supported
+      for (key in this._pendingAnimations) {
+        callback = this._pendingAnimations[key].callback;
+        if (callback) this._scv_runAnimationCallback(callback, null, key, NO);
+        this._scv_removeAnimationFromLayout(key, NO, YES);
+      }
+      this._activeAnimations = this._pendingAnimations = null;
+    }
+  },
+
+  _scv_removeAnimationFromLayout: function(propertyName, updateStyle, isPending) {
+
+    if (updateStyle) {
+      var layer = this.get('layer'),
+          updatedCSS = [], key;
+      for(key in this._activeAnimations) {
+        if (key !== propertyName) updatedCSS.push(this._activeAnimations[key].css);
+      }
+
+      // FIXME: Not really sure this is the right way to do it, but we don't want to trigger a layout update
+      if (layer) layer.style[SC.platform.domCSSPrefix+"Transition"] = updatedCSS.join(', ');
+    }
+
+
+    var layout = this.get('layout'),
+        idx;
+
+    if (propertyName === '-'+SC.platform.cssPrefix+'-transform' && this._animatedTransforms && this._animatedTransforms.length > 0) {
+      for(idx=0; idx < this._animatedTransforms.length; idx++) {
+        delete layout['animate'+this._animatedTransforms[idx].capitalize()];
+      }
+      this._animatedTransforms = null;
+    }
+    delete layout['animate'+propertyName.capitalize()];
+
+    if (!isPending) delete this._activeAnimations[propertyName];
+  },
+
+  _scv_runAnimationCallback: function(callback, evt, propertyName, cancelled) {
+    if (callback) {
+      if (SC.typeOf(callback) !== SC.T_HASH) callback = { action: callback };
+      callback.source = this;
+      if (!callback.target) callback.target = this;
+    }
+    SC.View.runCallback(callback, { event: evt, propertyName: propertyName, view: this, isCancelled: cancelled });
+  },
+
+  /**
+    Called when animation ends, should not usually be called manually
+  */
+  _scv_animationEnd: function(evt){
+    // WARNING: Sometimes this will get called more than once for a property. Not sure why.
+
+    var propertyName = evt.originalEvent.propertyName,
+        layout = this.get('layout'),
+        animation, idx;
+
+    animation = this._activeAnimations ? this._activeAnimations[propertyName] : null;
+
+    if(animation) {
+      if (animation.callback) {
+        // Charles says this is a good idea
+        SC.RunLoop.begin();
+        // We're using invokeLater so we don't trigger any layout changes from the callbacks until the animations are done
+        if (this._animatedTransforms && this._animatedTransforms.length > 0) {
+          for (idx=0; idx < this._animatedTransforms.length; idx++) {
+            this.invokeLater('_scv_runAnimationCallback', 1, animation.callback, evt, this._animatedTransforms[idx], NO);
+          }
+        } else {
+          this.invokeLater('_scv_runAnimationCallback', 1, animation.callback, evt, propertyName, NO);
+        }
+        SC.RunLoop.end();
+      }
+
+      this._scv_removeAnimationFromLayout(propertyName, YES);
+    }
+  },
+
+
   /** 
     The layout describes how you want your view to be positions on the 
     screen.  You can define the following properties:
@@ -2047,7 +2709,6 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     if (!pdim) pdim = this.computeParentDimensions(layout) ;
     dH = pdim.height;
     dW = pdim.width;
-    
     
     // handle left aligned and left/right 
     if (!SC.none(lL)) {
@@ -2277,7 +2938,7 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
       // frame changes should be sent all the time unless this property is 
       // present to indicate that we want the old 1.0 API behavior instead.
       // 
-      if (!cv.hasStaticLayout) {
+      if (!cv.useStaticLayout) {
         cv.notifyPropertyChange('clippingFrame') ;
         cv._sc_view_clippingFrameDidChange();
       }
@@ -2356,8 +3017,8 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     this._viewFrameDidChange();
 
     // Also notify our children.
-    var cv = this.childViews, len = cv.length, idx, view ;
-    for (idx=0; idx<len; ++idx) {
+    var cv = this.childViews, len, idx, view ;
+    for (idx=0; idx<(len= cv.length); ++idx) {
       view = cv[idx];
       view.parentViewDidResize();
     }
@@ -2436,13 +3097,13 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
   },
 
   /**
-    Setting wantsAcceleratedLayer to YES will use 3d transforms to move the
-    layer when available.
+    Setting wantsAcceleratedLayer to YES will use transforms to move the
+    layer when available. On some platforms transforms are hardware accelerated.
   */
   wantsAcceleratedLayer: NO,
 
   /**
-    Specifies whether 3d transforms can be used to move the layer.
+    Specifies whether transforms can be used to move the layer.
   */
   hasAcceleratedLayer: function(){
     return this.get('wantsAcceleratedLayer') && SC.platform.supportsAcceleratedLayers;
@@ -2476,30 +3137,66 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
         lMH = layout.maxHeight,
         lcX = layout.centerX, 
         lcY = layout.centerY,
-        hasAcceleratedLayer = this.get('hasAcceleratedLayer'),
-        translateTop = 0,
-        translateLeft = 0;
+        canUseAcceleratedLayer = this.get('hasAcceleratedLayer'),
+        translateTop = null,
+        translateLeft = null;
     if (lW !== undefined && lW === SC.LAYOUT_AUTO && !stLayout) {
-      error= SC.Error.desc("%@.layout() you cannot use width:auto if "+
-              "staticLayout is disabled".fmt(this),"%@".fmt(this),-1);
+      error= SC.Error.desc("%@.layout() you cannot use width:auto if ".fmt(this) +
+              "staticLayout is disabled","%@".fmt(this),-1);
       console.error(error.toString()) ;
       throw error ;
     }
     
     if (lH !== undefined && lH === SC.LAYOUT_AUTO && !stLayout) {
-      error = SC.Error.desc("%@.layout() you cannot use height:auto if "+
-                "staticLayout is disabled".fmt(this),"%@".fmt(this),-1);  
+      error = SC.Error.desc("%@.layout() you cannot use height:auto if ".fmt(this) +
+                "staticLayout is disabled","%@".fmt(this),-1);  
       console.error(error.toString()) ;
       throw error ;
     }
 
+    if (SC.platform.supportsCSSTransforms) {
+      // Check to see if we're using transforms
+      var animatingTransforms = NO, transformAnimationDuration;
+      for(key in layout){
+        if (key.substring(0,7) === 'animate') {
+          if (SC.CSS_TRANSFORM_MAP[key.substring(7).camelize()]) {
+            animatingTransforms = YES;
+
+            if (this._pendingAnimations && this._pendingAnimations['-'+SC.platform.cssPrefix+'-transform']) {
+              throw "Animations of transforms must be executed simultaneously!";
+            }
+
+            // TODO: If we want to allow it to be set as just a number for duration we need to add support here
+            if (transformAnimationDuration && layout[key].duration !== transformAnimationDuration) {
+              console.warn("Can't animate transforms with different durations! Using first duration specified.");
+              layout[key].duration = transformAnimationDuration;
+            }
+            transformAnimationDuration = layout[key].duration;
+
+            // FIXME: There will also be problems if we have conflicting timings and callbacks
+          }
+        }
+      }
+
+      // If we're animating other transforms at different speeds, don't use acceleratedLayer
+      if (
+        animatingTransforms &&
+        (
+          (layout['animateTop'] && layout['animateTop'].duration !== transformAnimationDuration) ||
+          (layout['animateLeft'] && layout['animateLeft'].duration !== transformAnimationDuration)
+        )
+      ) {
+        canUseAcceleratedLayer = NO;
+      }
+    }
+
     // X DIRECTION
-    
+
     // handle left aligned and left/right
     if (!SC.none(lL)) {
       if(SC.isPercentage(lL)) {
         ret.left = (lL*100)+"%";  //percentage left
-      } else if (hasAcceleratedLayer && SC.empty(lR)) {
+      } else if (canUseAcceleratedLayer && !SC.empty(lW)) {
         translateLeft = Math.floor(lL);
         ret.left = 0;
       } else {
@@ -2548,7 +3245,7 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
         ret.marginLeft = Math.floor(lcX - ret.width/2) ;
       }else {
         // This error message happens whenever width is not set.
-        console.warn("You have to set width and centerX usign both percentages or pixels");
+        console.warn("You have to set width and centerX using both percentages or pixels");
         ret.marginLeft = "50%";
       }
       ret.right = null ;
@@ -2581,7 +3278,7 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     if (!SC.none(lT)) {
       if(SC.isPercentage(lT)) {
         ret.top = (lT*100)+"%";
-      } else if (hasAcceleratedLayer && SC.empty(lB)) {
+      } else if (canUseAcceleratedLayer && !SC.empty(lH)) {
         translateTop = Math.floor(lT);
         ret.top = 0;
       } else {
@@ -2656,7 +3353,11 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     
     // if zIndex is set, use it.  otherwise let default shine through
     ret.zIndex = SC.none(layout.zIndex) ? null : layout.zIndex.toString();
-    
+
+    // if opacity is set, use it. otherwise let default shine through
+    ret.opacity = SC.none(layout.opacity) ? null : layout.opacity.toString();
+    ret.mozOpacity = ret.opacity; // older Firefox?
+
     // if backgroundPosition is set, use it.
     // otherwise let default shine through
     ret.backgroundPosition = SC.none(layout.backgroundPosition) ?
@@ -2670,17 +3371,113 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
       if (ret[x]===0) ret[x]=null;
     }
 
-    if (hasAcceleratedLayer) {
-      var transform = 'translateX('+translateLeft+'px) translateY('+translateTop+'px)';
-      if (SC.platform.supportsCSS3DTransforms) transform += ' translateZ(0px)'
-      ret[SC.platform.domCSSPrefix+'Transform'] = transform;
+    if (SC.platform.supportsCSSTransforms) {
+      // Handle transforms
+      var transformAttribute = SC.platform.domCSSPrefix+'Transform',
+          layer = this.get('layer'),
+          // FIXME: This is not the best way to do it, we should track these locally
+          currentTransforms = (layer ? layer.style[transformAttribute] : '').split(' '),
+          halTransforms, specialTransforms = [], transformName, idx;
+
+      if (canUseAcceleratedLayer) {
+        // Remove previous transforms
+        if (this._lastAcceleratedTransforms) currentTransforms.removeObjects(this._lastAcceleratedTransforms);
+
+        halTransforms = ['translateX('+(translateLeft || 0)+'px)', 'translateY('+(translateTop || 0)+'px)'];
+
+        // FIXME: This join.match is a bit hackish
+        if (SC.platform.supportsCSS3DTransforms && !currentTransforms.join(' ').match('translateZ')) {
+          halTransforms.push('translateZ(0px)');
+        }
+
+        // Store for next time
+        this._lastAcceleratedTransforms = halTransforms;
+      }
+
+      // Handle special CSS transform attributes
+      for(transformName in SC.CSS_TRANSFORM_MAP) {
+        var cleanedTransforms = [];
+        for(idx=0; idx < currentTransforms.length; idx++) {
+          if (!currentTransforms[idx].match(new RegExp('^'+transformName+'\\\('))) {
+            cleanedTransforms.push(currentTransforms[idx]);
+          }
+        }
+        currentTransforms = cleanedTransforms;
+
+        if (layout[transformName]) {
+          specialTransforms.push(SC.CSS_TRANSFORM_MAP[transformName](layout[transformName]));
+        } 
+      }
+      specialTransforms = specialTransforms.join(' ');
+
+      var allTransforms = currentTransforms.concat(halTransforms, specialTransforms).without(undefined).without('').join(' ');
+
+      // Set transform attribute
+      if (allTransforms !== '') ret[transformAttribute] = allTransforms;
     }
+
+    // Temporary fix to not break SC.Animatable
+    if (!this.isAnimatable) {
+
+      // Handle animations
+      var transitions = [], animation, propertyKey;
+      this._animatedTransforms = [];
+
+      for(key in layout) {
+        if (key.substring(0,7) === 'animate') {
+          // FIXME: If we want to allow it to be set as just a number for duration we need to add support here
+          animation = layout[key];
+
+          if (animation.timing) {
+            if (SC.typeOf(animation.timing) != SC.T_STRING) {
+              animation.timing = "cubic-bezier("+animation.timing[0]+", "+animation.timing[1]+", "+
+                                                 animation.timing[2]+", "+animation.timing[3]+")";
+            }
+          } else {
+            animation.timing = 'linear';
+          }
+
+          propertyKey = key.substring(7).camelize();
+
+          // TODO: This is a weird conditional, we can probably clean it up
+          if (
+            SC.platform.supportsCSSTransforms &&
+            (
+              (
+                canUseAcceleratedLayer && (
+                  (propertyKey === 'top' && !SC.empty(translateTop)) ||
+                  (propertyKey === 'left' && !SC.empty(translateLeft))
+                )
+              ) ||
+              SC.CSS_TRANSFORM_MAP[propertyKey]
+            )
+          ) {
+            this._animatedTransforms.push(propertyKey);
+            propertyKey = '-'+SC.platform.cssPrefix+'-transform';
+          }
+
+          animation.css = propertyKey + " " + animation.duration + "s " + animation.timing;
+
+          // If it's a transform this may have already been set
+          if (!this._pendingAnimations) this._pendingAnimations = {};
+          if (!this._pendingAnimations[propertyKey]) {
+            this._pendingAnimations[propertyKey] = animation;
+            transitions.push(animation.css);
+          }
+        }
+      }
+
+      if (SC.platform.supportsCSSTransitions) ret[SC.platform.domCSSPrefix+"Transition"] = transitions.length > 0 ? transitions.join(", ") : null;
+
+    }
+
 
     // convert any numbers into a number + "px".
     for(key in ret) {
       value = ret[key];
       if (typeof value === SC.T_NUMBER) ret[key] = (value + "px");
     }
+
     return ret ;
   }.property().cacheable(),
   
@@ -2712,6 +3509,33 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
         currentLayout  = this.get('layout'),
         didResize      = YES,
         previousWidth, previousHeight, currentWidth, currentHeight;
+
+
+    // Handle old style rotation
+    if (!SC.none(currentLayout.rotate)) {
+      if (SC.none(currentLayout.rotateX)) {
+        currentLayout.rotateX = currentLayout.rotate;
+        console.warn('Please set rotateX instead of rotate');
+      }
+    }
+    if (!SC.none(currentLayout.rotateX)) {
+      currentLayout.rotate = currentLayout.rotateX;
+    } else {
+      delete currentLayout.rotate;
+    }
+
+    if (!SC.none(currentLayout.animateRotate)) {
+      if (SC.none(currentLayout.animateRotateX)) {
+        currentLayout.animateRotateX = currentLayout.animateRotate;
+        console.warn('Please set animateRotateX instead of animateRotate');
+      }
+    }
+    if (!SC.none(currentLayout.animateRotateX)) {
+      currentLayout.animateRotate = currentLayout.animateRotateX;
+    } else {
+      delete currentLayout.animateRotate;
+    }
+
 
     if (previousLayout  &&  previousLayout !== currentLayout) {
       // This is a simple check to see whether we think the view may have
@@ -2844,7 +3668,7 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     var layer = this.get('layer'), context;
     if (layer) {
       context = this.renderContext(layer);
-      this.renderLayout(context);
+      this.renderLayout(context, NO);
       context.update();
 
       // If this view uses static layout, then notify if the frame changed.
@@ -2866,6 +3690,7 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     @test in layoutChildViews
   */
   renderLayout: function(context, firstTime) {
+    this._scv_willRenderAnimations();
     context.addStyle(this.get('layoutStyle'));
   },
   
@@ -2950,6 +3775,188 @@ SC.View = SC.Responder.extend(SC.DelegateSupport,
     
     if (x > 100 || y > 100) return NO;
     return YES;
+  },
+  
+  ///
+  /// BUILDING IN/OUT
+  ///
+  
+  /**
+    Call this to append a child while building it in. If the child is not
+    buildable, this is the same as calling appendChild.
+  */
+  buildInChild: function(view) {
+    view.willBuildInToView(this);
+    this.appendChild(view);
+    view.buildInToView(this);
+  },
+  
+  /**
+    Call to remove a child after building it out. If the child is not buildable,
+    this will simply call removeChild.
+  */
+  buildOutChild: function(view) {
+    view.buildOutFromView(this);
+  },
+  
+  /**
+    Called by child view when build in finishes. By default, does nothing.
+    
+  */
+  buildInDidFinishFor: function(child) {
+  },
+  
+  /**
+    @private
+    Called by child view when build out finishes. By default removes the child view.
+  */
+  buildOutDidFinishFor: function(child) {
+    this.removeChild(child);
+  },
+  
+  /**
+    Whether the view is currently building in.
+  */
+  isBuildingIn: NO,
+  
+  /**
+    Whether the view is currently building out.
+  */
+  isBuildingOut: NO,
+  
+  /**
+    Implement this, and call didFinishBuildIn when you are done.
+  */
+  buildIn: function() {
+    this.buildInDidFinish();
+  },
+  
+  /**
+    Implement this, and call didFinsihBuildOut when you are done.
+  */
+  buildOut: function() {
+    this.buildOutDidFinish();
+  },
+  
+  /**
+    This should reset (without animation) any internal states; sometimes called before.
+    
+    It is usually called before a build in, by the parent view.
+  */
+  resetBuild: function() {
+    
+  },
+  
+  /**
+    Implement this if you need to do anything special when cancelling build out;
+    note that buildIn will subsequently be called, so you usually won't need to do
+    anything.
+    
+    This is basically called whenever build in happens.
+  */
+  buildOutDidCancel: function() {
+    
+  },
+  
+  /**
+    Implement this if you need to do anything special when cancelling build in.
+    You probably won't be able to do anything. I mean, what are you gonna do?
+    
+    If build in was cancelled, it means build out is probably happening. 
+    So, any timers or anything you had going, you can cancel. 
+    Then buildOut will happen.
+  */
+  buildInDidCancel: function() {
+    
+  },
+  
+  /**
+    Call this when you have built in.
+  */
+  buildInDidFinish: function() {
+    this.isBuildingIn = NO;
+    this._buildingInTo.buildInDidFinishFor(this);
+    this._buildingInTo = null;
+  },
+  
+  /**
+    Call this when you have finished building out.
+  */
+  buildOutDidFinish: function() {
+    this.isBuildingOut = NO;
+    this._buildingOutFrom.buildOutDidFinishFor(this);
+    this._buildingOutFrom = null;
+  },
+  
+  /**
+    Usually called by parentViewDidChange, this resets the build state (calling resetBuild in the process).
+  */
+  resetBuildState: function() {
+    if (this.isBuildingIn) {
+      this.buildInDidCancel();
+      this.isBuildingIn = NO;
+    }
+    if (this.isBuildingOut) {
+      this.buildOutDidCancel();
+      this.isBuildingOut = NO;
+    }
+    
+    // finish cleaning up
+    this.buildingInTo = null;
+    this.buildingOutFrom = null;
+    
+    this.resetBuild();
+  },
+  
+  /**
+    @private (semi)
+    Called by building parent view's buildInChild method. This prepares
+    to build in, but unlike buildInToView, this is called _before_ the child
+    is appended.
+    
+    Mostly, this cancels any build out _before_ the view is removed through parent change.
+  */
+  willBuildInToView: function(view) {
+    // stop any current build outs (and if we need to, we also need to build in again)
+    if (this.isBuildingOut) {
+      this.buildOutDidCancel();
+    }
+  },
+  
+  /**
+    @private (semi)
+    Called by building parent view's buildInChild method.
+  */
+  buildInToView: function(view) {
+    // if we are already building in, do nothing.
+    if (this.isBuildingIn) return;
+    
+    this._buildingInTo = view;
+    this.isBuildingOut = NO;
+    this.isBuildingIn = YES;
+    this.buildIn();
+  },
+  
+  /**
+    @private (semi)
+    Called by building parent view's buildOutChild method.
+    
+    The supplied view should always be the parent view.
+  */
+  buildOutFromView: function(view) {
+    // if we are already building out, do nothing.
+    if (this.isBuildingOut) return;
+    
+    // cancel any build ins
+    if (this.isBuildingIn) {
+      this.buildInDidCancel();
+    }
+    
+    // in any case, we need to build out
+    this.isBuildingOut = YES;
+    this.isBuildingIn = NO;
+    this._buildingOutFrom = view;
+    this.buildOut();
   }
 });
 
@@ -3309,5 +4316,40 @@ SC.View.unload = function() {
   }   
 } ;
 
+SC.View.runCallback = function(callback){
+  var additionalArgs = SC.$A(arguments).slice(1),
+      typeOfAction = SC.typeOf(callback.action);
+
+  // if the action is a function, just try to call it.
+  if (typeOfAction == SC.T_FUNCTION) {
+    callback.action.apply(callback.target, additionalArgs);
+
+  // otherwise, action should be a string.  If it has a period, treat it
+  // like a property path.
+  } else if (typeOfAction === SC.T_STRING) {
+    if (callback.action.indexOf('.') >= 0) {
+      var path = callback.action.split('.') ;
+      var property = path.pop() ;
+
+      var target = SC.objectForPropertyPath(path, window) ;
+      var action = target.get ? target.get(property) : target[property];
+      if (action && SC.typeOf(action) == SC.T_FUNCTION) {
+        action.apply(target, additionalArgs);
+      } else {
+        throw 'SC.Animator could not find a function at %@'.fmt(callback.action) ;
+      }
+
+    // otherwise, try to execute action direction on target or send down
+    // responder chain.
+    // FIXME: Add support for additionalArgs to this
+    // } else {
+    //  SC.RootResponder.responder.sendAction(callback.action, callback.target, callback.source, callback.source.get("pane"), null, callback.source);
+    }
+  }
+};
+
+
 //unload views for IE, trying to collect memory.
 if(SC.browser.msie) SC.Event.add(window, 'unload', SC.View, SC.View.unload) ;
+
+

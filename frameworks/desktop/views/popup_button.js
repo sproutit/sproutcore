@@ -37,7 +37,9 @@ SC.PopupButtonView = SC.ButtonView.extend(
   // ..........................................................
   // PROPERTIES
   //
-
+  
+  theme: '',
+  
   /**
     The prefer matrix to use when displaying the menu.
 
@@ -274,7 +276,8 @@ SC.PopupButtonView = SC.ButtonView.extend(
   {
     if (!this.get('isEnabled')) return NO ;
     var menu = this.get('instantiatedMenu') ;
-    return (!!menu && menu.performKeyEquivalent(charCode, evt)) ;
+
+    return (!!menu && menu.performKeyEquivalent(charCode, evt, YES)) ;
   },
 
   /** @private */

@@ -28,11 +28,13 @@ sc_require('system/core_query') ;
   @since SproutCore 1.0
 */
 SC.Event = function(originalEvent) { 
-
+  var idx, len;
   // copy properties from original event, if passed in.
   if (originalEvent) {
     this.originalEvent = originalEvent ;
-    var props = SC.Event._props, len = props.length, idx = len , key;
+    var props = SC.Event._props, key;
+    len = props.length;
+    idx = len;
     while(--idx >= 0) {
       key = props[idx] ;
       this[key] = originalEvent[key] ;
@@ -441,7 +443,7 @@ SC.mixin(SC.Event, /** @scope SC.Event */ {
 
     // Handle triggering native .onfoo handlers
     onfoo = elem["on" + eventType] ;
-    isClick = SC.CoreQuery.nodeName(elem, 'a') && eventType === 'click';
+    isClick = SC.$.nodeName(elem, 'a') && eventType === 'click';
     if ((!fn || isClick) && onfoo && onfoo.apply(elem, args) === NO) ret = NO;
 
     // Trigger the native events (except for clicks on links)
@@ -737,6 +739,13 @@ SC.Event.prototype = {
   */
   touchesForView: function(view) {
     if (this.touchContext) return this.touchContext.touchesForView(view);
+  },
+  
+  /**
+    Same as touchesForView, but sounds better for responders.
+  */
+  touchesForResponder: function(responder) {
+    if (this.touchContext) return this.touchContext.touchesForView(responder);
   },
   
   /**

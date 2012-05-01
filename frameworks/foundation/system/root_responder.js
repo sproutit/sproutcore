@@ -422,20 +422,20 @@ SC.RootResponder = SC.Object.extend({
     @returns {Boolean} YES if action was performed, NO otherwise
     @test in targetForAction
   */
-  sendAction: function( action, target, sender, pane, context) {
-    target = this.targetForAction(action, target, sender, pane) ;
+  sendAction: function( action, target, sender, pane, context, firstResponder) {
+    target = this.targetForAction(action, target, sender, pane, firstResponder) ;
 
     // HACK: If the target is a ResponderContext, forward the action.
     if (target && target.isResponderContext) {
-      return !!target.sendAction(action, sender, context);
+      return !!target.sendAction(action, sender, context, firstResponder);
     } else return target && target.tryToPerform(action, sender);
   },
 
-  _responderFor: function(target, methodName) {
+  _responderFor: function(target, methodName, firstResponder) {
     var defaultResponder = target ? target.get('defaultResponder') : null;
 
     if (target) {
-      target = target.get('firstResponder') || target;
+      target = firstResponder || target.get('firstResponder') || target;
       do {
         if (target.respondsTo(methodName)) return target ;
       } while ((target = target.get('nextResponder'))) ;
@@ -472,9 +472,10 @@ SC.RootResponder = SC.Object.extend({
     @param {String} method name for target
     @param {Object} sender optional sender
     @param {SC.Pane} optional pane
+    @param {firstResponder} a first responder to use
     @returns {Object} target object or null if none found
   */
-  targetForAction: function(methodName, target, sender, pane) {
+  targetForAction: function(methodName, target, sender, pane, firstResponder) {
 
     // 1. no action, no target...
     if (!methodName || (SC.typeOf(methodName) !== SC.T_STRING)) {
@@ -501,7 +502,7 @@ SC.RootResponder = SC.Object.extend({
 
     // 3. an explicit pane was passed...
     if (pane) {
-      return this._responderFor(pane, methodName) ;
+      return this._responderFor(pane, methodName, firstResponder) ;
     }
 
     // 4. no target or pane passed... try to find target in the active panes
@@ -771,7 +772,7 @@ SC.RootResponder = SC.Object.extend({
       }
     }
   },
-
+  
   // ................................................................................
   // TOUCH SUPPORT
   //
@@ -802,7 +803,7 @@ SC.RootResponder = SC.Object.extend({
   _touches: {},
 
   /**
-    Returns the touches that are registered to the specified view; undefined if none.
+    Returns the touches that are registered to the specified view or responder; undefined if none.
 
     When views receive a touch event, they have the option to subscribe to it.
     They are then mapped to touch events and vice-versa. This returns touches mapped to the view.
@@ -1508,9 +1509,10 @@ SC.RootResponder = SC.Object.extend({
   */
   keydown: function(evt) {
     if (SC.none(evt)) return YES;
-
     var keyCode = evt.keyCode;
-
+    if(SC.browser.mozilla && evt.keyCode===9){
+      this.keydownCounter=1;
+    } 
     // Fix for IME input (japanese, mandarin).
     // If the KeyCode is 229 wait for the keyup and
     // trigger a keyDown if it is is enter onKeyup.
@@ -1580,6 +1582,10 @@ SC.RootResponder = SC.Object.extend({
         keyCode   = evt.keyCode,
         isFirefox = !!SC.browser.mozilla;
 
+    if(SC.browser.mozilla && evt.keyCode===9){
+      this.keydownCounter++;
+      if(this.keydownCounter==2) return YES;
+    }
     // delete is handled in keydown() for most browsers
     if (isFirefox && (evt.which === 8)) {
       //get the keycode and set it for which.
@@ -1592,7 +1598,7 @@ SC.RootResponder = SC.Object.extend({
     } else {
       var isFirefoxArrowKeys = (keyCode >= 37 && keyCode <= 40 && isFirefox),
           charCode           = evt.charCode;
-      if ((charCode !== undefined && charCode === 0) && !isFirefoxArrowKeys) return YES;
+      if ((charCode !== undefined && charCode === 0 && evt.keyCode!==9) && !isFirefoxArrowKeys) return YES;
       if (isFirefoxArrowKeys) evt.which = keyCode;
       return this.sendEvent('keyDown', evt) ? evt.hasCustomEventHandling:YES;
     }
@@ -1649,10 +1655,10 @@ SC.RootResponder = SC.Object.extend({
     if(!SC.browser.msie) window.focus();
     
     // First, save the click count. The click count resets if the mouse down
-    // event occurs more than 200 ms later than the mouse up event or more
+    // event occurs more than 250 ms later than the mouse up event or more
     // than 8 pixels away from the mouse down event.
     this._clickCount += 1 ;
-    if (!this._lastMouseUpAt || ((Date.now()-this._lastMouseUpAt) > 200)) {
+    if (!this._lastMouseUpAt || ((Date.now()-this._lastMouseUpAt) > 250)) {
       this._clickCount = 1 ;
     } else {
       var deltaX = this._lastMouseDownX - evt.clientX,
@@ -1707,7 +1713,6 @@ SC.RootResponder = SC.Object.extend({
 
     var handler = null, view = this._mouseDownView,
         targetView = this.targetViewForEvent(evt);
-    this._lastMouseUpAt = Date.now() ;
 
     // record click count.
     evt.clickCount = this._clickCount ;
@@ -1744,6 +1749,10 @@ SC.RootResponder = SC.Object.extend({
 
     // cleanup
     this._mouseCanDrag = NO; this._mouseDownView = null ;
+
+    // Save timestamp of mouseup at last possible moment.
+    // (This is used to calculate double click events)
+    this._lastMouseUpAt = Date.now() ;
   
     return (handler) ? evt.hasCustomEventHandling : YES ;
   },

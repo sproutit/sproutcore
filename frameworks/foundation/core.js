@@ -38,6 +38,35 @@ SC.DROP_AFTER = 0x04 ;
 */
 SC.DROP_ANY = 0x07 ;
 
+/**
+  Indicates that the content should be aligned to the left.
+*/
+SC.ALIGN_LEFT = 'left';
+
+/**
+  Indicates that the content should be aligned to the right.
+*/
+SC.ALIGN_RIGHT = 'right';
+
+/**
+  Indicates that the content should be aligned to the center.
+*/
+SC.ALIGN_CENTER = 'center';
+
+/**
+  Indicates that the content should be aligned to the top.
+*/
+SC.ALIGN_TOP = 'top';
+
+/**
+  Indicates that the content should be aligned to the middle.
+*/
+SC.ALIGN_MIDDLE = 'middle';
+
+/**
+  Indicates that the content should be aligned to the bottom.
+*/
+SC.ALIGN_BOTTOM = 'bottom';
 
 /**
   This variable is here to make the tab focus behavior work like safari's.
@@ -141,8 +170,10 @@ SC.mixin(Function.prototype, /** @scope Function.prototype */ {
       var args = SC.$A(arguments).slice(2,arguments.length);
       args.unshift(target);
       // f = f.bind.apply(f, args) ;
-      var that = this, func = f ;
-      f = function() { return func.apply(that, args.slice(1)); } ;
+      var func = f ;
+      // Use "this" in inner func because it get its scope by 
+      // outer func f (=target). Could replace "this" with target for clarity.
+      f = function() { return func.apply(this, args.slice(1)); } ;
     }
     return SC.Timer.schedule({ target: target, action: f, interval: interval });
   }    

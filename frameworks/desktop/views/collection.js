@@ -2308,9 +2308,7 @@ SC.CollectionView = SC.View.extend(
   // ..........................................................
   // TOUCH EVENTS
   //
-  
-  touchStart: function(ev) {
-
+  touchStart: function(touch, evt) {
     // When the user presses the mouse down, we don't do much just yet.
     // Instead, we just need to save a bunch of state about the mouse down
     // so we can choose the right thing to do later.
@@ -2321,16 +2319,15 @@ SC.CollectionView = SC.View.extend(
     // find the actual view the mouse was pressed down on.  This will call
     // hitTest() on item views so they can implement non-square detection
     // modes. -- once we have an item view, get its content object as well.
-    var itemView      = this.itemViewForEvent(ev),
+    var itemView      = this.itemViewForEvent(touch),
         content       = this.get('content'),
         contentIndex  = itemView ? itemView.get('contentIndex') : -1,
         info, anchor ;
-
+        
     // become first responder if possible.
     this.becomeFirstResponder() ;
-    this.select(contentIndex, NO);
     
-    this._cv_performSelectAction(this, ev);
+    this.invokeLater("select", 1, contentIndex);
     
     return YES;
   },
@@ -2346,6 +2343,13 @@ SC.CollectionView = SC.View.extend(
       }
     }, this);
 
+  },
+  
+  touchEnd: function(touch) {
+    var itemView = this.itemViewForEvent(touch);
+    
+    // If actOnSelect is implemented, the action will be fired.
+    this._cv_performSelectAction(itemView, touch, 0);
   },
 
   touchCancelled: function(evt) {
@@ -2541,11 +2545,12 @@ SC.CollectionView = SC.View.extend(
   */
   _cv_dragViewFor: function(dragContent) {
     // find only the indexes that are in both dragContent and nowShowing.
-    var indexes = this.get('nowShowing').without(dragContent);
+    var indexes = this.get('nowShowing').without(dragContent),
+        dragLayer = this.get('layer').cloneNode(false),
+        view = SC.View.create({ layer: dragLayer, parentView: this }),
+        height=0, layout;
+
     indexes = this.get('nowShowing').without(indexes);
-    
-    var dragLayer = this.get('layer').cloneNode(false); 
-    var view = SC.View.create({ layer: dragLayer, parentView: this });
 
     // cleanup weird stuff that might make the drag look out of place
     SC.$(dragLayer).css('backgroundColor', 'transparent')
@@ -2569,10 +2574,18 @@ SC.CollectionView = SC.View.extend(
         itemView.updateLayerIfNeeded();
       }
 
-      if (layer) dragLayer.appendChild(layer);
+      if (layer) {
+        dragLayer.appendChild(layer);
+        layout = itemView.get('layout');
+        if(layout.height+layout.top>height){
+          height = layout.height+layout.top;
+        }
+      }
       layer = null;
       
     }, this);
+    // we don't want to show the scrollbars, resize the dragview'
+    view.set('layout', {height:height});
 
     dragLayer = null;
     return view ;
