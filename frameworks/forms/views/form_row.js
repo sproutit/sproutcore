@@ -171,7 +171,7 @@ SC.FormRowView.mixin({
 	  }
 		// now, create a hash (will be used by the parent form's exampleRow)
 		if (!ext) ext = {};
-		ext.label = label;
+		if (label) ext.label = label;
 		ext.childViews = ["_singleField"];
 		ext._singleField = fieldType;
 		return ext;
