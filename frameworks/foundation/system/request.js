@@ -267,9 +267,9 @@ SC.Request = SC.Object.extend(SC.Copyable, SC.Freezable,
     } else if (value === undefined) {
       headers = key;
       this.beginPropertyChanges();
-      for(key in headers) {
-        if (!headers.hasOwnProperty(key)) continue ;
-        this.header(key, headers[key]);
+      for(var headerKey in headers) {
+        if (!headers.hasOwnProperty(headerKey)) continue ;
+        this.header(headerKey, headers[headerKey]);
       }
       this.endPropertyChanges();
       return this;
